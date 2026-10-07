@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "name": "@civica/worker",
+  "scripts": {
+    "typecheck": "bun --bun tsc --noEmit"
+  },
+  "dependencies": {
+    "@civica/domain": "workspace:*",
+    "@civica/contracts": "workspace:*",
+    "@civica/db": "workspace:*",
+    "@civica/source-camara": "workspace:*",
+    "zod": "4.6.5"
+  }
+}

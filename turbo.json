@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalEnv": [
+    "DEMO_MODE",
+    "VITE_APP_NAME",
+    "VITE_APP_URL",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "DATABASE_URL",
+    "DATABASE_READ_URL",
+    "PORT",
+    "SUPABASE_URL",
+    "SUPABASE_PUBLISHABLE_KEY"
+  ],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    }
+  },
+  "globalDependencies": [".env"]
+}

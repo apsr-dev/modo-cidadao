@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "name": "@civica/domain",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "bun --bun tsc --noEmit"
+  },
+  "dependencies": {}
+}

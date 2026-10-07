@@ -1,0 +1,13 @@
+import '@tanstack/react-start/server-only'
+import { connectDatabase } from '@civica/db'
+import { memoryRepresentatives, representatives } from '@civica/domain'
+import { serverEnv } from './env.server'
+
+let connection: ReturnType<typeof connectDatabase> | undefined
+export function catalogRepository() {
+  const env = serverEnv()
+  if (env.DEMO_MODE === 'true') return memoryRepresentatives()
+  connection ??= connectDatabase(env.DATABASE_READ_URL ?? '')
+  return connection.repository()
+}
+export const catalog = () => representatives(catalogRepository())

@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "name": "@civica/config",
+  "exports": {
+    "./tsconfig": "./tsconfig.json"
+  }
+}

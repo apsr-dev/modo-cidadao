@@ -1,0 +1,46 @@
+name: Local foundation
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DEMO_MODE: 'true'
+      TURBO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.2'
+      - run: bun --version
+      - run: bun install --frozen-lockfile
+      # Route generation is part of the build; typecheck a fresh clone after it.
+      - run: bun run check:boundaries
+      - run: bun run build
+      - run: bun run typecheck
+      - run: bun run lint
+      - run: bun run test
+      - run: bun --bun playwright install --with-deps chromium
+      - run: E2E_PRODUCTION=1 bun run test:e2e
+  local-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.2'
+      - run: bun install --frozen-lockfile
+      - run: bun run db:start
+      - run: bun run db:env
+      - run: bun run test:integration
+      - run: bun run build
+      - run: bun --bun playwright install --with-deps chromium
+      # Integration suite seeds one real reduced fixture, without calling government APIs.
+      - run: E2E_INTEGRATION=1 E2E_PRODUCTION=1 bun run test:e2e
+      - if: always()
+        run: bun run db:stop

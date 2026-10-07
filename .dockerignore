@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+.tools
+node_modules
+**/node_modules
+**/dist
+.turbo
+supabase/.temp
+supabase/.branches
+test-results
+playwright-report

@@ -1,0 +1,2 @@
+-- Fictional seed is shared with demo mode via bun run db:seed.
+-- No real politician is fabricated here.

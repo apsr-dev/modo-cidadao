@@ -1,0 +1,15 @@
+.DS_Store
+node_modules/
+.tools/
+.env
+.env.*
+!.env.example
+.turbo/
+**/dist/
+**/.output/
+**/routeTree.gen.ts
+supabase/.temp/
+supabase/.branches/
+playwright-report/
+test-results/
+*.log

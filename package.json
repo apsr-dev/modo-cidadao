@@ -1,0 +1,57 @@
+{
+  "name": "plataforma-civica",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.2",
+  "engines": {
+    "bun": "1.4.2"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "preinstall": "bun scripts/check-runtime.ts",
+    "dev": "turbo run dev",
+    "build": "turbo run build && bun scripts/check-client-bundle.ts",
+    "start": "bun run --cwd apps/web start",
+    "typecheck": "turbo run typecheck && bun --bun tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "bun --bun vitest run",
+    "test:e2e": "bun --bun playwright test",
+    "test:integration": "LOCAL_INTEGRATION=1 bun --bun vitest run tests/integration",
+    "test:source": "bun scripts/check-source.ts",
+    "db:start": "bun scripts/supabase-start.ts",
+    "db:stop": "bun --bun supabase stop",
+    "db:reset": "bun --bun supabase db reset --local",
+    "db:migrate": "bun --bun supabase migration up --local",
+    "db:seed": "bun scripts/seed.ts",
+    "db:check": "bun scripts/check-db.ts",
+    "db:env": "bun scripts/local-env.ts",
+    "worker": "bun apps/worker/src/index.ts",
+    "check:boundaries": "bun scripts/check-boundaries.ts",
+    "test:worker:shutdown": "bun scripts/check-worker-shutdown.ts"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "turbo": "2.11.7",
+    "vitest": "5.0.3",
+    "@playwright/test": "1.63.0",
+    "@biomejs/biome": "2.5.15",
+    "@types/bun": "1.4.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "supabase": "2.120.0"
+  },
+  "dependencies": {
+    "@civica/db": "workspace:*",
+    "@civica/domain": "workspace:*",
+    "@civica/contracts": "workspace:*",
+    "@civica/source-camara": "workspace:*",
+    "@supabase/supabase-js": "2.117.3"
+  },
+  "trustedDependencies": [
+    "supabase"
+  ]
+}

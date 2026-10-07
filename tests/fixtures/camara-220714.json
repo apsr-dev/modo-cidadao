@@ -1,0 +1,17 @@
+{
+  "dados": {
+    "id": 220714,
+    "nomeCivil": "ADAIL JOSÉ FIGUEIREDO PINHEIRO",
+    "ultimoStatus": {
+      "nome": "Adail Filho",
+      "siglaUf": "AM",
+      "idLegislatura": 57,
+      "siglaPartido": "MDB",
+      "situacao": "Exercício",
+      "email": null,
+      "gabinete": {
+        "telefone": "3215-5531"
+      }
+    }
+  }
+}

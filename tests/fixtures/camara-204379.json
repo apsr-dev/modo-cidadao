@@ -1,0 +1,17 @@
+{
+  "dados": {
+    "id": 204379,
+    "nomeCivil": "ACÁCIO DA SILVA FAVACHO NETO",
+    "ultimoStatus": {
+      "nome": "Acácio Favacho",
+      "siglaUf": "AP",
+      "idLegislatura": 57,
+      "siglaPartido": "MDB",
+      "situacao": "Exercício",
+      "email": null,
+      "gabinete": {
+        "telefone": "3215-5414"
+      }
+    }
+  }
+}
