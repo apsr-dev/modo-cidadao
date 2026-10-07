@@ -5,6 +5,7 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 ## O que funciona
 
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
+- Tema Modo Cidadao do tweakcn, fontes locais e alternância claro/escuro no cabeçalho. Segue o sistema até uma escolha manual, preservada neste navegador.
 - Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.

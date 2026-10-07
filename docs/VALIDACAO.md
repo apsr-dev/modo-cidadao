@@ -44,3 +44,11 @@ A imagem do `Dockerfile`, o workflow no GitHub, adapters de hospedagem remota e 
 CPF retornado pela Câmara é removido antes de persistir RAW; hashes original/armazenado e campos removidos mantêm evidência dessa minimização. Datas de coleta e de observação não são datas legais de atualização ou filiação.
 
 Comandos reproduzíveis estão no [README](../README.md); versões instaladas em [VERSOES.md](VERSOES.md). A porta 3000 deve estar livre para suítes que iniciam seu próprio servidor; `E2E_BASE_URL` permite usar um servidor já ativo.
+
+## Tema visual Modo Cidadao — MOD-177
+
+O tema fornecido em 07/10/2026 foi aplicado na branch `feat/shadcn-theme`. Os 52 tokens claros e 50 escuros foram comparados ao CSS enviado e preservados. Fontes locais, superfícies, bordas, sombras, links, estados de foco e favicon usam o novo tema; cores auxiliares de texto e preenchimento são derivadas para legibilidade.
+
+Build Vite/Start, inspeção do bundle, typecheck e lint passaram. Permanecem os sete avisos CSS e a sugestão de template string já existentes. Vitest: **9 passaram, 2 opt-in ignorados**. Playwright contra o servidor Bun de produção isolado na porta 3002, em demo: **14 passaram, 2 de Auth ignorados**. O teste de contraste foi repetido após seu ajuste de tipagem, com os dois dispositivos aprovados.
+
+A suíte cobre preferência do sistema, escolha manual por teclado, recarga e navegação, sincronização entre abas, armazenamento bloqueado, aplicação antes do JavaScript da aplicação e contraste mínimo de 4,5 nas amostras de texto/botões verificadas nos dois temas. A navegação também foi verificada em 320 pixels, sem overflow horizontal, além dos fluxos públicos de catálogo/SSR/REST já existentes. A prévia foi inspecionada visualmente em desktop e celular, sem erros no navegador ou servidor. Esta entrega não alterou a ingestão, o banco ou a autenticação; os testes opt-in dessas integrações não foram repetidos.

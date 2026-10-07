@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { publicEnv } from '../lib/env'
+import { ThemeToggle } from './theme-toggle'
 
 const links = [
   ['/', 'Visão geral', Compass],
@@ -83,9 +84,12 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
           <span>
             Brasil <span className="muted">/</span> Cidadania e participação
           </span>
-          <Link to="/meu-brasil">
-            <CircleUserRound size={18} /> Minha área
-          </Link>
+          <div className="topbar-actions">
+            <ThemeToggle />
+            <Link to="/meu-brasil">
+              <CircleUserRound size={18} /> Minha área
+            </Link>
+          </div>
         </header>
         {demo ? (
           <div className="demo-strip">
