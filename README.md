@@ -31,6 +31,14 @@ Abra **http://localhost:3000**. Em outro terminal, repita o `export PATH` antes 
 
 A web executa em demo quando não há `.env`. Se criar configuração manualmente, copie `.env.example` para `.env` e mantenha `DEMO_MODE=true` até configurar o banco. As variáveis privadas e públicas são validadas separadamente. Nunca prefixe credenciais com `VITE_`.
 
+## Skill shadcn para o Codex
+
+A skill oficial do repositório `shadcn/ui` fica em `.agents/skills/shadcn`, com suas referências, e é descoberta pelo Codex nos próximos turnos neste checkout. A origem e o hash da instalação ficam em `skills-lock.json`. Para atualizar a instalação no escopo do projeto:
+
+```sh
+bun x --bun skills add shadcn/ui --skill shadcn --agent codex --copy --yes
+```
+
 ## Banco local e dados oficiais
 
 É necessário Docker Desktop em execução. Não há projeto Supabase remoto configurado.
