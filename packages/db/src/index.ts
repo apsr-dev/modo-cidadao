@@ -2,6 +2,7 @@ import { fold, type Representative, type RepresentativesRepository } from '@civi
 import { and, asc, count, eq, isNull, like, not, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
+import { proposalStore } from './proposals'
 import {
   contacts,
   mandates,
@@ -214,15 +215,17 @@ export function connectDatabase(url: string) {
     })
   }
   return {
+    proposalsRepository: proposalStore(db).repository,
+    upsertProposal: proposalStore(db).upsertProposal,
     db,
     client,
     repository,
     saveRaw,
     upsertRepresentative,
-    async startRun() {
+    async startRun(resource = 'deputados') {
       const [r] = await db
         .insert(syncRuns)
-        .values({ source: 'camara', status: 'running' })
+        .values({ source: 'camara', resource, status: 'running' })
         .returning({ id: syncRuns.id })
       if (!r) throw new Error('RUN_NOT_CREATED')
       return r.id

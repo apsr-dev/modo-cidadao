@@ -30,8 +30,8 @@ function Directory() {
         <p>Encontre pessoas, consulte fontes e conheça os contatos disponíveis.</p>
       </div>
       <div className="coverage-note">
-        Câmara dos Deputados · Amostra local limitada. Senado ainda não integrado. A lista não
-        representa a bancada completa.
+        Catálogo local da Câmara · Situação conforme a última coleta. Uma busca vazia não comprova
+        ausência na fonte. Senado ainda não integrado.
       </div>
       <form className="filter-form" method="get" action="/representantes">
         <label className="search-field">

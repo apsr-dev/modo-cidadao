@@ -1,4 +1,11 @@
-import { credentialsSchema, filtersSchema, followSchema, personIdSchema } from '@civica/contracts'
+import {
+  credentialsSchema,
+  filtersSchema,
+  followSchema,
+  personIdSchema,
+  proposalFiltersSchema,
+  proposalIdSchema,
+} from '@civica/contracts'
 import { createServerFn } from '@tanstack/react-start'
 export const getSettings = createServerFn({ method: 'GET' }).handler(async () => {
   const { serverEnv } = await import('../server/env.server')
@@ -15,6 +22,18 @@ export const getRepresentative = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const { catalogRepository } = await import('../server/catalog.server')
     return catalogRepository().get(data)
+  })
+export const listProposals = createServerFn({ method: 'GET' })
+  .validator(proposalFiltersSchema)
+  .handler(async ({ data }) => {
+    const { proposalCatalog } = await import('../server/catalog.server')
+    return proposalCatalog().list(data)
+  })
+export const getProposal = createServerFn({ method: 'GET' })
+  .validator(proposalIdSchema)
+  .handler(async ({ data }) => {
+    const { proposalsRepository } = await import('../server/catalog.server')
+    return proposalsRepository().get(data)
   })
 export const getPersonal = createServerFn({ method: 'GET' }).handler(async () => {
   const { personal, noStore } = await import('../server/auth.server')

@@ -1334,3 +1334,124 @@ small {
     font-size: 12px;
   }
 }
+.proposal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 20px 0 28px;
+}
+.proposal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  background: white;
+  color: #263c34;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.proposal-card:hover {
+  border-color: var(--green);
+}
+.proposal-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.proposal-ementa {
+  line-height: 1.7;
+  color: var(--muted);
+  flex: 1;
+}
+.proposal-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.proposal-filters {
+  flex-wrap: wrap;
+}
+.proposal-filters input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  min-height: 44px;
+}
+.proposal-text {
+  line-height: 1.8;
+}
+.proposal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.proposal-authors {
+  padding: 0;
+  list-style: none;
+}
+.proposal-authors li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.proposal-authors li > span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.proposal-timeline {
+  list-style: none;
+  padding: 0 0 0 22px;
+  border-left: 2px solid #dce5dc;
+}
+.proposal-timeline li {
+  position: relative;
+  padding: 12px 0 28px;
+  overflow-wrap: anywhere;
+}
+.proposal-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -29px;
+  top: 17px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #155b47;
+}
+.proposal-timeline summary {
+  cursor: pointer;
+  padding: 10px 0;
+}
+.profile-proposals {
+  margin: 32px 0;
+}
+@media (max-width: 700px) {
+  .proposal-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .proposal-filters label {
+    width: auto;
+    min-width: 0;
+  }
+  .proposal-filters label:first-of-type,
+  .proposal-filters .button {
+    grid-column: 1 / -1;
+  }
+  .proposal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .profile-proposals .results-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

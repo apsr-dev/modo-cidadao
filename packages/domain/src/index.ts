@@ -2,6 +2,8 @@ export type DataValue =
   | { state: 'available'; value: string }
   | { state: 'not_informed' | 'not_collected' | 'not_applicable'; value: null }
 
+export * from './proposals'
+
 export interface Provenance {
   source: 'camara' | 'demo'
   externalId: string

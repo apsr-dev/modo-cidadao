@@ -57,7 +57,7 @@ test('busca, paginação, perfil e navegação funcionam sem erros de hidrataç�
     await page.locator('.person-card').first().click()
     await expect(page.getByRole('heading', { name: 'Origem e cobertura' })).toBeVisible()
   }
-  await page.goto('/propostas')
+  await page.goto('/votacoes')
   await expect(page.getByRole('heading', { name: 'Integração ainda não disponível' })).toBeVisible()
   await page.goto('/participe')
   await expect(page.getByRole('link', { name: 'Ir ao canal oficial' })).toHaveCount(2)
