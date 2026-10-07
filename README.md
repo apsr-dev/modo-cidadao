@@ -14,6 +14,8 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 
 Propostas, votações, eleições e a integração de dados do Senado/TSE exibem indisponibilidade honesta. Feed, alertas, despesas, recuperação de senha, exportação/exclusão de conta, PWA e resumos de IA permanecem planejados. Esta inicialização não é uma operação pública completa.
 
+Cargo, esfera e UF de representação são explícitos nos cartões, perfis e diretório. A UF identifica o estado ou o Distrito Federal representado pelo deputado federal; não indica que o cargo é estadual. Senadores e deputados estaduais/distritais ainda não estão integrados. Os rótulos preservam o aviso de personagens fictícios no modo demo. Consulte [ADR 003](docs/decisions/003-cargo-esfera-representantes.md).
+
 ## Requisitos e início
 
 Bun **1.4.2** é o único runtime JavaScript da aplicação/worker e gerenciador de pacotes. Nesta máquina ele foi instalado no projeto, sem alterar o perfil do shell:

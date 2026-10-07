@@ -99,7 +99,7 @@ function Home() {
               to: '/representantes',
               icon: Users,
               title: 'Quem representa você',
-              text: 'Explore o diretório da Câmara e consulte a origem de cada informação.',
+              text: 'Explore deputados federais da Câmara e consulte a origem de cada informação.',
               label: 'Explorar representantes',
               tone: 'green',
             },
@@ -157,7 +157,10 @@ function Home() {
           <MapPin size={20} />
           <p>
             <strong>Cobertura transparente</strong>
-            <span>Foco federal. Cada integração informa seus limites.</span>
+            <span>
+              Deputados federais disponíveis. Senado e esferas estadual/distrital ainda não
+              integrados.
+            </span>
           </p>
         </div>
         <div>

@@ -75,7 +75,7 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
         </div>
         <div className="sidebar-footer">
           <span className="status-dot" />
-          Cobertura federal <small>Uma iniciativa independente.</small>
+          Deputados federais <small>Uma iniciativa independente.</small>
         </div>
       </aside>
       <div className="main-column">
