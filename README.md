@@ -14,6 +14,10 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 
 Propostas, votações, eleições e a integração de dados do Senado/TSE exibem indisponibilidade honesta. Feed, alertas, despesas, recuperação de senha, exportação/exclusão de conta, PWA e resumos de IA permanecem planejados. Esta inicialização não é uma operação pública completa.
 
+## Planejamento e contribuição
+
+O backlog completo está no [Linear](https://linear.app/modo-cidadao/project/modo-cidadao-b79c0658183c): 34 funcionalidades, cinco áreas técnicas e 133 subtarefas com escopo, critérios de aceite e dependências. Consulte o [índice e guia de contribuição](docs/BACKLOG-LINEAR.md) para encontrar os itens e o fluxo de branch própria e PR para `main`. Os documentos de planejamento continuam sendo a referência completa do produto.
+
 ## Requisitos e início
 
 Bun **1.4.2** é o único runtime JavaScript da aplicação/worker e gerenciador de pacotes. Nesta máquina ele foi instalado no projeto, sem alterar o perfil do shell:
