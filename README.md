@@ -16,17 +16,16 @@ Propostas, votações, eleições e a integração de dados do Senado/TSE exibem
 
 ## Requisitos e início
 
-Bun **1.4.2** é o único runtime JavaScript da aplicação/worker e gerenciador de pacotes. Nesta máquina ele foi instalado no projeto, sem alterar o perfil do shell:
+Bun **1.4.2** é o único runtime JavaScript da aplicação/worker e gerenciador de pacotes. Instale essa versão para seu usuário pelo [instalador oficial](https://bun.com/docs/installation). Nesta máquina, ela está disponível em `~/.bun/bin`, com o PATH configurado no zsh. Abra um novo terminal após instalar e execute:
 
 ```sh
 cd /Users/Samuel.Reichert/Samuel/modo-cidadao
-export PATH="$PWD/.tools/bun-darwin-aarch64:$PATH"
 bun --version
 bun install --frozen-lockfile
 bun run dev
 ```
 
-Abra **http://localhost:3000**. Em outro terminal, repita o `export PATH` antes dos comandos. Em um clone novo, instale Bun 1.4.2 pelo [instalador oficial](https://bun.com/docs/installation); `.tools/` não é versionado. Node.js está instalado na máquina, mas os comandos da aplicação, Vitest e Playwright foram executados com Bun. Turborepo/Biome/CLI e serviços Docker usam seus próprios binários.
+Abra **http://localhost:3000**. O comando `bun --version` deve retornar `1.4.2`. Não é necessário instalar Bun dentro do repositório nem configurar o PATH em cada sessão. Node.js está instalado na máquina, mas os comandos da aplicação, Vitest e Playwright foram executados com Bun. Turborepo/Biome/CLI e serviços Docker usam seus próprios binários.
 
 A web executa em demo quando não há `.env`. Se criar configuração manualmente, copie `.env.example` para `.env` e mantenha `DEMO_MODE=true` até configurar o banco. As variáveis privadas e públicas são validadas separadamente. Nunca prefixe credenciais com `VITE_`.
 
@@ -40,8 +39,10 @@ bun run db:env
 bun run db:seed
 bun run db:check
 bun run worker -- --source=camara --max-pages=1 --page-size=3 --limit=3
-DEMO_MODE=false bun run dev
+bun run dev:real
 ```
+
+`dev:real` inicia o servidor com `DEMO_MODE=false`, independentemente do valor no `.env`, e usa os dados oficiais já importados no banco local. Não inicia o banco nem executa coleta automática.
 
 `db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Neste ambiente o banco já foi iniciado, as migrations aplicadas, o seed carregado e três representantes oficiais importados; `.env` foi deixado com `DEMO_MODE=false` para usar essa integração.
 
