@@ -420,6 +420,7 @@
           "id",
           "name",
           "civilName",
+          "photo",
           "uf",
           "legislature",
           "institution",
@@ -440,6 +441,10 @@
           },
           "civilName": {
             "$ref": "#/components/schemas/DataValue"
+          },
+          "photo": {
+            "$ref": "#/components/schemas/DataValue",
+            "description": "URL oficial retornada por ultimoStatus.urlFoto; não coletado em registros anteriores, não informado quando ausente/inválido, não se aplica na demo."
           },
           "uf": {
             "type": "string",
