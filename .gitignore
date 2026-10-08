@@ -1,6 +1,5 @@
 .DS_Store
 node_modules/
-.tools/
 .env
 .env.*
 !.env.example

@@ -3,7 +3,6 @@
   "files": {
     "includes": [
       "**",
-      "!!.tools",
       "!!node_modules",
       "!!**/dist",
       "!!**/routeTree.gen.ts",
