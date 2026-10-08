@@ -39,8 +39,10 @@ bun run db:env
 bun run db:seed
 bun run db:check
 bun run worker -- --source=camara --max-pages=1 --page-size=3 --limit=3
-DEMO_MODE=false bun run dev
+bun run dev:real
 ```
+
+`dev:real` inicia o servidor com `DEMO_MODE=false`, independentemente do valor no `.env`, e usa os dados oficiais já importados no banco local. Não inicia o banco nem executa coleta automática.
 
 `db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Neste ambiente o banco já foi iniciado, as migrations aplicadas, o seed carregado e três representantes oficiais importados; `.env` foi deixado com `DEMO_MODE=false` para usar essa integração.
 

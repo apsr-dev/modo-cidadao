@@ -13,6 +13,7 @@
   "scripts": {
     "preinstall": "bun scripts/check-runtime.ts",
     "dev": "turbo run dev",
+    "dev:real": "DEMO_MODE=false bun run dev",
     "build": "turbo run build && bun scripts/check-client-bundle.ts",
     "start": "bun run --cwd apps/web start",
     "typecheck": "turbo run typecheck && bun --bun tsc --noEmit",
