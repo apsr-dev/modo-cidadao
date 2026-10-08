@@ -5,14 +5,15 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 ## O que funciona
 
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
-- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte.
+- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte. A coleta local foi ampliada para 513 deputados em exercício em 07/10/2026.
+- Propostas da Câmara: catálogo com tipo/número/ano/autor, paginação, detalhe com ementa e documentos oficiais, autoria/coautoria e linha do tempo de tramitação. O perfil mostra propostas importadas vinculadas por ID oficial.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.
 - Supabase Auth local por e-mail/senha, cookies SSR HttpOnly e seguir/deixar de seguir. Follows privados por RLS; isolamento entre dois usuários testado no banco e no REST.
-- Modo demo explícito com 12 personagens fictícios e o mesmo seed determinístico. Auth/follows ficam indisponíveis nesse modo.
+- Modo demo explícito com 12 personagens e oito propostas fictícias, incluindo tramitações, e o mesmo seed determinístico. Auth/follows ficam indisponíveis nesse modo.
 - Participação abre os portais institucionais verificados da Câmara e do Senado.
 
-Propostas, votações, eleições e a integração de dados do Senado/TSE exibem indisponibilidade honesta. Feed, alertas, despesas, recuperação de senha, exportação/exclusão de conta, PWA e resumos de IA permanecem planejados. Esta inicialização não é uma operação pública completa.
+Votações, eleições e a integração de dados do Senado/TSE exibem indisponibilidade honesta. O catálogo de propostas é parcial e não representa toda a atuação de cada parlamentar. Feed, alertas, despesas, recuperação de senha, exportação/exclusão de conta, PWA e resumos de IA permanecem planejados. Esta inicialização não é uma operação pública completa.
 
 ## Requisitos e início
 
@@ -43,13 +44,13 @@ bun run worker -- --source=camara --max-pages=1 --page-size=3 --limit=3
 DEMO_MODE=false bun run dev
 ```
 
-`db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Neste ambiente o banco já foi iniciado, as migrations aplicadas, o seed carregado e três representantes oficiais importados; `.env` foi deixado com `DEMO_MODE=false` para usar essa integração.
+`db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Neste ambiente o banco já foi iniciado, as migrations aplicadas, o seed carregado e 513 deputados e três propostas oficiais importados; `.env` foi deixado com `DEMO_MODE=false` para usar essa integração.
 
 A origem web configurada é `http://localhost:3000`. Use esse endereço para login. Se trocar domínio/porta, ajuste `VITE_APP_URL`; as mutações por cookie verificam Origin. `VITE_APP_NAME` altera a marca após reiniciar/rebuild.
 
 O seed usa nomes fictícios e não cria contas. O catálogo integrado exclui `demo=true`. Para ativar a integração de forma persistente, altere `DEMO_MODE=false` no `.env`. Sem configuração completa ou banco acessível, o modo integrado mostra erro; ele não consulta produção nem muda silenciosamente para demo.
 
-A sincronização é limitada a 5 páginas, 20 itens/página e 100 representantes por chamada; o padrão é 3. Não apaga registros ausentes em amostras parciais nem importa histórico. Checkpoint só avança após página completa persistida; retomada automática, scheduler, fila de jobs, outbox e notificações ainda não existem. SIGINT/SIGTERM interrompe a coleta, registra cancelamento e fecha o pool.
+A sincronização é limitada a 5 páginas, 20 itens/página e 100 registros por chamada; `--start-page` permite iniciar outro lote manual de deputados ou propostas; o padrão é 3. Não apaga registros ausentes em amostras parciais nem importa histórico. Checkpoint só avança após página completa persistida; retomada automática, scheduler, fila de jobs, outbox e notificações ainda não existem. SIGINT/SIGTERM interrompe a coleta, registra cancelamento e fecha o pool.
 
 ```sh
 bun run worker -- --help
@@ -63,6 +64,27 @@ bun run db:stop                    # encerra contêineres locais, preservando vo
 ```
 
 `db:reset` não reimporta dados oficiais. As migrations são exclusivamente `supabase/migrations`; não há Drizzle Kit nem outra cadeia. Para migration nova, use `bun --bun supabase migration new nome` após consultar `--help`.
+
+## Propostas e ampliação do catálogo
+
+A origem continua sendo a Câmara; nenhum novo fornecedor foi necessário. Em `/propostas`, filtros por `type`, `number`, `year` e `authorId` operam sobre dados já persistidos. O detalhe mostra ementa oficial, situação, autores, datas e links específicos dos documentos. O perfil liga autoria por URI/ID do deputado, nunca pelo nome. Proponentes e signatários de apoio mantêm papéis distintos conforme a fonte.
+
+```sh
+bun run db:migrate
+bun run db:seed
+bun run worker -- --source=camara --resource=proposals --year=2026 --type=PL --deputy=204379 --page-size=3 --limit=3
+# Para um identificador específico, acrescente --number=4916.
+# Ampliação manual do catálogo atual de deputados, com até 100 registros em cada lote:
+for first_page in 1 6 11 16 21 26; do
+  bun run worker -- --source=camara --resource=deputies --start-page="$first_page" --max-pages=5 --page-size=20 --limit=100 || break
+done
+```
+
+As páginas iniciais acima foram suficientes para a listagem de 07/10/2026; não são uma garantia permanente sobre seu tamanho. A consulta padrão da fonte retorna deputados em exercício no momento da requisição. A situação do perfil e as datas de coleta indicam a observação local; não há atualização automática nem remoção por ausência.
+
+O catálogo inicial de propostas contém três PLs de 2026 de um autor; é uma amostra explícita. O ano é filtro de apresentação, sem garantia de cobertura anual completa da consulta externa. Intervalos anuais de datas são rejeitados pela API e não são enviados. O worker grava detalhe, autores e tramitações antes de substituir a versão atual. Recurso incompleto/falha preserva a última versão válida; versões anteriores e snapshots ficam no schema interno. Mesmos corpos não criam nova revisão. Cada recoleta mantém suas observações.
+
+Horários sem fuso são preservados, sem conversão para UTC. A situação não é traduzida para “virou lei”. PDFs permanecem como links; votos, resumos, relatorias, comparação pública de versões e follows de propostas ainda não estão implementados. Veja [ADR 002](docs/decisions/002-propostas-camara.md), [ficha da fonte](docs/FONTE-CAMARA.md) e [validação da feature](docs/VALIDACAO-PROPOSTAS.md).
 
 ## Autenticação e acompanhamento
 
@@ -94,7 +116,7 @@ Em checkout limpo, execute `build` antes de `typecheck`, porque Start gera `rout
 
 O CI fixa Bun 1.4.2, usa `bun install --frozen-lockfile`, executa build/typecheck/lint/Vitest e Playwright. Um segundo job inicia Supabase local e testa Auth/RLS usando fixtures, sem acessar APIs legislativas. O workflow foi criado; sua execução no GitHub ainda não ocorreu.
 
-Resultados e limites de verificação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
+Resultados da fundação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md); checks da feature em [docs/VALIDACAO-PROPOSTAS.md](docs/VALIDACAO-PROPOSTAS.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
 
 ## Estrutura e fronteiras
 
@@ -125,6 +147,8 @@ Arquivos `.server.ts` têm marcador server-only; a proteção de imports cobre o
 | --- | --- |
 | `GET /api/v1/representatives` | `name`, `uf`, `page`, `pageSize`; máximo 50 itens; `{items,total,page,pageSize,pages}`. |
 | `GET /api/v1/people/:id` | DTO público de perfil; UUID válido e 404 para pessoa ausente. |
+| `GET /api/v1/proposals` | `type`, `number`, `year`, `authorId`, `page`, `pageSize`; catálogo local parcial. |
+| `GET /api/v1/proposals/:id` | Detalhe, autores e eventos de tramitação; UUID estável e 404 para registro não importado. |
 | `GET /api/v1/me/follows` | IDs dos follows do usuário autenticado. |
 | `PUT /api/v1/me/follows/people/:id` | Follow idempotente de pessoa existente no catálogo. |
 | `DELETE /api/v1/me/follows/people/:id` | Remove apenas follow do usuário autenticado. |
@@ -133,7 +157,7 @@ Erros REST: `{error:{code,message,requestId}}`, status 400/401/403/404/503 confo
 
 ## Proveniência e limites
 
-Cada perfil identifica fonte, ID externo, link oficial e coleta. A data de coleta não é data de atualização legislativa. Não são importados mandatos históricos, comissões, propostas, votos, despesas ou candidaturas. A amostra não é a bancada completa.
+Cada perfil identifica fonte, ID externo, link oficial e coleta. A data de coleta não é data de atualização legislativa. Não são importados mandatos históricos, comissões, votos, despesas ou candidaturas. A coleta atual de deputados foi ampliada; as propostas continuam uma amostra parcial. Ausência no catálogo não comprova ausência na fonte.
 
 A Câmara retorna CPF no detalhe. O adapter remove esse campo antes de persistir, mantendo os demais dados, hash original, hash armazenado e lista de campos removidos. Cada coleta mantém sua observação; quando minimizado, o corpo não é prometido como bytes idênticos do transporte. Filiação registra períodos **de observação**, sem inventar datas legais. Dados ausentes conservam “não informado”, “não coletado” ou “não se aplica”.
 

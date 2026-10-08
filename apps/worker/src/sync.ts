@@ -5,16 +5,26 @@ export interface SyncOptions {
   pageSize: number
   limit: number
   signal: AbortSignal
+  startPage?: number
 }
 type Storage = Pick<
   ReturnType<typeof connectDatabase>,
   'saveRaw' | 'upsertRepresentative' | 'startRun' | 'updateRun'
 >
-export async function syncCamara(storage: Storage, options: SyncOptions, source = camaraClient()) {
+export async function syncCamara(
+  storage: Storage,
+  options: SyncOptions,
+  source: Pick<ReturnType<typeof camaraClient>, 'list' | 'detail'> = camaraClient(),
+) {
   const runId = await storage.startRun()
   let processed = 0
   try {
-    for (let page = 1; page <= options.maxPages && processed < options.limit; page++) {
+    const firstPage = options.startPage ?? 1
+    for (
+      let page = firstPage;
+      page < firstPage + options.maxPages && processed < options.limit;
+      page++
+    ) {
       options.signal.throwIfAborted()
       const raw = await source.list(page, options.pageSize, options.signal)
       await storage.saveRaw(raw)

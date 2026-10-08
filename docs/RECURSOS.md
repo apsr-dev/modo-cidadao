@@ -242,3 +242,7 @@ Fonte indisponível deve gerar estado operacional verificável. Não completar l
 ## Atualização de decisão — 07/10/2026
 
 Bun **1.4.2** passa a ser o runtime da web e dos workers e o único gerenciador de pacotes. Workspaces ficam no `package.json`; `bun.lock` é o único lockfile. Vite continua sendo o pipeline de build (`bun --bun vite`), com checagem estática TypeScript separada. Vitest e Playwright permanecem. Consulte [ADR 001](decisions/001-bun-e-fundacao-local.md) e o README para comportamento implementado e validações. O restante do planejamento permanece integral.
+
+## Entrega de propostas — 07/10/2026
+
+Catálogo, autoria/coautoria e tramitação da Câmara implementados localmente, com versões preservadas e coleta manual limitada. O catálogo de deputados foi ampliado; o de propostas continua parcial. Consulte [ADR 002](decisions/002-propostas-camara.md), [ficha da fonte](FONTE-CAMARA.md) e [validação da feature](VALIDACAO-PROPOSTAS.md). Cada feature usa branch própria e PR para `main`, conforme `AGENTS.md`. O planejamento completo permanece integral.

@@ -3,6 +3,8 @@ import { type Representative, reported } from '@civica/domain'
 import { z } from 'zod'
 export const BASE_URL = 'https://dadosabertos.camara.leg.br/api/v2'
 export const NORMALIZER_VERSION = 'camara-deputados-1'
+export * from './proposals'
+
 const status = z.object({
   nome: z.string().min(1),
   siglaUf: z.string().regex(/^[A-Z]{2}$/),
@@ -57,7 +59,13 @@ export interface RawResponse {
   text: string
   fetchedAt: string
   externalId: string
-  resource: 'deputados-lista' | 'deputado'
+  resource:
+    | 'deputados-lista'
+    | 'deputado'
+    | 'proposicoes-lista'
+    | 'proposicao'
+    | 'proposicao-autores'
+    | 'proposicao-tramitacoes'
   hash: string
   sourceHash: string
   redactedFields: string[]
@@ -142,6 +150,38 @@ export function camaraClient(
     },
     detail(id: number, signal: AbortSignal) {
       return read(`${BASE_URL}/deputados/${id}`, signal, String(id), 'deputado')
+    },
+    proposals(
+      page: number,
+      pageSize: number,
+      filters: { year: number; type?: string; number?: number; deputy?: number },
+      signal: AbortSignal,
+    ) {
+      const query = new URLSearchParams({
+        pagina: String(page),
+        itens: String(pageSize),
+        ordem: 'DESC',
+        ordenarPor: 'id',
+        ano: String(filters.year),
+      })
+      if (filters.type) query.set('siglaTipo', filters.type)
+      if (filters.number) query.set('numero', String(filters.number))
+      if (filters.deputy) query.set('idDeputadoAutor', String(filters.deputy))
+      return read(`${BASE_URL}/proposicoes?${query}`, signal, String(page), 'proposicoes-lista')
+    },
+    proposal(id: number, signal: AbortSignal) {
+      return read(`${BASE_URL}/proposicoes/${id}`, signal, String(id), 'proposicao')
+    },
+    authors(id: number, signal: AbortSignal) {
+      return read(`${BASE_URL}/proposicoes/${id}/autores`, signal, String(id), 'proposicao-autores')
+    },
+    events(id: number, signal: AbortSignal) {
+      return read(
+        `${BASE_URL}/proposicoes/${id}/tramitacoes`,
+        signal,
+        String(id),
+        'proposicao-tramitacoes',
+      )
     },
   }
 }
