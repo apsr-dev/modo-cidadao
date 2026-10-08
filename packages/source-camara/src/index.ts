@@ -2,13 +2,14 @@ import { createHash } from 'node:crypto'
 import { type Representative, reported } from '@civica/domain'
 import { z } from 'zod'
 export const BASE_URL = 'https://dadosabertos.camara.leg.br/api/v2'
-export const NORMALIZER_VERSION = 'camara-deputados-1'
+export const NORMALIZER_VERSION = 'camara-deputados-2'
 const status = z.object({
   nome: z.string().min(1),
   siglaUf: z.string().regex(/^[A-Z]{2}$/),
   idLegislatura: z.number().int(),
   siglaPartido: z.string().nullish(),
   situacao: z.string().nullish(),
+  urlFoto: z.unknown().optional(),
   email: z.string().nullish(),
   gabinete: z.object({ telefone: z.string().nullish() }).nullish(),
 })
@@ -27,6 +28,28 @@ export function stablePersonId(externalId: string) {
   const hash = createHash('sha256').update(`camara:deputados:${externalId}`).digest('hex')
   return `${hash.slice(0, 8)}-${hash.slice(8, 12)}-5${hash.slice(13, 16)}-a${hash.slice(17, 20)}-${hash.slice(20, 32)}`
 }
+// Only the official portrait returned for this source identity is accepted.
+// An absent or malformed optional photo must not invalidate the representative.
+export function officialDeputyPhoto(value: unknown, externalId: string) {
+  if (typeof value !== 'string') return reported(null)
+  try {
+    const url = new URL(value)
+    return reported(
+      url.protocol === 'https:' &&
+        url.hostname === 'www.camara.leg.br' &&
+        !url.username &&
+        !url.password &&
+        !url.port &&
+        !url.search &&
+        !url.hash &&
+        url.pathname === `/internet/deputado/bandep/${externalId}.jpg`
+        ? value
+        : null,
+    )
+  } catch {
+    return reported(null)
+  }
+}
 export function normalizeDeputy(payload: unknown, fetchedAt: string): Representative {
   const { dados } = detailSchema.parse(payload)
   const last = dados.ultimoStatus
@@ -41,6 +64,7 @@ export function normalizeDeputy(payload: unknown, fetchedAt: string): Representa
     status: reported(last.situacao),
     email: reported(last.email && z.email().safeParse(last.email).success ? last.email : null),
     phone: reported(last.gabinete?.telefone),
+    photo: officialDeputyPhoto(last.urlFoto, String(dados.id)),
     demo: false,
     provenance: {
       source: 'camara',

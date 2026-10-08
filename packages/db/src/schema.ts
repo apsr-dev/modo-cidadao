@@ -48,6 +48,7 @@ export const people = civic.table('people', {
   id: uuid().primaryKey(),
   name: text().notNull(),
   civilName: jsonb('civil_name').$type<DataValue>().notNull(),
+  photo: jsonb().$type<DataValue>().notNull(),
   source: text().$type<'demo' | 'camara'>().notNull(),
   externalId: text('external_id').notNull(),
   searchName: text('search_name').notNull(),

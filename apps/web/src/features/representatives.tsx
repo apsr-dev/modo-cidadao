@@ -2,6 +2,7 @@ import type { DataValue, Representative } from '@civica/contracts'
 import { Badge } from '@civica/ui'
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight, MapPin } from 'lucide-react'
+import { RepresentativePhoto } from './representative-photo'
 export function valueLabel(value: DataValue) {
   return (
     value.value ??
@@ -17,13 +18,7 @@ export function PersonCard({ person }: { person: Representative }) {
   return (
     <Link to="/representantes/$id" params={{ id: person.id }} className="person-card">
       <div className="person-card-top">
-        <span className="avatar">
-          {person.name
-            .split(' ')
-            .slice(0, 2)
-            .map((n) => n[0])
-            .join('')}
-        </span>
+        <RepresentativePhoto person={person} />
         <ArrowUpRight size={20} />
       </div>
       <Badge>{person.demo ? 'Personagem fictício' : 'Câmara dos Deputados'}</Badge>

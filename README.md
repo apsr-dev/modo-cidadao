@@ -6,6 +6,7 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
 - Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte.
+- Foto oficial no diretório e perfil, com iniciais acessíveis quando ausente ou indisponível. A demo mantém somente iniciais.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.
 - Supabase Auth local por e-mail/senha, cookies SSR HttpOnly e seguir/deixar de seguir. Follows privados por RLS; isolamento entre dois usuários testado no banco e no REST.
@@ -44,6 +45,8 @@ DEMO_MODE=false bun run dev
 ```
 
 `db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Neste ambiente o banco já foi iniciado, as migrations aplicadas, o seed carregado e três representantes oficiais importados; `.env` foi deixado com `DEMO_MODE=false` para usar essa integração.
+
+Para atualizar um banco existente com fotos, execute `bun run db:migrate` antes de iniciar a nova web/worker e repita a coleta limitada acima. A migration preserva pessoas e marca a foto anterior como “não coletado”; somente uma nova observação oficial preenche a URL. As imagens são carregadas diretamente da Câmara, sem crawler nem armazenamento de arquivos. Origem, atribuição e limites dos termos estão em [docs/FONTE-CAMARA.md](docs/FONTE-CAMARA.md).
 
 A origem web configurada é `http://localhost:3000`. Use esse endereço para login. Se trocar domínio/porta, ajuste `VITE_APP_URL`; as mutações por cookie verificam Origin. `VITE_APP_NAME` altera a marca após reiniciar/rebuild.
 

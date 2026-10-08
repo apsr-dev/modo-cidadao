@@ -93,6 +93,56 @@ describe.skipIf(!enabled)('PostgreSQL e Auth locais', () => {
     await expect(reader.client`select * from internal.raw_snapshots`).rejects.toThrow()
     await expect(reader.client`delete from civic.people where false`).rejects.toThrow()
   })
+  it('preserva foto e proveniência na leitura, replay e atualização mais recente', async () => {
+    const id = crypto.randomUUID()
+    const p = {
+      ...normalizeDeputy(fixture, '2026-10-08T12:00:00.000Z'),
+      id,
+      name: `Teste foto ${id}`,
+      demo: true,
+      provenance: {
+        ...normalizeDeputy(fixture, '2026-10-08T12:00:00.000Z').provenance,
+        source: 'demo' as const,
+        externalId: `photo-test-${id}`,
+        officialUrl: null,
+        resourceUrl: null,
+      },
+    }
+    const cleanup = connectDatabase(
+      requireLocal(process.env.MIGRATION_DATABASE_URL, 'MIGRATION_DATABASE_URL'),
+    )
+    try {
+      await connection.upsertRepresentative(p)
+      await connection.upsertRepresentative(p)
+      expect(await reader.repository(true).get(id)).toMatchObject({
+        photo: p.photo,
+        provenance: p.provenance,
+      })
+      const page = await reader.repository(true).list({ name: p.name, page: 1, pageSize: 1 })
+      expect(page.total).toBe(1)
+      expect(page.items[0]?.photo).toEqual(p.photo)
+      const withoutPhoto = {
+        ...p,
+        photo: { state: 'not_informed' as const, value: null },
+        provenance: { ...p.provenance, fetchedAt: '2026-10-08T13:00:00.000Z' },
+      }
+      await connection.upsertRepresentative(withoutPhoto)
+      await connection.upsertRepresentative(p)
+      expect(await reader.repository(true).get(id)).toMatchObject({
+        photo: withoutPhoto.photo,
+        provenance: withoutPhoto.provenance,
+      })
+      expect(await reader.repository().get(id)).toBeNull()
+    } finally {
+      await cleanup.client.begin(async (tx) => {
+        await tx`delete from civic.contacts where person_id=${id}`
+        await tx`delete from civic.party_memberships where mandate_id in (select id from civic.mandates where person_id=${id})`
+        await tx`delete from civic.mandates where person_id=${id}`
+        await tx`delete from civic.people where id=${id}`
+      })
+      await cleanup.close()
+    }
+  })
   it('usuário A segue; B não lê, exclui nem atribui linhas de A; anônimo bloqueado', async () => {
     expect(
       (

@@ -7,6 +7,13 @@ Leia integralmente, antes de mudanças relevantes:
 
 O planejamento descreve o produto completo; README e `docs/VALIDACAO.md` descrevem o que está implementado e verificado. Preserve os documentos completos; não reorganize por MVP, fases ou sprints. Registre decisões novas em `docs/decisions/` e atualize documentação quando comportamento, produto ou arquitetura mudar.
 
+## Revisão visual dos PRs
+
+- PRs que alteram ou adicionam telas devem incluir screenshots na descrição, com legendas que indiquem tela, estado e modo demo/integrado.
+- Capture a versão real da branch, sem mockups. Cubra as telas e estados alterados; inclua antes/depois ou claro/escuro quando isso ajudar a avaliar a mudança.
+- Confira a renderização das imagens no GitHub. Capturas não devem expor contas, credenciais, follows ou outros dados pessoais privados.
+- PRs sem alteração visual não precisam de screenshots.
+
 ## Runtime e verificação
 
 - Bun **1.4.2** é o runtime da web/worker e único gerenciador. Use Bun workspaces, `workspace:*`, `bun.lock` e `bun install --frozen-lockfile`. Nunca gere lockfiles concorrentes.

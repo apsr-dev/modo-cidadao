@@ -44,3 +44,18 @@ A imagem do `Dockerfile`, o workflow no GitHub, adapters de hospedagem remota e 
 CPF retornado pela Câmara é removido antes de persistir RAW; hashes original/armazenado e campos removidos mantêm evidência dessa minimização. Datas de coleta e de observação não são datas legais de atualização ou filiação.
 
 Comandos reproduzíveis estão no [README](../README.md); versões instaladas em [VERSOES.md](VERSOES.md). A porta 3000 deve estar livre para suítes que iniciam seu próprio servidor; `E2E_BASE_URL` permite usar um servidor já ativo.
+
+## MOD-49 — fotos oficiais (08/10/2026)
+
+Validação no worktree da feature, com Bun 1.4.2, build de produção e Supabase local existente:
+
+- `bun install --frozen-lockfile`, `bun run build`, `bun run typecheck` e `bun run lint`: concluídos. Permanecem os sete avisos CSS e a sugestão de template string anteriores.
+- `bun run check:boundaries`: import de banco pelo pacote UI bloqueado; probe removido e build recomposto. Bundle público: 16 arquivos, sem marcadores de banco ou segredos.
+- `bun run test`: 23 testes passaram; três de integração ignorados no modo padrão. Inclui URL oficial, campos ausentes/malformados, domínio/ID incorretos e demo sem retratos.
+- `bun run test:integration`: três testes passaram. Foto/proveniência lidas pela conexão limitada, replay sem duplicação e observação antiga sem sobrescrever a nova; registro temporário removido. Auth/RLS continuam funcionando.
+- E2E de produção em demo (porta 3005): seis testes passaram, seis ignorados por modo. E2E integrado (porta 3004): dez passaram, dois ignorados por modo. Desktop e celular verificaram imagem válida e fallback após 404, navegação ao perfil, texto alternativo, origem e ausência de Referer. Os casos de imagem usam bytes determinísticos via interceptação e não acessam a Câmara no CI.
+- Uma execução simultânea das suítes colidiu nos artefatos temporários do Playwright (ENOENT). A suíte integrada foi repetida com `--output=/private/tmp/mod49-e2e-integrated` e passou integralmente; não houve falha de comportamento da aplicação.
+- Migration aditiva aplicada sem reset: os 513 registros oficiais permaneceram e receberam `photo=not_collected`. Coleta oficial limitada atualizou três para `available`; os outros 510 permaneceram sem foto coletada. Nenhum arquivo de imagem foi importado.
+- Navegador local: fotos reais renderizadas no diretório e perfil; crédito institucional e link da imagem presentes. URLs das fixtures 204379/220714 verificadas diretamente na API oficial.
+
+Para banco existente, aplicar `bun run db:migrate` antes de executar a nova versão e repetir a coleta para preencher fotos. A disponibilidade de cada arquivo depende do host da Câmara; indisponibilidade mantém as iniciais e acesso ao perfil. Autoria/licença específica de retrato não é fornecida por `urlFoto`; referências e limites estão em [FONTE-CAMARA.md](FONTE-CAMARA.md).
