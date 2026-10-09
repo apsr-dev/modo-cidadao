@@ -1,5 +1,13 @@
 import { filtersSchema, ufs } from '@civica/contracts'
-import { Button } from '@civica/ui'
+import {
+  Button,
+  Field,
+  FieldGroup,
+  FieldLabel,
+  Input,
+  NativeSelect,
+  NativeSelectOption,
+} from '@civica/ui'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
@@ -7,7 +15,7 @@ import { PersonCard } from '../features/representatives'
 import { EmptyState } from '../features/shell'
 import { metadata } from '../lib/env'
 import { representativesQuery } from '../lib/queries'
-export const Route = createFileRoute('/representantes/')({
+export const Route = createFileRoute('/_app/representantes/')({
   validateSearch: filtersSchema,
   loaderDeps: ({ search }) => search,
   loader: ({ context, deps }) => context.queryClient.ensureQueryData(representativesQuery(deps)),
@@ -34,29 +42,29 @@ function Directory() {
         representa a bancada completa.
       </div>
       <form className="filter-form" method="get" action="/representantes">
-        <label className="search-field">
-          <span>Nome do representante</span>
-          <div>
-            <Search size={18} />
-            <input
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="representative-name">Nome do representante</FieldLabel>
+            <Input
+              id="representative-name"
               name="name"
               defaultValue={filters.name}
               placeholder="Busque pelo nome"
               maxLength={100}
             />
-          </div>
-        </label>
-        <label>
-          <span>Unidade federativa</span>
-          <select name="uf" defaultValue={filters.uf ?? ''}>
-            <option value="">Todas as UFs</option>
-            {ufs.map((uf) => (
-              <option key={uf}>{uf}</option>
-            ))}
-          </select>
-        </label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="representative-uf">Unidade federativa</FieldLabel>
+            <NativeSelect id="representative-uf" name="uf" defaultValue={filters.uf ?? ''}>
+              <NativeSelectOption value="">Todas as UFs</NativeSelectOption>
+              {ufs.map((uf) => (
+                <NativeSelectOption key={uf}>{uf}</NativeSelectOption>
+              ))}
+            </NativeSelect>
+          </Field>
+        </FieldGroup>
         <Button type="submit">
-          Buscar <Search size={16} />
+          Buscar <Search data-icon="inline-end" />
         </Button>
       </form>
       <div className="results-heading">

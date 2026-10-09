@@ -1,4 +1,4 @@
-import { Button } from '@civica/ui'
+import { Button, Field, FieldGroup, FieldLabel, Input } from '@civica/ui'
 import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { LockKeyhole, LogOut } from 'lucide-react'
@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { EmptyState } from '../features/shell'
 import { metadata } from '../lib/env'
 import { getPersonal, login, logout, signup } from '../lib/functions'
-export const Route = createFileRoute('/meu-brasil')({
+export const Route = createFileRoute('/_app/meu-brasil')({
   loader: () => getPersonal(),
   headers: () => ({ 'Cache-Control': 'private, no-store', Vary: 'Cookie, Authorization' }),
   head: () => ({
@@ -74,7 +74,7 @@ function Account() {
                 }
               }}
             >
-              <LogOut size={16} /> Sair
+              <LogOut data-icon="inline-start" /> Sair
             </Button>
           </section>
           <section className="panel">
@@ -138,29 +138,33 @@ function Account() {
               }
             }}
           >
-            <label>
-              E-mail
-              <input
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                maxLength={254}
-                disabled={!hydrated}
-              />
-            </label>
-            <label>
-              Senha
-              <input
-                name="password"
-                type="password"
-                autoComplete={register ? 'new-password' : 'current-password'}
-                minLength={10}
-                maxLength={128}
-                required
-                disabled={!hydrated}
-              />
-            </label>
+            <FieldGroup>
+              <Field data-disabled={!hydrated}>
+                <FieldLabel htmlFor="account-email">E-mail</FieldLabel>
+                <Input
+                  id="account-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  maxLength={254}
+                  disabled={!hydrated}
+                />
+              </Field>
+              <Field data-disabled={!hydrated}>
+                <FieldLabel htmlFor="account-password">Senha</FieldLabel>
+                <Input
+                  id="account-password"
+                  name="password"
+                  type="password"
+                  autoComplete={register ? 'new-password' : 'current-password'}
+                  minLength={10}
+                  maxLength={128}
+                  required
+                  disabled={!hydrated}
+                />
+              </Field>
+            </FieldGroup>
             <small>No mínimo 10 caracteres. Recuperação de senha ainda não integrada.</small>
             <Button type="submit" disabled={busy || !hydrated}>
               {busy ? 'Aguarde…' : register ? 'Criar conta' : 'Entrar'}

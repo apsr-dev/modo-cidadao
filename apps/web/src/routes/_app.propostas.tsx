@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { EmptyState } from '../features/shell'
 import { metadata } from '../lib/env'
-export const Route = createFileRoute('/votacoes')({
+export const Route = createFileRoute('/_app/propostas')({
   head: () =>
     metadata(
-      'Votações',
-      'Decisões parlamentares com objeto, contexto e resultado oficial.',
-      '/votacoes',
+      'Propostas',
+      'Textos, versões e tramitações para entender o que está em discussão.',
+      '/propostas',
     ),
   component: Page,
 })
@@ -15,8 +15,8 @@ function Page() {
     <>
       <div className="page-heading">
         <span className="eyebrow">INFORMAÇÃO PÚBLICA COM CONTEXTO</span>
-        <h1>Votações</h1>
-        <p>Decisões parlamentares com objeto, contexto e resultado oficial.</p>
+        <h1>Propostas</h1>
+        <p>Textos, versões e tramitações para entender o que está em discussão.</p>
       </div>
       <EmptyState title="Integração ainda não disponível">
         <p>

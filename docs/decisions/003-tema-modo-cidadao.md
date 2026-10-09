@@ -11,3 +11,5 @@ Inter, Merriweather e JetBrains Mono são servidas localmente por arquivos WOFF2
 Sem escolha manual, o tema segue a preferência do sistema, inclusive suas mudanças. O botão no cabeçalho salva `light` ou `dark` na chave `modo-cidadao-theme` do armazenamento local e sincroniza abas abertas. Quando o armazenamento está bloqueado, a alternância continua funcionando durante a navegação. Um script estático no head aplica a preferência antes da pintura do corpo; somente a diferença esperada na classe do HTML é suprimida na hidratação. Não são interpolados dados do usuário.
 
 Esta entrega aplica o tema fornecido. A definição completa da marca e domínio continua no Linear; o Linear também é a única fonte de backlog.
+
+A separação e o redesign solicitados em 09/10/2026 estão no [ADR 004](004-landing-e-app.md). Eles alteram a composição e os layouts descritos acima, mantendo os tokens e o comportamento do tema.

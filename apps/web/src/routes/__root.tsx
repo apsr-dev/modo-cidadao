@@ -7,7 +7,7 @@ import {
   Outlet,
   Scripts,
 } from '@tanstack/react-router'
-import { EmptyState, Shell } from '../features/shell'
+import { EmptyState } from '../features/shell'
 import { getSettings } from '../lib/functions'
 import { themeInitScript } from '../lib/theme'
 import styleHref from '../styles.css?url'
@@ -48,7 +48,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   ),
 })
 function Root() {
-  const { demo } = Route.useLoaderData()
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
@@ -57,9 +56,7 @@ function Root() {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <Shell demo={demo}>
-          <Outlet />
-        </Shell>
+        <Outlet />
         <Scripts />
       </body>
     </html>

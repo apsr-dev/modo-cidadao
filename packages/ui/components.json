@@ -4,16 +4,16 @@
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "css": "src/styles.css",
+    "css": "../../apps/web/src/styles.css",
     "baseColor": "neutral",
     "cssVariables": true
   },
   "aliases": {
-    "components": "@/features",
+    "components": "@civica/ui",
     "utils": "@civica/ui/utils",
     "ui": "@civica/ui",
-    "lib": "@/lib",
-    "hooks": "@/lib"
+    "lib": "@civica/ui",
+    "hooks": "@civica/ui"
   },
   "iconLibrary": "lucide"
 }

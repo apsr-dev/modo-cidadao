@@ -52,3 +52,17 @@ O tema fornecido em 07/10/2026 foi aplicado na branch `feat/shadcn-theme`. Os 52
 Build Vite/Start, inspeção do bundle, typecheck e lint passaram. Permanecem os sete avisos CSS e a sugestão de template string já existentes. Vitest: **9 passaram, 2 opt-in ignorados**. Playwright contra o servidor Bun de produção isolado na porta 3002, em demo: **14 passaram, 2 de Auth ignorados**. O teste de contraste foi repetido após seu ajuste de tipagem, com os dois dispositivos aprovados.
 
 A suíte cobre preferência do sistema, escolha manual por teclado, recarga e navegação, sincronização entre abas, armazenamento bloqueado, aplicação antes do JavaScript da aplicação e contraste mínimo de 4,5 nas amostras de texto/botões verificadas nos dois temas. A navegação também foi verificada em 320 pixels, sem overflow horizontal, além dos fluxos públicos de catálogo/SSR/REST já existentes. A prévia foi inspecionada visualmente em desktop e celular, sem erros no navegador ou servidor. Esta entrega não alterou a ingestão, o banco ou a autenticação; os testes opt-in dessas integrações não foram repetidos.
+
+
+## Landing e app — redesign de 09/10/2026 no PR 4
+
+Validado com Bun 1.4.2 no worktree `feat/shadcn-theme`. A landing está em `/`, o início do app em `/app`, e os caminhos de catálogo, perfil, participação e área pessoal foram preservados pelo layout sem segmento `_app`.
+
+- `bun install --frozen-lockfile`, build Vite/Start, inspeção de 20 arquivos públicos e TypeScript estrito aprovados. Lint sem erros ou avisos; resta somente a sugestão preexistente de template string no script de configuração local.
+- Vitest: **9 passaram, 2 opt-in ignorados**. Sem mudanças de domínio, banco ou ingestão.
+- Playwright contra o build de produção na porta 3008, demo: **18 passaram, 2 de Auth ignorados**.
+- Playwright contra o mesmo build na porta 3009, com catálogo e Supabase existentes locais: **20 passaram**, incluindo login, follow, reload, isolamento REST, unfollow e logout. Contas temporárias removidas pela suíte. Nenhuma migration ou importação foi executada nesta validação.
+- A nova cobertura verifica landing sem navegação do app, entrada em `/app`, descoberta por UF, Escape/foco na navegação mobile e entrada pública sem JavaScript. A suíte anterior continua verificando SSR/REST, perfil/404, origem das mutações, tema, armazenamento bloqueado e contraste nas amostras de texto/botões verificadas.
+- Inspeção visual em desktop, 390 × 844 e 320 × 700: landing, início do app, catálogo, perfil e participação. Em 320 pixels, sem overflow horizontal. Console observado sem erros. Capturas em `docs/screenshots/pr-4` usam personagens fictícios e não contêm dados de contas.
+
+As referências do Mobbin, a licença da fotografia e as decisões de layout estão no [ADR 004](decisions/004-landing-e-app.md). O MCP conectado não expôs ferramentas nesta sessão; as referências foram consultadas no navegador. Os testes de fonte externa e o advisor de banco não foram repetidos porque esta entrega não modifica essas integrações. Não houve deploy remoto.

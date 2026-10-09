@@ -6,7 +6,7 @@ import { FollowButton } from '../features/follow'
 import { valueLabel } from '../features/representatives'
 import { metadata } from '../lib/env'
 import { representativeQuery } from '../lib/queries'
-export const Route = createFileRoute('/representantes/$id')({
+export const Route = createFileRoute('/_app/representantes/$id')({
   loader: async ({ params, context }) => {
     if (!personIdSchema.safeParse(params.id).success) throw notFound()
     const person = await context.queryClient.ensureQueryData(representativeQuery(params.id))

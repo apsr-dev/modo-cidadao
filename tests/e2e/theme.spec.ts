@@ -123,13 +123,12 @@ test('mantém contraste legível nos textos e botões das superfícies do tema',
       }
       return [
         '.button-primary',
+        '.button-outline',
         '.text-link',
-        '.card-action',
-        '.quiet-badge',
-        '.hero-copy > p',
-        '.discovery-card p',
-        '.participation-callout p',
-        '.illustration-label',
+        '.marketing-header nav',
+        '.landing-purpose p:not(.section-label)',
+        '.landing-path-list p',
+        '.principles-list p',
       ].map((selector) => {
         const el = document.querySelector(selector)
         if (!el) throw new Error(`Missing theme sample: ${selector}`)

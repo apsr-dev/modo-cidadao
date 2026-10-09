@@ -5,6 +5,7 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 ## O que funciona
 
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
+- Landing editorial em `/`, separada do app em `/app`, com catálogo em listas e contexto de cobertura. As URLs existentes continuam funcionando.
 - Tema Modo Cidadao do tweakcn, fontes locais e alternância claro/escuro no cabeçalho. Segue o sistema até uma escolha manual, preservada neste navegador.
 - Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
@@ -31,7 +32,11 @@ Abra **http://localhost:3000**. Em outro terminal, repita o `export PATH` antes 
 
 A web executa em demo quando não há `.env`. Se criar configuração manualmente, copie `.env.example` para `.env` e mantenha `DEMO_MODE=true` até configurar o banco. As variáveis privadas e públicas são validadas separadamente. Nunca prefixe credenciais com `VITE_`.
 
-## Skill shadcn para o Codex
+## Skills de interface para o Codex
+
+`frontend-skill`, `make-interfaces-feel-better` e `find-skills` também estão em `.agents/skills`. A primeira foi instalada da versão histórica `30444aed500c00c85294d12074f6e3ee794f808a` de `openai/skills` (`skills/.curated/frontend-skill`); não está mais no catálogo principal e o instalador oficial não gerou uma entrada em `skills-lock.json`. As outras duas conservam origem e hash no lockfile.
+
+## Skill shadcn
 
 A skill oficial do repositório `shadcn/ui` fica em `.agents/skills/shadcn`, com suas referências, e é descoberta pelo Codex nos próximos turnos neste checkout. A origem e o hash da instalação ficam em `skills-lock.json`. Para atualizar a instalação no escopo do projeto:
 
@@ -105,6 +110,10 @@ O CI fixa Bun 1.4.2, usa `bun install --frozen-lockfile`, executa build/typechec
 
 Resultados e limites de verificação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
 
+## Landing e plataforma
+
+A apresentação pública usa `MarketingShell` em `/`; a plataforma usa `Shell` no layout sem segmento `_app`. `/app` é a tela Explorar. `/representantes`, `/representantes/:id`, `/participe`, `/meu-brasil` e as páginas de integrações pendentes conservam suas URLs. Os layouts compartilham marca, tema e componentes, mas têm navegação e hierarquia próprias. Não há um segundo deploy ou pacote de frontend. A composição e as referências estão no [ADR 004](docs/decisions/004-landing-e-app.md).
+
 ## Estrutura e fronteiras
 
 ```text
@@ -114,7 +123,7 @@ packages/domain   entidades, portas e casos de uso, sem framework/banco
 packages/contracts validação Zod e tipos públicos
 packages/db       schema Drizzle, repositórios e tipo da Data API pessoal
 packages/source-camara cliente oficial, schemas externos e normalização
-packages/ui       Button e Badge compartilhados; padrão shadcn/ui
+packages/ui       Button, Badge, Field, Input, NativeSelect, Empty e Separator; shadcn/ui
 packages/config   TypeScript estrito compartilhado
 supabase          configuração, migrations SQL e referência ao seed determinístico
 scripts           configuração local, seed, checks e inspeção do bundle
