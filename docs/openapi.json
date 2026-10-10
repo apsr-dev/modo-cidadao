@@ -82,7 +82,7 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 50,
-              "default": 6
+              "default": 24
             }
           }
         ],

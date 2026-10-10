@@ -8,6 +8,8 @@ Runtime: **Bun 1.4.2**. PostgreSQL local: **17.11** (Supabase padrão). Docker C
 | --- | --- |
 | @biomejs/biome | 2.5.15 |
 | @playwright/test | 1.63.0 |
+| @radix-ui/react-label | 2.1.16 |
+| @radix-ui/react-separator | 1.1.16 |
 | @radix-ui/react-slot | 1.4.0 |
 | @supabase/ssr | 0.12.7 |
 | @supabase/supabase-js | 2.117.3 |
@@ -36,4 +38,4 @@ Runtime: **Bun 1.4.2**. PostgreSQL local: **17.11** (Supabase padrão). Docker C
 | vitest | 5.0.3 |
 | zod | 4.6.5 |
 
-shadcn/ui é código adaptado do componente Button, com Radix Slot/CVA, não uma biblioteca runtime adicional. O alvo de produção é o servidor Bun local; nenhum adapter/provedor remoto foi instalado.
+shadcn/ui é código local adaptado de Button, Field, Input, NativeSelect, Empty e Separator. Radix fornece Slot, Label e Separator; CVA configura variantes. Os dois últimos pacotes Radix foram adicionados no redesign de 09/10/2026. O alvo de produção é o servidor Bun local; nenhum adapter/provedor remoto foi instalado.

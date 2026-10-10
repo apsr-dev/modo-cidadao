@@ -5,7 +5,9 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 ## O que funciona
 
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
-- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte.
+- Landing editorial em `/`, separada do app em `/app`, com catálogo em listas, regiões visuais distintas e contexto de cobertura. As URLs existentes continuam funcionando.
+- Tema Modo Cidadao do tweakcn, fontes locais e alternância claro/escuro no cabeçalho. Segue o sistema até uma escolha manual, preservada neste navegador.
+- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação padrão de 24 itens e contatos retornados pela fonte.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.
 - Supabase Auth local por e-mail/senha, cookies SSR HttpOnly e seguir/deixar de seguir. Follows privados por RLS; isolamento entre dois usuários testado no banco e no REST.
@@ -29,6 +31,18 @@ bun run dev
 Abra **http://localhost:3000**. Em outro terminal, repita o `export PATH` antes dos comandos. Em um clone novo, instale Bun 1.4.2 pelo [instalador oficial](https://bun.com/docs/installation); `.tools/` não é versionado. Node.js está instalado na máquina, mas os comandos da aplicação, Vitest e Playwright foram executados com Bun. Turborepo/Biome/CLI e serviços Docker usam seus próprios binários.
 
 A web executa em demo quando não há `.env`. Se criar configuração manualmente, copie `.env.example` para `.env` e mantenha `DEMO_MODE=true` até configurar o banco. As variáveis privadas e públicas são validadas separadamente. Nunca prefixe credenciais com `VITE_`.
+
+## Skills de interface para o Codex
+
+`frontend-skill`, `make-interfaces-feel-better` e `find-skills` também estão em `.agents/skills`. A primeira foi instalada da versão histórica `30444aed500c00c85294d12074f6e3ee794f808a` de `openai/skills` (`skills/.curated/frontend-skill`); não está mais no catálogo principal e o instalador oficial não gerou uma entrada em `skills-lock.json`. As outras duas conservam origem e hash no lockfile.
+
+## Skill shadcn
+
+A skill oficial do repositório `shadcn/ui` fica em `.agents/skills/shadcn`, com suas referências, e é descoberta pelo Codex nos próximos turnos neste checkout. A origem e o hash da instalação ficam em `skills-lock.json`. Para atualizar a instalação no escopo do projeto:
+
+```sh
+bun x --bun skills add shadcn/ui --skill shadcn --agent codex --copy --yes
+```
 
 ## Banco local e dados oficiais
 
@@ -96,6 +110,10 @@ O CI fixa Bun 1.4.2, usa `bun install --frozen-lockfile`, executa build/typechec
 
 Resultados e limites de verificação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
 
+## Landing e plataforma
+
+A apresentação pública usa `MarketingShell` em `/`; a plataforma usa `Shell` no layout sem segmento `_app`. `/app` é a tela Explorar. `/representantes`, `/representantes/:id`, `/participe`, `/meu-brasil` e as páginas de integrações pendentes conservam suas URLs. Os layouts compartilham marca, tema e componentes, mas têm navegação e hierarquia próprias. Não há um segundo deploy ou pacote de frontend. A composição e as referências estão no [ADR 004](docs/decisions/004-landing-e-app.md).
+
 ## Estrutura e fronteiras
 
 ```text
@@ -105,7 +123,7 @@ packages/domain   entidades, portas e casos de uso, sem framework/banco
 packages/contracts validação Zod e tipos públicos
 packages/db       schema Drizzle, repositórios e tipo da Data API pessoal
 packages/source-camara cliente oficial, schemas externos e normalização
-packages/ui       Button e Badge compartilhados; padrão shadcn/ui
+packages/ui       Button, Badge, Field, Input, NativeSelect, Empty e Separator; shadcn/ui
 packages/config   TypeScript estrito compartilhado
 supabase          configuração, migrations SQL e referência ao seed determinístico
 scripts           configuração local, seed, checks e inspeção do bundle
@@ -123,7 +141,7 @@ Arquivos `.server.ts` têm marcador server-only; a proteção de imports cobre o
 
 | Método e caminho | Comportamento |
 | --- | --- |
-| `GET /api/v1/representatives` | `name`, `uf`, `page`, `pageSize`; máximo 50 itens; `{items,total,page,pageSize,pages}`. |
+| `GET /api/v1/representatives` | `name`, `uf`, `page`, `pageSize`; padrão 24 e máximo 50 itens; `{items,total,page,pageSize,pages}`. |
 | `GET /api/v1/people/:id` | DTO público de perfil; UUID válido e 404 para pessoa ausente. |
 | `GET /api/v1/me/follows` | IDs dos follows do usuário autenticado. |
 | `PUT /api/v1/me/follows/people/:id` | Follow idempotente de pessoa existente no catálogo. |
@@ -140,3 +158,9 @@ A Câmara retorna CPF no detalhe. O adapter remove esse campo antes de persistir
 O alvo de produção validado é o processo Bun local usando o build Start. `Dockerfile` fixa Bun 1.4.2, mas a imagem e um provedor remoto não foram validados. Nenhum deploy, serviço pago, conta externa ou agendamento remoto foi configurado. Para produção serão necessárias decisões sobre domínio, credenciais/papéis, e-mail, recuperação/exclusão de conta, retenção, orçamento e operação.
 
 Veja [AGENTS.md](AGENTS.md), [ADR 001](docs/decisions/001-bun-e-fundacao-local.md) e os três documentos de planejamento antes de mudanças relevantes.
+
+## Separação institucional e consulta — MOD-44
+
+A home `/` apresenta propósito, fontes e cobertura com ação **Explorar a plataforma** para `/app`. Sua seção de fontes distingue personagens fictícios da demo e catálogo local da Câmara com importação limitada, sem prometer atualização automática ou cobertura completa. Canais de participação são acessados nos portais oficiais. Nesta branch, propostas, votações, Senado, despesas e eleições permanecem sem integração.
+
+O layout `_app` preserva as URLs públicas e não exige conta para consultar. `/meu-brasil` explica que login serve para salvar acompanhamentos e permite continuar sem conta; a demo mantém a conta indisponível. A implementação usa o PR #4 já aberto, sem duplicar a separação existente. Veja [ADR 004](docs/decisions/004-landing-e-app.md) e [validação](docs/VALIDACAO-MOD-44.md).

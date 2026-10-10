@@ -32,7 +32,7 @@ export const filtersSchema = z.object({
   name: z.string().trim().max(100).default(''),
   uf: z.preprocess((value) => (value === '' ? undefined : value), z.enum(ufs).optional()),
   page: z.coerce.number().int().min(1).max(10000).default(1),
-  pageSize: z.coerce.number().int().min(1).max(50).default(6),
+  pageSize: z.coerce.number().int().min(1).max(50).default(24),
 })
 export const personIdSchema = z.uuid()
 export const credentialsSchema = z.object({

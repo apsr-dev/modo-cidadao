@@ -1,5 +1,7 @@
-import { Link } from '@tanstack/react-router'
+import { Button, cn, Empty, EmptyContent, EmptyHeader, EmptyTitle, Separator } from '@civica/ui'
+import { Link, useRouterState } from '@tanstack/react-router'
 import {
+  ArrowLeft,
   ArrowUpRight,
   BookOpen,
   CheckSquare,
@@ -11,11 +13,12 @@ import {
   Users,
   X,
 } from 'lucide-react'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useRef, useState } from 'react'
 import { publicEnv } from '../lib/env'
+import { ThemeToggle } from './theme-toggle'
 
 const links = [
-  ['/', 'Visão geral', Compass],
+  ['/app', 'Explorar', Compass],
   ['/representantes', 'Representantes', Users],
   ['/propostas', 'Propostas', BookOpen],
   ['/votacoes', 'Votações', CheckSquare],
@@ -23,89 +26,116 @@ const links = [
   ['/eleicoes', 'Eleições', Flag],
   ['/meu-brasil', 'Meu Brasil', CircleUserRound],
 ] as const
+
+export function Brand() {
+  return (
+    <Link to="/" className="brand">
+      <span className="brand-mark">
+        <Landmark size={20} strokeWidth={1.8} aria-hidden="true" />
+      </span>
+      <span>{publicEnv.VITE_APP_NAME}</span>
+    </Link>
+  )
+}
+
 export function Shell({ children, demo }: { children: ReactNode; demo: boolean }) {
   const [open, setOpen] = useState(false)
+  const menuButton = useRef<HTMLButtonElement>(null)
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const current =
+    links.find(
+      ([path]) => pathname === path || (path !== '/app' && pathname.startsWith(`${path}/`)),
+    )?.[1] ?? 'Plataforma'
   return (
     <div className="app-shell">
       <a className="skip-link" href="#conteudo">
         Pular para o conteúdo
       </a>
       <aside className="sidebar">
-        <Link to="/" className="brand">
-          <span className="brand-mark">
-            <Landmark size={23} />
-          </span>
-          <span>
-            {publicEnv.VITE_APP_NAME}
-            <small>CIDADANIA NO DIA A DIA</small>
-          </span>
-        </Link>
-        <button
-          className="mobile-menu"
-          type="button"
-          aria-label={open ? 'Fechar navegação' : 'Abrir navegação'}
-          aria-expanded={open}
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X /> : <Menu />}
-        </button>
+        <div className="sidebar-brand">
+          <Brand />
+          <button
+            className="mobile-menu"
+            ref={menuButton}
+            type="button"
+            aria-label={open ? 'Fechar navegação' : 'Abrir navegação'}
+            aria-expanded={open}
+            aria-controls="app-navigation"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+        </div>
         <nav
+          id="app-navigation"
           aria-label="Navegação principal"
-          className={open ? 'navigation is-open' : 'navigation'}
+          className={cn('navigation', open && 'is-open')}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') {
+              setOpen(false)
+              menuButton.current?.focus()
+            }
+          }}
         >
+          <span className="navigation-label">PLATAFORMA</span>
           {links.map(([to, label, Icon]) => (
             <Link
               key={to}
               to={to}
-              activeOptions={{ exact: to === '/' }}
+              activeOptions={{ exact: to === '/app' }}
               activeProps={{ className: 'active' }}
               onClick={() => setOpen(false)}
             >
-              <Icon size={19} />
+              <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
               {label}
             </Link>
           ))}
         </nav>
-        <div className="sidebar-note">
-          <span className="small-label">INFORMAÇÃO COM ORIGEM</span>
-          <p>Entender o país começa por saber onde buscar.</p>
-          <Link to="/participe">
-            Conheça os canais oficiais <ArrowUpRight size={16} />
+        <div className="sidebar-bottom">
+          <Separator />
+          <span className="sidebar-coverage">
+            <span className="status-dot" />
+            Cobertura federal
+          </span>
+          <Link to="/">
+            <ArrowLeft size={16} aria-hidden="true" />
+            Sobre o projeto
           </Link>
-        </div>
-        <div className="sidebar-footer">
-          <span className="status-dot" />
-          Cobertura federal <small>Uma iniciativa independente.</small>
+          <small>Uma iniciativa independente.</small>
         </div>
       </aside>
       <div className="main-column">
         <header className="topbar">
           <span>
-            Brasil <span className="muted">/</span> Cidadania e participação
+            Plataforma <span className="breadcrumb-separator">/</span> <strong>{current}</strong>
           </span>
-          <Link to="/meu-brasil">
-            <CircleUserRound size={18} /> Minha área
-          </Link>
+          <div className="topbar-actions">
+            <ThemeToggle />
+            <Button asChild variant="ghost">
+              <Link to="/meu-brasil">
+                <CircleUserRound data-icon="inline-start" />
+                Minha área
+              </Link>
+            </Button>
+          </div>
         </header>
-        {demo ? (
-          <div className="demo-strip">
-            <span className="status-dot" /> Modo demonstração{' '}
-            <span>
-              Os representantes são personagens fictícios. Nenhum dado eleitoral é simulado.
-            </span>
-          </div>
-        ) : (
-          <div className="live-strip">
-            Catálogo local · Importação limitada da Câmara · Consulte a data de coleta em cada
-            perfil.
-          </div>
-        )}
+        <div className={cn('data-strip', demo ? 'demo-strip' : 'live-strip')}>
+          <span className="status-dot" />
+          <strong>{demo ? 'Modo demonstração' : 'Dados integrados'}</strong>
+          <span>
+            {demo
+              ? 'Representantes fictícios. Nenhum dado eleitoral é simulado.'
+              : 'Catálogo local da Câmara. Consulte a coleta e a cobertura de cada registro.'}
+          </span>
+        </div>
         <main id="conteudo" className="content">
           {children}
         </main>
         <footer className="page-footer">
           <span>{publicEnv.VITE_APP_NAME} · Nome provisório</span>
-          <span>Fatos, contexto e fontes. A decisão é sua.</span>
+          <Link to="/participe">
+            Canais oficiais <ArrowUpRight size={14} aria-hidden="true" />
+          </Link>
         </footer>
       </div>
     </div>
@@ -113,10 +143,14 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
 }
 export function EmptyState({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="empty-state">
-      <Compass size={32} />
-      <h2>{title}</h2>
-      <div>{children}</div>
-    </div>
+    <Empty className="empty-state">
+      <EmptyHeader>
+        <Compass size={26} strokeWidth={1.5} aria-hidden="true" />
+        <EmptyTitle role="heading" aria-level={2}>
+          {title}
+        </EmptyTitle>
+      </EmptyHeader>
+      <EmptyContent>{children}</EmptyContent>
+    </Empty>
   )
 }

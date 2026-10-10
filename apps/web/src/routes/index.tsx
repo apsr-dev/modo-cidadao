@@ -1,180 +1,195 @@
-import { Badge, Button } from '@civica/ui'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BookOpen,
-  Check,
-  CheckSquare,
-  Landmark,
-  MapPin,
-  MessageSquare,
-  Users,
-} from 'lucide-react'
-import { metadata } from '../lib/env'
+import { Button, Separator } from '@civica/ui'
+import { createFileRoute, getRouteApi, Link } from '@tanstack/react-router'
+import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { MarketingShell } from '../features/marketing-shell'
+import { metadata, publicEnv } from '../lib/env'
+
 export const Route = createFileRoute('/')({
   head: () =>
     metadata(
       'A cidadania continua depois do voto',
-      'Conheça representantes, entenda a atividade do Congresso e encontre canais oficiais de participação.',
+      'Conheça quem representa você e encontre canais oficiais para participar da vida pública.',
       '/',
     ),
   component: Home,
 })
+
 function Home() {
+  const { demo } = getRouteApi('__root__').useLoaderData()
   return (
-    <>
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">
-            <span className="status-dot" /> SEU PAÍS. SUA PARTICIPAÇÃO.
-          </span>
-          <h1>
+    <MarketingShell>
+      <section className="landing-hero" aria-labelledby="landing-title">
+        <img
+          className="landing-photo"
+          src="/images/congresso-nacional.jpg"
+          alt="Palácio do Congresso Nacional, em Brasília, fotografado por Carlos Moura, Agência Senado"
+          width={4176}
+          height={2784}
+          fetchPriority="high"
+        />
+        <div className="landing-hero-inner">
+          <p className="landing-kicker">INFORMAÇÃO PÚBLICA. ESCOLHAS SUAS.</p>
+          <h1 id="landing-title">{publicEnv.VITE_APP_NAME}</h1>
+          <h2>
             A cidadania continua
             <br />
-            depois do <em>voto.</em>
-          </h1>
-          <p>
-            Conheça quem representa você e encontre caminhos para participar. Informação pública,
-            reunida para fazer parte do seu dia a dia.
+            depois do voto.
+          </h2>
+          <p className="landing-intro">
+            Conheça quem representa você.
+            <br />
+            Encontre caminhos para participar.
           </p>
-          <div className="hero-actions">
+          <div className="landing-actions">
             <Button asChild>
-              <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
-                Encontrar representantes <ArrowRight size={17} />
+              <Link to="/app">
+                Explorar a plataforma <ArrowRight data-icon="inline-end" />
               </Link>
             </Button>
-            <Link className="text-link" to="/participe">
-              Quero participar <ArrowUpRight size={17} />
-            </Link>
+            <a className="hero-secondary" href="#como-funciona">
+              Conheça o projeto <ArrowDown aria-hidden="true" />
+            </a>
           </div>
-          <div className="hero-footnote">
-            <Check size={15} /> Navegue sem criar uma conta
-          </div>
+          <span className="landing-footnote">Acesso público · Sem precisar criar uma conta</span>
         </div>
-        <div className="civic-illustration" aria-hidden="true">
-          <div className="illustration-orbit orbit-one" />
-          <div className="illustration-orbit orbit-two" />
-          <span className="illustration-star star-one">✳</span>
-          <span className="illustration-star star-two">+</span>
-          <div className="civic-card card-back">
-            <span className="mini-line" />
-            <span className="mini-line short" />
-            <div className="mini-people">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-          <div className="civic-card card-front">
-            <span className="stamp">
-              <Landmark size={27} />
-            </span>
-            <span className="illustration-label">
-              A vida pública
-              <br />
-              <strong>também é sua.</strong>
-            </span>
-            <div className="illustration-bottom">
-              <span>BRASIL · PARTICIPAÇÃO</span>
-              <ArrowUpRight size={21} />
-            </div>
-          </div>
-          <div className="floating-note">
-            <MessageSquare size={17} /> Sua voz tem lugar
-          </div>
+        <div className="landing-photo-caption">
+          <span>BRASÍLIA, BRASIL</span>
+          <a href="#credito-foto">Foto: Carlos Moura / Agência Senado</a>
         </div>
       </section>
-      <section className="discover-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">POR ONDE COMEÇAR</span>
-            <h2>Mais perto das decisões.</h2>
-          </div>
-          <span className="section-caption">Descobrir. Entender. Acompanhar. Participar.</span>
-        </div>
-        <div className="discovery-grid">
-          {[
-            {
-              to: '/representantes',
-              icon: Users,
-              title: 'Quem representa você',
-              text: 'Explore o diretório da Câmara e consulte a origem de cada informação.',
-              label: 'Explorar representantes',
-              tone: 'green',
-            },
-            {
-              to: '/propostas',
-              icon: BookOpen,
-              title: 'O que está em discussão',
-              text: 'O espaço para entender propostas, versões do texto e tramitações.',
-              label: 'Conhecer este espaço',
-              tone: 'yellow',
-            },
-            {
-              to: '/votacoes',
-              icon: CheckSquare,
-              title: 'Como as decisões acontecem',
-              text: 'O espaço para consultar decisões e votos com o contexto necessário.',
-              label: 'Conhecer este espaço',
-              tone: 'blue',
-            },
-          ].map(({ to, icon: Icon, title, text, label, tone }) => (
-            <Link to={to} key={to} className="discovery-card">
-              <span className={`icon-tile ${tone}`}>
-                <Icon size={23} />
-              </span>
-              {to !== '/representantes' && (
-                <Badge className="quiet-badge">Integração pendente</Badge>
-              )}
-              <h3>{title}</h3>
-              <p>{text}</p>
-              <span className="card-action">
-                {label}
-                <ArrowRight size={17} />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
-      <section className="participation-callout">
-        <div className="participation-symbol">
-          <MessageSquare size={31} />
+
+      <section className="landing-section landing-purpose" id="como-funciona">
+        <div>
+          <p className="section-label">01 / MAIS PERTO</p>
+          <h2>
+            O país é público.
+            <br />A informação também.
+          </h2>
         </div>
         <div>
-          <span className="eyebrow">ALÉM DA URNA</span>
-          <h2>Participar pode começar com uma pergunta.</h2>
-          <p>Encontre consultas, debates e canais de diálogo nos portais oficiais.</p>
-        </div>
-        <Button variant="outline" asChild>
-          <Link to="/participe">
-            Ver como participar <ArrowUpRight size={17} />
+          <p>
+            Decisões públicas fazem parte da sua vida. Reunimos informações e canais oficiais para
+            que você possa entender e participar, no seu tempo.
+          </p>
+          <Link
+            to="/representantes"
+            search={{ name: '', page: 1, pageSize: 24 }}
+            className="text-link"
+          >
+            Encontrar representantes <ArrowUpRight aria-hidden="true" />
           </Link>
-        </Button>
+        </div>
       </section>
-      <div className="trust-row">
-        <div>
-          <MapPin size={20} />
-          <p>
-            <strong>Cobertura transparente</strong>
-            <span>Foco federal. Cada integração informa seus limites.</span>
-          </p>
-        </div>
-        <div>
-          <Landmark size={20} />
-          <p>
-            <strong>Direto à fonte</strong>
-            <span>Dados e participação conectados aos canais oficiais.</span>
-          </p>
-        </div>
-        <div>
-          <Check size={20} />
-          <p>
-            <strong>Sem notas para políticos</strong>
-            <span>Contexto para você formar a própria opinião.</span>
-          </p>
-        </div>
+      <div className="landing-section">
+        <Separator />
       </div>
-    </>
+      <section className="landing-section landing-paths" aria-labelledby="landing-paths-title">
+        <div className="landing-section-heading">
+          <p className="section-label">02 / COMECE POR AQUI</p>
+          <h2 id="landing-paths-title">
+            Um próximo passo
+            <br />
+            ao seu alcance.
+          </h2>
+        </div>
+        <div className="landing-path-list">
+          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
+            <span className="path-number">01</span>
+            <div>
+              <h3>Conheça seus representantes</h3>
+              <p>Busque por nome ou estado e consulte cada fonte.</p>
+            </div>
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+          <Link to="/participe">
+            <span className="path-number">02</span>
+            <div>
+              <h3>Encontre um canal de participação</h3>
+              <p>Consultas, ideias e debates nos portais da Câmara e do Senado.</p>
+            </div>
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+          <Link to="/meu-brasil">
+            <span className="path-number">03</span>
+            <div>
+              <h3>Escolha quem acompanhar</h3>
+              <p>Salve perfis na sua área privada quando estiver usando dados integrados.</p>
+            </div>
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+      <section
+        className="landing-section landing-purpose"
+        id="fontes"
+        aria-labelledby="sources-title"
+      >
+        <div>
+          <p className="section-label">03 / FONTES E COBERTURA</p>
+          <h2 id="sources-title">
+            Saiba de onde vem
+            <br />
+            cada informação.
+          </h2>
+        </div>
+        <div>
+          <h3>{demo ? 'Você está na demonstração' : 'Catálogo local da Câmara'}</h3>
+          <p>
+            {demo
+              ? 'Os representantes são personagens fictícios para conhecer a interface. A demonstração não salva acompanhamentos nem cria contas.'
+              : 'O catálogo reúne deputados importados dos Dados Abertos da Câmara. A importação é limitada; não há garantia de cobertura completa nem atualização automática.'}
+          </p>
+          <p>
+            {demo
+              ? 'No modo integrado, cada perfil identifica a fonte, o link oficial e a data de coleta.'
+              : 'Cada perfil identifica a fonte, o link oficial e a data de coleta. Coleta não é a data de atualização oficial.'}{' '}
+            Senadores, propostas, votações, despesas e dados eleitorais ainda não estão integrados
+            nesta versão.
+          </p>
+          <a
+            className="text-link"
+            href="https://dadosabertos.camara.leg.br/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Dados Abertos da Câmara <ArrowUpRight aria-hidden="true" />
+          </a>
+          <p>
+            A participação acontece nos portais oficiais da Câmara e do Senado. Abrir um canal não
+            comprova que você concluiu uma participação.
+          </p>
+          <Link to="/participe" className="text-link">
+            Consultar canais oficiais <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+      <section className="landing-principles" id="sobre">
+        <div className="landing-section">
+          <p className="section-label">04 / NOSSO COMPROMISSO</p>
+          <h2>
+            Contexto para pensar.
+            <br />
+            Liberdade para decidir.
+          </h2>
+          <div className="principles-list">
+            <p>
+              <strong>Direto à fonte.</strong> Cada registro indica de onde veio a informação.
+            </p>
+            <p>
+              <strong>Sem ranking político.</strong> Não damos notas nem recomendamos votos.
+            </p>
+            <p>
+              <strong>Cobertura transparente.</strong> Consulte os limites de cada fonte. Uma
+              amostra não representa cobertura completa.
+            </p>
+          </div>
+          <Button asChild>
+            <Link to="/app">
+              Abrir a plataforma <ArrowRight data-icon="inline-end" />
+            </Link>
+          </Button>
+        </div>
+      </section>
+    </MarketingShell>
   )
 }

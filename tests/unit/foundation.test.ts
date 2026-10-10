@@ -11,7 +11,7 @@ describe('contratos e domínio', () => {
     expect(filtersSchema.parse({ name: '  Aurora  ', page: '2', uf: 'SP' })).toEqual({
       name: 'Aurora',
       page: 2,
-      pageSize: 6,
+      pageSize: 24,
       uf: 'SP',
     })
     for (const data of [

@@ -1,3 +1,4 @@
+import interFontHref from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url'
 import type { QueryClient } from '@tanstack/react-query'
 import {
   createRootRouteWithContext,
@@ -6,8 +7,9 @@ import {
   Outlet,
   Scripts,
 } from '@tanstack/react-router'
-import { EmptyState, Shell } from '../features/shell'
+import { EmptyState } from '../features/shell'
 import { getSettings } from '../lib/functions'
+import { themeInitScript } from '../lib/theme'
 import styleHref from '../styles.css?url'
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   loader: () => getSettings(),
@@ -15,10 +17,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'theme-color', content: '#155b47' },
+      { name: 'theme-color', content: '#0056b3' },
     ],
     links: [
       { rel: 'stylesheet', href: styleHref },
+      {
+        rel: 'preload',
+        href: interFontHref,
+        as: 'font',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
+      },
       { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
     ],
   }),
@@ -39,16 +48,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   ),
 })
 function Root() {
-  const { demo } = Route.useLoaderData()
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <HeadContent />
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Static theme bootstrap with no user data. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <Shell demo={demo}>
-          <Outlet />
-        </Shell>
+        <Outlet />
         <Scripts />
       </body>
     </html>
