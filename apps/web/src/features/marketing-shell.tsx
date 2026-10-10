@@ -16,6 +16,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
         <Brand />
         <nav aria-label="Sobre o projeto">
           <a href="#como-funciona">Como funciona</a>
+          <a href="#fontes">Fontes e cobertura</a>
           <a href="#sobre">O projeto</a>
         </nav>
         <div className="marketing-header-actions">

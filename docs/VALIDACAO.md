@@ -66,3 +66,7 @@ Validado com Bun 1.4.2 no worktree `feat/shadcn-theme`. A landing está em `/`, 
 - Inspeção visual em desktop, 390 × 844 e 320 × 700: landing, início do app, catálogo, perfil e participação. Em 320 pixels, sem overflow horizontal. Console observado sem erros. Capturas em `docs/screenshots/pr-4` usam personagens fictícios e não contêm dados de contas.
 
 As referências do Mobbin, a licença da fotografia e as decisões de layout estão no [ADR 004](decisions/004-landing-e-app.md). O MCP conectado não expôs ferramentas nesta sessão; as referências foram consultadas no navegador. Os testes de fonte externa e o advisor de banco não foram repetidos porque esta entrega não modifica essas integrações. Não houve deploy remoto.
+
+## MOD-44 — apresentação institucional e navegação
+
+A separação de layouts foi complementada com fontes/cobertura por modo e entrada da conta restrita à persistência. Checks e evidências estão em [VALIDACAO-MOD-44.md](VALIDACAO-MOD-44.md).

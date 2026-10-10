@@ -107,7 +107,16 @@ function Account() {
       ) : (
         <section className="auth-panel panel">
           <h2>{register ? 'Criar conta local' : 'Entre na sua conta'}</h2>
-          <p>Acesso por e-mail e senha no Supabase configurado para este ambiente.</p>
+          <p>
+            A conta serve para salvar seus acompanhamentos. Consultar o catálogo não exige login.
+          </p>
+          <Link
+            to="/representantes"
+            search={{ name: '', page: 1, pageSize: 6 }}
+            className="text-link"
+          >
+            Continuar sem conta
+          </Link>
           <form
             method="post"
             onSubmit={async (event) => {

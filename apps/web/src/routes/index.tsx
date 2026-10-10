@@ -1,5 +1,5 @@
 import { Button, Separator } from '@civica/ui'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, getRouteApi, Link } from '@tanstack/react-router'
 import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { MarketingShell } from '../features/marketing-shell'
 import { metadata, publicEnv } from '../lib/env'
@@ -15,6 +15,7 @@ export const Route = createFileRoute('/')({
 })
 
 function Home() {
+  const { demo } = getRouteApi('__root__').useLoaderData()
   return (
     <MarketingShell>
       <section className="landing-hero" aria-labelledby="landing-title">
@@ -118,9 +119,53 @@ function Home() {
           </Link>
         </div>
       </section>
+      <section
+        className="landing-section landing-purpose"
+        id="fontes"
+        aria-labelledby="sources-title"
+      >
+        <div>
+          <p className="section-label">03 / FONTES E COBERTURA</p>
+          <h2 id="sources-title">
+            Saiba de onde vem
+            <br />
+            cada informação.
+          </h2>
+        </div>
+        <div>
+          <h3>{demo ? 'Você está na demonstração' : 'Catálogo local da Câmara'}</h3>
+          <p>
+            {demo
+              ? 'Os representantes são personagens fictícios para conhecer a interface. A demonstração não salva acompanhamentos nem cria contas.'
+              : 'O catálogo reúne deputados importados dos Dados Abertos da Câmara. A importação é limitada; não há garantia de cobertura completa nem atualização automática.'}
+          </p>
+          <p>
+            {demo
+              ? 'No modo integrado, cada perfil identifica a fonte, o link oficial e a data de coleta.'
+              : 'Cada perfil identifica a fonte, o link oficial e a data de coleta. Coleta não é a data de atualização oficial.'}{' '}
+            Senadores, propostas, votações, despesas e dados eleitorais ainda não estão integrados
+            nesta versão.
+          </p>
+          <a
+            className="text-link"
+            href="https://dadosabertos.camara.leg.br/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Dados Abertos da Câmara <ArrowUpRight aria-hidden="true" />
+          </a>
+          <p>
+            A participação acontece nos portais oficiais da Câmara e do Senado. Abrir um canal não
+            comprova que você concluiu uma participação.
+          </p>
+          <Link to="/participe" className="text-link">
+            Consultar canais oficiais <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
       <section className="landing-principles" id="sobre">
         <div className="landing-section">
-          <p className="section-label">03 / NOSSO COMPROMISSO</p>
+          <p className="section-label">04 / NOSSO COMPROMISSO</p>
           <h2>
             Contexto para pensar.
             <br />
@@ -134,8 +179,8 @@ function Home() {
               <strong>Sem ranking político.</strong> Não damos notas nem recomendamos votos.
             </p>
             <p>
-              <strong>Cobertura transparente.</strong> O catálogo atual é da Câmara. Outras
-              integrações estão em desenvolvimento.
+              <strong>Cobertura transparente.</strong> Consulte os limites de cada fonte. Uma
+              amostra não representa cobertura completa.
             </p>
           </div>
           <Button asChild>

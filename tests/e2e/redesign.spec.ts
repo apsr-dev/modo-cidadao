@@ -52,3 +52,69 @@ test('landing sem JavaScript mantém apresentação, âncoras e entrada pública
     await context.close()
   }
 })
+
+const integrated = process.env.E2E_INTEGRATION === '1'
+
+test('home apresenta fontes e cobertura do modo ativo no HTML inicial', async ({
+  page,
+  request,
+}) => {
+  const response = await request.get('/')
+  expect(response.status()).toBe(200)
+  const html = await response.text()
+  expect(html).toContain(integrated ? 'Catálogo local da Câmara' : 'Você está na demonstração')
+  await page.goto('/')
+  const sources = page.getByRole('region', { name: 'Saiba de onde vem cada informação.' })
+  await expect(sources.getByRole('link', { name: 'Dados Abertos da Câmara' })).toHaveAttribute(
+    'href',
+    'https://dadosabertos.camara.leg.br/',
+  )
+  await expect(sources).toContainText('ainda não estão integrados nesta versão')
+  if (integrated) {
+    await expect(sources).toContainText(
+      'não há garantia de cobertura completa nem atualização automática',
+    )
+    await expect(sources).toContainText('Coleta não é a data de atualização oficial')
+  } else {
+    await expect(sources).toContainText('personagens fictícios')
+    await expect(sources).toContainText('não salva acompanhamentos nem cria contas')
+  }
+  await expect(page.getByLabel('E-mail', { exact: true })).toHaveCount(0)
+  await page.getByRole('link', { name: 'Consultar canais oficiais' }).click()
+  await expect(page.getByRole('link', { name: 'Ir ao canal oficial' })).toHaveCount(2)
+})
+
+test('URLs públicas mantêm layout de consulta e conta fica restrita à persistência', async ({
+  page,
+  request,
+}) => {
+  for (const path of [
+    '/app',
+    '/representantes',
+    '/propostas',
+    '/votacoes',
+    '/participe',
+    '/eleicoes',
+  ]) {
+    const response = await request.get(path)
+    expect(response.status(), path).toBe(200)
+    const html = await response.text()
+    expect(html, path).toContain('class="app-shell"')
+    expect(html, path).not.toContain('class="marketing-shell"')
+    await page.goto(path)
+    await expect(page.getByLabel('E-mail', { exact: true })).toHaveCount(0)
+  }
+  await page.goto('/meu-brasil')
+  if (integrated) {
+    await expect(page.getByRole('heading', { name: 'Entre na sua conta' })).toBeVisible()
+    await expect(page.getByText('A conta serve para salvar seus acompanhamentos.')).toBeVisible()
+    await page.getByRole('link', { name: 'Continuar sem conta' }).click()
+  } else {
+    await expect(
+      page.getByRole('heading', { name: 'Conta indisponível na demonstração' }),
+    ).toBeVisible()
+    await page.getByRole('link', { name: 'Explorar a demonstração' }).click()
+  }
+  await expect(page.getByRole('heading', { name: 'Representantes', exact: true })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+})

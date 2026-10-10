@@ -158,3 +158,9 @@ A Câmara retorna CPF no detalhe. O adapter remove esse campo antes de persistir
 O alvo de produção validado é o processo Bun local usando o build Start. `Dockerfile` fixa Bun 1.4.2, mas a imagem e um provedor remoto não foram validados. Nenhum deploy, serviço pago, conta externa ou agendamento remoto foi configurado. Para produção serão necessárias decisões sobre domínio, credenciais/papéis, e-mail, recuperação/exclusão de conta, retenção, orçamento e operação.
 
 Veja [AGENTS.md](AGENTS.md), [ADR 001](docs/decisions/001-bun-e-fundacao-local.md) e os três documentos de planejamento antes de mudanças relevantes.
+
+## Separação institucional e consulta — MOD-44
+
+A home `/` apresenta propósito, fontes e cobertura com ação **Explorar a plataforma** para `/app`. Sua seção de fontes distingue personagens fictícios da demo e catálogo local da Câmara com importação limitada, sem prometer atualização automática ou cobertura completa. Canais de participação são acessados nos portais oficiais. Nesta branch, propostas, votações, Senado, despesas e eleições permanecem sem integração.
+
+O layout `_app` preserva as URLs públicas e não exige conta para consultar. `/meu-brasil` explica que login serve para salvar acompanhamentos e permite continuar sem conta; a demo mantém a conta indisponível. A implementação usa o PR #4 já aberto, sem duplicar a separação existente. Veja [ADR 004](docs/decisions/004-landing-e-app.md) e [validação](docs/VALIDACAO-MOD-44.md).

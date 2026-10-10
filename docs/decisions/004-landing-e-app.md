@@ -32,3 +32,9 @@ Ao incorporar PRs de funcionalidades ainda abertos, suas rotas de interface deve
 `packages/ui` recebe Field, Input, NativeSelect, Empty e Separator do registro oficial shadcn, com imports adaptados ao workspace. O utilitário `cn` é compartilhado; não foi adicionada biblioteca de animação. Fontes continuam locais. O nome permanece configurável por `VITE_APP_NAME`.
 
 Esta é uma mudança de interface sobre a cobertura existente do PR 4. Propostas, votações, Senado e eleições continuam com seus estados de integração pendente nesta branch. A demo continua declarando personagens fictícios e desabilitando autenticação. O Linear segue como única fonte de backlog.
+
+## Complemento — MOD-44
+
+A tarefa F-01.02 foi concluída sobre a separação já existente nesta branch e no PR #4, evitando duas implementações concorrentes da mesma mudança. A home lê o modo público do loader raiz para explicar fontes e cobertura antes de entrar no catálogo, sem consultar dados pessoais ou duplicar acesso ao banco. A apresentação descreve somente a cobertura implementada nesta branch; integração de propostas pertence ao PR #1.
+
+A área pessoal oferece saída para o catálogo sem conta e explica que autenticação serve à persistência. Autorização continua em cada operação privada no servidor, com as políticas de cache e RLS existentes. Testes de navegador verificam home, URLs públicas e entrada da conta em demo e integração local.
