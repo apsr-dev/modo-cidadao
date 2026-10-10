@@ -25,7 +25,7 @@ function Profile() {
   const p = Route.useLoaderData()
   return (
     <>
-      <Link className="back-link" to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+      <Link className="back-link" to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
         <ArrowLeft size={16} />
         Todos os representantes
       </Link>

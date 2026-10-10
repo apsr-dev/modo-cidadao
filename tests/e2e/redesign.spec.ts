@@ -4,6 +4,7 @@ test('landing separada do app mantém a descoberta por UF e os links públicos',
   page,
   request,
 }, testInfo) => {
+  if (testInfo.project.name === 'mobile') await page.setViewportSize({ width: 320, height: 740 })
   const html = await (await request.get('/')).text()
   expect(html).toContain('marketing-shell')
   expect(html).not.toContain('class="app-shell"')
@@ -11,6 +12,11 @@ test('landing separada do app mantém a descoberta por UF e os links públicos',
   await expect(page.getByRole('navigation', { name: 'Navegação principal' })).toHaveCount(0)
   await page.getByRole('link', { name: 'Explorar a plataforma', exact: true }).first().click()
   await expect(page.getByRole('heading', { name: 'Explorar', exact: true })).toBeVisible()
+  expect(
+    await page
+      .locator('.person-card')
+      .evaluateAll((rows) => rows.every((row) => row.scrollWidth <= row.clientWidth)),
+  ).toBe(true)
   if (testInfo.project.name === 'mobile') {
     const toggle = page.getByRole('button', { name: 'Abrir navegação' })
     await toggle.click()

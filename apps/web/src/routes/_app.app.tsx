@@ -52,7 +52,7 @@ function Explore() {
             </div>
             <Link
               to="/representantes"
-              search={{ name: '', page: 1, pageSize: 6 }}
+              search={{ name: '', page: 1, pageSize: 24 }}
               className="text-link"
             >
               Ver todos <ArrowUpRight size={16} aria-hidden="true" />

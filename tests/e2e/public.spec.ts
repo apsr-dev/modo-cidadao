@@ -43,6 +43,8 @@ test('busca, paginação, perfil e navegação funcionam sem erros de hidrataç�
   await page.getByRole('link', { name: 'Encontrar representantes' }).click()
   await expect(page.getByRole('heading', { name: 'Representantes', exact: true })).toBeVisible()
   if (!integrated) {
+    await expect(page.locator('.person-card')).toHaveCount(12)
+    await page.goto('/representantes?pageSize=6')
     await page.getByRole('link', { name: 'Próxima →' }).click()
     await expect(page.getByText('Página 2 de 2')).toBeVisible()
     await page.getByRole('textbox', { name: 'Nome do representante' }).fill('Aurora')

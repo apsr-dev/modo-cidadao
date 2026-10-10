@@ -44,7 +44,7 @@ function Account() {
             Login e acompanhamento precisam do Supabase local e de dados integrados. A demonstração
             não cria sessões fictícias nem salva escolhas pessoais.
           </p>
-          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
             Explorar a demonstração
           </Link>
         </EmptyState>
@@ -92,7 +92,7 @@ function Account() {
             ) : (
               <p>
                 Você ainda não segue ninguém.{' '}
-                <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+                <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
                   Encontre representantes
                 </Link>
                 .
@@ -112,7 +112,7 @@ function Account() {
           </p>
           <Link
             to="/representantes"
-            search={{ name: '', page: 1, pageSize: 6 }}
+            search={{ name: '', page: 1, pageSize: 24 }}
             className="text-link"
           >
             Continuar sem conta

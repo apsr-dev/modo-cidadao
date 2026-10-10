@@ -38,3 +38,11 @@ Esta é uma mudança de interface sobre a cobertura existente do PR 4. Propostas
 A tarefa F-01.02 foi concluída sobre a separação já existente nesta branch e no PR #4, evitando duas implementações concorrentes da mesma mudança. A home lê o modo público do loader raiz para explicar fontes e cobertura antes de entrar no catálogo, sem consultar dados pessoais ou duplicar acesso ao banco. A apresentação descreve somente a cobertura implementada nesta branch; integração de propostas pertence ao PR #1.
 
 A área pessoal oferece saída para o catálogo sem conta e explica que autenticação serve à persistência. Autorização continua em cada operação privada no servidor, com as políticas de cache e RLS existentes. Testes de navegador verificam home, URLs públicas e entrada da conta em demo e integração local.
+
+## Refinamento — 10/10/2026
+
+A plataforma passa a usar os tokens de sidebar já fornecidos pelo tema: navegação escura, fundo da página em `background`, conteúdo principal em `card` e contexto secundário derivado de `muted`/`border`. Resultados, contatos, participação e proveniência ganham separação por superfícies e divisórias. Textos auxiliares ficam mais próximos de `foreground`, preservando legibilidade em claro e escuro. Os tokens originais do tweakcn continuam intactos.
+
+`NativeSelect` usa altura de 44px e padding vertical zero. O estilo global de inputs deixa de se aplicar aos selects, evitando conflito entre altura e padding que deslocava o texto para baixo. O controle continua nativo, com teclado e envio de formulário sem JavaScript.
+
+O diretório e o REST de representantes passam a usar 24 itens por página quando `pageSize` não é informado. Links de entrada/retorno usam 24; parâmetros explícitos entre 1 e 50 continuam aceitos e são preservados pelo formulário de filtros. A seleção resumida em `/app` mantém quatro pessoas visíveis. Capturas e validação do refinamento ficam em `docs/VALIDACAO-REFINAMENTO-UI.md`.

@@ -5,9 +5,9 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 ## O que funciona
 
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
-- Landing editorial em `/`, separada do app em `/app`, com catálogo em listas e contexto de cobertura. As URLs existentes continuam funcionando.
+- Landing editorial em `/`, separada do app em `/app`, com catálogo em listas, regiões visuais distintas e contexto de cobertura. As URLs existentes continuam funcionando.
 - Tema Modo Cidadao do tweakcn, fontes locais e alternância claro/escuro no cabeçalho. Segue o sistema até uma escolha manual, preservada neste navegador.
-- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação e contatos retornados pela fonte.
+- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação padrão de 24 itens e contatos retornados pela fonte.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.
 - Supabase Auth local por e-mail/senha, cookies SSR HttpOnly e seguir/deixar de seguir. Follows privados por RLS; isolamento entre dois usuários testado no banco e no REST.
@@ -141,7 +141,7 @@ Arquivos `.server.ts` têm marcador server-only; a proteção de imports cobre o
 
 | Método e caminho | Comportamento |
 | --- | --- |
-| `GET /api/v1/representatives` | `name`, `uf`, `page`, `pageSize`; máximo 50 itens; `{items,total,page,pageSize,pages}`. |
+| `GET /api/v1/representatives` | `name`, `uf`, `page`, `pageSize`; padrão 24 e máximo 50 itens; `{items,total,page,pageSize,pages}`. |
 | `GET /api/v1/people/:id` | DTO público de perfil; UUID válido e 404 para pessoa ausente. |
 | `GET /api/v1/me/follows` | IDs dos follows do usuário autenticado. |
 | `PUT /api/v1/me/follows/people/:id` | Follow idempotente de pessoa existente no catálogo. |

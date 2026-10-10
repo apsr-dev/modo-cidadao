@@ -41,73 +41,76 @@ function Directory() {
         Câmara dos Deputados · Amostra local limitada. Senado ainda não integrado. A lista não
         representa a bancada completa.
       </div>
-      <form className="filter-form" method="get" action="/representantes">
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="representative-name">Nome do representante</FieldLabel>
-            <Input
-              id="representative-name"
-              name="name"
-              defaultValue={filters.name}
-              placeholder="Busque pelo nome"
-              maxLength={100}
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="representative-uf">Unidade federativa</FieldLabel>
-            <NativeSelect id="representative-uf" name="uf" defaultValue={filters.uf ?? ''}>
-              <NativeSelectOption value="">Todas as UFs</NativeSelectOption>
-              {ufs.map((uf) => (
-                <NativeSelectOption key={uf}>{uf}</NativeSelectOption>
-              ))}
-            </NativeSelect>
-          </Field>
-        </FieldGroup>
-        <Button type="submit">
-          Buscar <Search data-icon="inline-end" />
-        </Button>
-      </form>
-      <div className="results-heading">
-        <p>
-          <strong>{data.total}</strong>{' '}
-          {data.total === 1 ? 'representante encontrado' : 'representantes encontrados'}
-        </p>
-        <span>Ordem alfabética</span>
-      </div>
-      {data.items.length ? (
-        <div className="people-grid">
-          {data.items.map((person) => (
-            <PersonCard key={person.id} person={person} />
-          ))}
+      <section className="directory-workspace" aria-label="Busca e resultados">
+        <form className="filter-form" method="get" action="/representantes">
+          <input type="hidden" name="pageSize" value={filters.pageSize} />
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="representative-name">Nome do representante</FieldLabel>
+              <Input
+                id="representative-name"
+                name="name"
+                defaultValue={filters.name}
+                placeholder="Busque pelo nome"
+                maxLength={100}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="representative-uf">Unidade federativa</FieldLabel>
+              <NativeSelect id="representative-uf" name="uf" defaultValue={filters.uf ?? ''}>
+                <NativeSelectOption value="">Todas as UFs</NativeSelectOption>
+                {ufs.map((uf) => (
+                  <NativeSelectOption key={uf}>{uf}</NativeSelectOption>
+                ))}
+              </NativeSelect>
+            </Field>
+          </FieldGroup>
+          <Button type="submit">
+            Buscar <Search data-icon="inline-end" />
+          </Button>
+        </form>
+        <div className="results-heading">
+          <p>
+            <strong>{data.total}</strong>{' '}
+            {data.total === 1 ? 'representante encontrado' : 'representantes encontrados'}
+          </p>
+          <span>Ordem alfabética</span>
         </div>
-      ) : (
-        <EmptyState title="Nenhum representante nesta busca">
-          <p>Experimente outro nome ou UF. A cobertura local é limitada.</p>
-          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
-            Limpar filtros
-          </Link>
-        </EmptyState>
-      )}
-      <nav className="pagination" aria-label="Paginação">
-        {filters.page > 1 ? (
-          <Link to="/representantes" search={{ ...filters, page: filters.page - 1 }}>
-            ← Anterior
-          </Link>
+        {data.items.length ? (
+          <div className="people-grid">
+            {data.items.map((person) => (
+              <PersonCard key={person.id} person={person} />
+            ))}
+          </div>
         ) : (
-          <span />
+          <EmptyState title="Nenhum representante nesta busca">
+            <p>Experimente outro nome ou UF. A cobertura local é limitada.</p>
+            <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
+              Limpar filtros
+            </Link>
+          </EmptyState>
         )}
-        <span>
-          Página {filters.page}
-          {data.pages > 0 ? ` de ${data.pages}` : ''}
-        </span>
-        {filters.page < data.pages ? (
-          <Link to="/representantes" search={{ ...filters, page: filters.page + 1 }}>
-            Próxima →
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
+        <nav className="pagination" aria-label="Paginação">
+          {filters.page > 1 ? (
+            <Link to="/representantes" search={{ ...filters, page: filters.page - 1 }}>
+              ← Anterior
+            </Link>
+          ) : (
+            <span />
+          )}
+          <span>
+            Página {filters.page}
+            {data.pages > 0 ? ` de ${data.pages}` : ''}
+          </span>
+          {filters.page < data.pages ? (
+            <Link to="/representantes" search={{ ...filters, page: filters.page + 1 }}>
+              Próxima →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+      </section>
     </>
   )
 }

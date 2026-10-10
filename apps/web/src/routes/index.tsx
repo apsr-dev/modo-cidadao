@@ -73,7 +73,7 @@ function Home() {
           </p>
           <Link
             to="/representantes"
-            search={{ name: '', page: 1, pageSize: 6 }}
+            search={{ name: '', page: 1, pageSize: 24 }}
             className="text-link"
           >
             Encontrar representantes <ArrowUpRight aria-hidden="true" />
@@ -93,7 +93,7 @@ function Home() {
           </h2>
         </div>
         <div className="landing-path-list">
-          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
             <span className="path-number">01</span>
             <div>
               <h3>Conheça seus representantes</h3>

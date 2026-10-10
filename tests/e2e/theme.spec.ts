@@ -99,58 +99,75 @@ test('permite alternar o tema quando o navegador bloqueia armazenamento', async 
 test('mantém contraste legível nos textos e botões das superfícies do tema', async ({ page }) => {
   for (const mode of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: mode })
-    await page.goto('/')
-    await expect(page.getByRole('button', { name: 'Tema escuro', exact: true })).toHaveAttribute(
-      'aria-pressed',
-      String(mode === 'dark'),
-    )
-    const samples = await page.evaluate(() => {
-      const canvas = document.createElement('canvas')
-      canvas.width = canvas.height = 1
-      const context = canvas.getContext('2d')
-      if (!context) throw new Error('Canvas unavailable')
-      const luminance = (color: string) => {
-        context.clearRect(0, 0, 1, 1)
-        context.fillStyle = color
-        context.fillRect(0, 0, 1, 1)
-        const rgb = context.getImageData(0, 0, 1, 1).data
-        const linear = (channel: number | undefined) => {
-          if (channel === undefined) throw new Error('Invalid RGB sample')
-          const value = channel / 255
-          return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+    for (const path of ['/', '/app']) {
+      await page.goto(path)
+      await expect(page.getByRole('button', { name: 'Tema escuro', exact: true })).toHaveAttribute(
+        'aria-pressed',
+        String(mode === 'dark'),
+      )
+      const samples = await page.evaluate(() => {
+        const canvas = document.createElement('canvas')
+        canvas.width = canvas.height = 1
+        const context = canvas.getContext('2d')
+        if (!context) throw new Error('Canvas unavailable')
+        const luminance = (color: string) => {
+          context.clearRect(0, 0, 1, 1)
+          context.fillStyle = color
+          context.fillRect(0, 0, 1, 1)
+          const rgb = context.getImageData(0, 0, 1, 1).data
+          const linear = (channel: number | undefined) => {
+            if (channel === undefined) throw new Error('Invalid RGB sample')
+            const value = channel / 255
+            return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+          }
+          return linear(rgb[0]) * 0.2126 + linear(rgb[1]) * 0.7152 + linear(rgb[2]) * 0.0722
         }
-        return linear(rgb[0]) * 0.2126 + linear(rgb[1]) * 0.7152 + linear(rgb[2]) * 0.0722
-      }
-      return [
-        '.button-primary',
-        '.button-outline',
-        '.text-link',
-        '.marketing-header nav',
-        '.landing-purpose p:not(.section-label)',
-        '.landing-path-list p',
-        '.principles-list p',
-      ].map((selector) => {
-        const el = document.querySelector(selector)
-        if (!el) throw new Error(`Missing theme sample: ${selector}`)
-        const style = getComputedStyle(el)
-        let backgroundElement = el
-        let background = style.backgroundColor
-        while (background === 'rgba(0, 0, 0, 0)' && backgroundElement.parentElement) {
-          backgroundElement = backgroundElement.parentElement
-          background = getComputedStyle(backgroundElement).backgroundColor
-        }
-        const foregroundLuminance = luminance(style.color)
-        const backgroundLuminance = luminance(background)
-        return {
-          selector,
-          contrast:
-            (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
-            (Math.min(foregroundLuminance, backgroundLuminance) + 0.05),
-        }
+        const selectors =
+          window.location.pathname === '/app'
+            ? [
+                '.button-primary',
+                '.sidebar .brand',
+                '.navigation-label',
+                '.navigation a.active',
+                '.sidebar-bottom small',
+                '.section-heading p',
+                '.list-caption',
+                '.person-card p',
+                '.explore-context p',
+                '.coverage-list dd',
+              ]
+            : [
+                '.button-primary',
+                '.button-outline',
+                '.text-link',
+                '.marketing-header nav',
+                '.landing-purpose p:not(.section-label)',
+                '.landing-path-list p',
+                '.principles-list p',
+              ]
+        return selectors.map((selector) => {
+          const el = document.querySelector(selector)
+          if (!el) throw new Error(`Missing theme sample: ${selector}`)
+          const style = getComputedStyle(el)
+          let backgroundElement = el
+          let background = style.backgroundColor
+          while (background === 'rgba(0, 0, 0, 0)' && backgroundElement.parentElement) {
+            backgroundElement = backgroundElement.parentElement
+            background = getComputedStyle(backgroundElement).backgroundColor
+          }
+          const foregroundLuminance = luminance(style.color)
+          const backgroundLuminance = luminance(background)
+          return {
+            selector,
+            contrast:
+              (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+              (Math.min(foregroundLuminance, backgroundLuminance) + 0.05),
+          }
+        })
       })
-    })
-    for (const sample of samples) {
-      expect(sample.contrast, `${mode}: ${sample.selector}`).toBeGreaterThanOrEqual(4.5)
+      for (const sample of samples) {
+        expect(sample.contrast, `${mode} ${path}: ${sample.selector}`).toBeGreaterThanOrEqual(4.5)
+      }
     }
   }
 })
