@@ -123,7 +123,7 @@ packages/domain   entidades, portas e casos de uso, sem framework/banco
 packages/contracts validação Zod e tipos públicos
 packages/db       schema Drizzle, repositórios e tipo da Data API pessoal
 packages/source-camara cliente oficial, schemas externos e normalização
-packages/ui       Button, Badge, Field, Input, NativeSelect, Empty e Separator; shadcn/ui
+packages/ui       Button, Badge, Field, Input, Select, NativeSelect (fallback), Empty e Separator; shadcn/ui
 packages/config   TypeScript estrito compartilhado
 supabase          configuração, migrations SQL e referência ao seed determinístico
 scripts           configuração local, seed, checks e inspeção do bundle
@@ -162,5 +162,7 @@ Veja [AGENTS.md](AGENTS.md), [ADR 001](docs/decisions/001-bun-e-fundacao-local.m
 ## Separação institucional e consulta — MOD-44
 
 A home `/` apresenta propósito, fontes e cobertura com ação **Explorar a plataforma** para `/app`. Sua seção de fontes distingue personagens fictícios da demo e catálogo local da Câmara com importação limitada, sem prometer atualização automática ou cobertura completa. Canais de participação são acessados nos portais oficiais. Nesta branch, propostas, votações, Senado, despesas e eleições permanecem sem integração.
+
+Os seletores de UF de `/app` e `/representantes` usam o Select do shadcn/Radix, com menu nas cores do tema, teclado, rolagem e opção “Todas as UFs”. O filtro continua no URL e o envio mantém `pageSize`. Sem JavaScript, o formulário usa um select nativo como fallback.
 
 O layout `_app` preserva as URLs públicas e não exige conta para consultar. `/meu-brasil` explica que login serve para salvar acompanhamentos e permite continuar sem conta; a demo mantém a conta indisponível. A implementação usa o PR #4 já aberto, sem duplicar a separação existente. Veja [ADR 004](docs/decisions/004-landing-e-app.md) e [validação](docs/VALIDACAO-MOD-44.md).

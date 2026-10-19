@@ -1,18 +1,11 @@
-import { filtersSchema, ufs } from '@civica/contracts'
-import {
-  Button,
-  Field,
-  FieldGroup,
-  FieldLabel,
-  Input,
-  NativeSelect,
-  NativeSelectOption,
-} from '@civica/ui'
+import { filtersSchema } from '@civica/contracts'
+import { Button, Field, FieldGroup, FieldLabel, Input } from '@civica/ui'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { PersonCard } from '../features/representatives'
 import { EmptyState } from '../features/shell'
+import { UfSelect } from '../features/uf-select'
 import { metadata } from '../lib/env'
 import { representativesQuery } from '../lib/queries'
 export const Route = createFileRoute('/_app/representantes/')({
@@ -57,12 +50,7 @@ function Directory() {
             </Field>
             <Field>
               <FieldLabel htmlFor="representative-uf">Unidade federativa</FieldLabel>
-              <NativeSelect id="representative-uf" name="uf" defaultValue={filters.uf ?? ''}>
-                <NativeSelectOption value="">Todas as UFs</NativeSelectOption>
-                {ufs.map((uf) => (
-                  <NativeSelectOption key={uf}>{uf}</NativeSelectOption>
-                ))}
-              </NativeSelect>
+              <UfSelect id="representative-uf" defaultValue={filters.uf} />
             </Field>
           </FieldGroup>
           <Button type="submit">

@@ -1,18 +1,10 @@
-import { ufs } from '@civica/contracts'
-import {
-  Button,
-  Field,
-  FieldGroup,
-  FieldLabel,
-  NativeSelect,
-  NativeSelectOption,
-  Separator,
-} from '@civica/ui'
+import { Button, Field, FieldGroup, FieldLabel, Separator } from '@civica/ui'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, ArrowUpRight, Landmark } from 'lucide-react'
 import { PersonCard } from '../features/representatives'
 import { EmptyState } from '../features/shell'
+import { UfSelect } from '../features/uf-select'
 import { metadata } from '../lib/env'
 import { representativesQuery } from '../lib/queries'
 
@@ -62,12 +54,7 @@ function Explore() {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="explore-uf">Seu estado</FieldLabel>
-                <NativeSelect id="explore-uf" name="uf" defaultValue="">
-                  <NativeSelectOption value="">Selecione uma UF</NativeSelectOption>
-                  {ufs.map((uf) => (
-                    <NativeSelectOption key={uf}>{uf}</NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                <UfSelect id="explore-uf" placeholder="Selecione uma UF" />
               </Field>
             </FieldGroup>
             <Button type="submit">

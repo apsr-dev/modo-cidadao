@@ -32,10 +32,11 @@ test('landing separada do app mantém a descoberta por UF e os links públicos',
         .getByRole('link', { name: 'Explorar', exact: true }),
     ).toHaveAttribute('aria-current', 'page')
   }
-  await page.getByLabel('Seu estado', { exact: true }).selectOption('SP')
+  await page.getByRole('combobox', { name: 'Seu estado', exact: true }).click()
+  await page.getByRole('option', { name: 'SP', exact: true }).click()
   await page.getByRole('button', { name: 'Encontrar representantes', exact: true }).click()
   await expect(page).toHaveURL(/\/representantes\?.*uf=SP/)
-  await expect(page.getByLabel('Unidade federativa')).toHaveValue('SP')
+  await expect(page.getByRole('combobox', { name: 'Unidade federativa' })).toHaveText('SP')
   const catalog = await (await request.get('/api/v1/representatives?uf=SP')).json()
   await expect(page.locator('.person-card')).toHaveCount(catalog.items.length)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)

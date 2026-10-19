@@ -46,3 +46,11 @@ A plataforma passa a usar os tokens de sidebar já fornecidos pelo tema: navega�
 `NativeSelect` usa altura de 44px e padding vertical zero. O estilo global de inputs deixa de se aplicar aos selects, evitando conflito entre altura e padding que deslocava o texto para baixo. O controle continua nativo, com teclado e envio de formulário sem JavaScript.
 
 O diretório e o REST de representantes passam a usar 24 itens por página quando `pageSize` não é informado. Links de entrada/retorno usam 24; parâmetros explícitos entre 1 e 50 continuam aceitos e são preservados pelo formulário de filtros. A seleção resumida em `/app` mantém quatro pessoas visíveis. Capturas e validação do refinamento ficam em `docs/VALIDACAO-REFINAMENTO-UI.md`.
+
+## Select customizado — 19/10/2026
+
+Por solicitação do responsável, os controles de UF em `/app` e no diretório usam o Select do registro oficial shadcn, baseado em `@radix-ui/react-select`. O campo fechado e as opções mantêm área de toque de 44px. O popup usa tokens `popover` e `accent`, checkmark de seleção, foco por teclado e rolagem limitada pelo espaço disponível. Não há animação nova para esta interação frequente.
+
+`UfSelect` concentra a composição de opções e a integração com os formulários GET existentes. A opção interna `all` é convertida em string vazia no único campo `uf` enviado; o sentinela não chega ao contrato público. A mudança da UF no URL reinicializa o estado do controle. O tamanho da página continua no campo existente do diretório.
+
+O `ClientOnly` do Router preserva o HTML inicial e a consulta sem JavaScript usando NativeSelect como fallback; após hidratação, o menu interativo é o Select customizado. Não há segundo campo nomeado `uf` ativo nem alteração nos loaders, validação, banco ou fontes. A dependência e suas transitivas são fixadas em `bun.lock`. Verificação: [validação do Select](../VALIDACAO-SELECT.md).

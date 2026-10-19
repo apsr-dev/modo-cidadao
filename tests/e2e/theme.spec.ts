@@ -96,7 +96,10 @@ test('permite alternar o tema quando o navegador bloqueia armazenamento', async 
   await expect(page.locator('html')).toHaveClass('dark')
 })
 
-test('mantém contraste legível nos textos e botões das superfícies do tema', async ({ page }) => {
+test('mantém contraste legível nos textos e botões das superfícies do tema', async ({
+  page,
+}, testInfo) => {
+  if (testInfo.project.name === 'mobile') await page.setViewportSize({ width: 320, height: 740 })
   for (const mode of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: mode })
     for (const path of ['/', '/app']) {
@@ -105,6 +108,18 @@ test('mantém contraste legível nos textos e botões das superfícies do tema',
         'aria-pressed',
         String(mode === 'dark'),
       )
+      if (path === '/app') {
+        const trigger = page.getByRole('combobox', { name: 'Seu estado', exact: true })
+        await expect(trigger).toHaveAttribute('data-slot', 'select-trigger')
+        await trigger.click()
+        const bounds = await page.getByRole('listbox').boundingBox()
+        const viewport = page.viewportSize()
+        if (!bounds || !viewport) throw new Error('Missing Select bounds')
+        expect(bounds.x).toBeGreaterThanOrEqual(0)
+        expect(bounds.y).toBeGreaterThanOrEqual(0)
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width)
+        expect(bounds.y + bounds.height).toBeLessThanOrEqual(viewport.height)
+      }
       const samples = await page.evaluate(() => {
         const canvas = document.createElement('canvas')
         canvas.width = canvas.height = 1
@@ -126,6 +141,9 @@ test('mantém contraste legível nos textos e botões das superfícies do tema',
           window.location.pathname === '/app'
             ? [
                 '.button-primary',
+                '[data-slot=select-trigger]',
+                '[role=option][data-state=checked]',
+                '[role=option][data-state=unchecked]',
                 '.sidebar .brand',
                 '.navigation-label',
                 '.navigation a.active',
