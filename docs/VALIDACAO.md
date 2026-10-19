@@ -43,7 +43,7 @@ A imagem do `Dockerfile`, o workflow no GitHub, adapters de hospedagem remota e 
 
 CPF retornado pela Câmara é removido antes de persistir RAW; hashes original/armazenado e campos removidos mantêm evidência dessa minimização. Datas de coleta e de observação não são datas legais de atualização ou filiação.
 
-Comandos reproduzíveis estão no [README](../README.md); versões instaladas em [VERSOES.md](VERSOES.md). A porta 3000 deve estar livre para suítes que iniciam seu próprio servidor; `E2E_BASE_URL` permite usar um servidor já ativo.
+Comandos reproduzíveis estão no [guia de desenvolvimento](DESENVOLVIMENTO.md); versões instaladas em [VERSOES.md](VERSOES.md). A porta 3000 deve estar livre para suítes que iniciam seu próprio servidor; `E2E_BASE_URL` permite usar um servidor já ativo.
 
 ## MOD-49 — fotos oficiais (08/10/2026)
 
@@ -93,3 +93,9 @@ Este documento registra a fundação inicial. O catálogo foi posteriormente amp
 ## Revisão e integração do PR 4 — 20/10/2026
 
 A integração com main e as correções de partido responsivo e preferência de tema foram verificadas novamente. Consulte os comandos, resultados e limites em [VALIDACAO-PR4-REVISAO.md](VALIDACAO-PR4-REVISAO.md). Os registros anteriores conservam as versões e a cobertura daquela execução.
+
+## Revisão documental do PR 7 — 21/10/2026
+
+O README curto e o guia completo de desenvolvimento foram atualizados por
+rebase sobre `main`. Comandos, links e preservação das skills conferidos em
+[VALIDACAO-PR7-REVISAO.md](VALIDACAO-PR7-REVISAO.md).
