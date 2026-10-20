@@ -105,7 +105,11 @@ function Explore() {
               <dd>Canais institucionais</dd>
             </div>
             <div>
-              <dt>Propostas e votações</dt>
+              <dt>Propostas</dt>
+              <dd>Catálogo parcial da Câmara</dd>
+            </div>
+            <div>
+              <dt>Votações</dt>
               <dd>Integração pendente</dd>
             </div>
             <div>

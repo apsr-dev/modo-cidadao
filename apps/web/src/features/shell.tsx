@@ -95,7 +95,7 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
           <Separator />
           <span className="sidebar-coverage">
             <span className="status-dot" />
-            Cobertura federal
+            Deputados federais
           </span>
           <Link to="/">
             <ArrowLeft size={16} aria-hidden="true" />
@@ -124,7 +124,7 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
           <strong>{demo ? 'Modo demonstração' : 'Dados integrados'}</strong>
           <span>
             {demo
-              ? 'Representantes fictícios. Nenhum dado eleitoral é simulado.'
+              ? 'Representantes, propostas e tramitações fictícios. Nenhum dado eleitoral é simulado.'
               : 'Catálogo local da Câmara. Consulte a coleta e a cobertura de cada registro.'}
           </span>
         </div>

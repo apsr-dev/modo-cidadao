@@ -3,26 +3,31 @@ import { Badge, Button } from '@civica/ui'
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { ArrowLeft, ArrowUpRight, Mail, Phone } from 'lucide-react'
 import { FollowButton } from '../features/follow'
+import { ProposalCard } from '../features/proposals'
 import { valueLabel } from '../features/representatives'
+import { representationLabels } from '../lib/catalog-labels'
 import { metadata } from '../lib/env'
-import { representativeQuery } from '../lib/queries'
+import { proposalsQuery, representativeQuery } from '../lib/queries'
 export const Route = createFileRoute('/_app/representantes/$id')({
   loader: async ({ params, context }) => {
     if (!personIdSchema.safeParse(params.id).success) throw notFound()
     const person = await context.queryClient.ensureQueryData(representativeQuery(params.id))
     if (!person) throw notFound()
-    return person
+    const proposals = await context.queryClient.ensureQueryData(
+      proposalsQuery({ authorId: person.id, page: 1, pageSize: 3 }),
+    )
+    return { person, proposals }
   },
   head: ({ loaderData }) =>
     metadata(
-      loaderData?.name ?? 'Representante',
+      loaderData?.person.name ?? 'Representante',
       'Perfil, origem dos dados e canais oficiais disponíveis.',
-      `/representantes/${loaderData?.id ?? ''}`,
+      `/representantes/${loaderData?.person.id ?? ''}`,
     ),
   component: Profile,
 })
 function Profile() {
-  const p = Route.useLoaderData()
+  const { person: p, proposals } = Route.useLoaderData()
   return (
     <>
       <Link className="back-link" to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
@@ -38,10 +43,12 @@ function Profile() {
             .join('')}
         </span>
         <div>
-          <Badge>{p.demo ? 'Demonstração · Personagem fictício' : 'Câmara dos Deputados'}</Badge>
+          <Badge>
+            {p.demo ? 'Demonstração · Personagem fictício' : representationLabels(p).office}
+          </Badge>
           <h1>{p.name}</h1>
           <p>
-            {p.uf} · {valueLabel(p.party)}
+            UF de representação: {p.uf} · {valueLabel(p.party)}
           </p>
           <p className="muted">Situação informada: {valueLabel(p.status)}</p>
         </div>
@@ -52,8 +59,23 @@ function Profile() {
           <dl>
             <dt>Nome civil</dt>
             <dd>{valueLabel(p.civilName)}</dd>
+            <dt>Cargo</dt>
+            <dd>
+              {representationLabels(p).office}
+              {p.demo ? ' (contexto demonstrativo)' : ''}
+            </dd>
+            <dt>Esfera</dt>
+            <dd>
+              {representationLabels(p).sphere}
+              {p.demo ? ' (contexto demonstrativo)' : ''}
+            </dd>
+            <dt>UF de representação</dt>
+            <dd>{p.uf}</dd>
             <dt>Instituição</dt>
-            <dd>Câmara dos Deputados{p.demo ? ' (contexto demonstrativo)' : ''}</dd>
+            <dd>
+              {representationLabels(p).name}
+              {p.demo ? ' (contexto demonstrativo)' : ''}
+            </dd>
             <dt>Legislatura</dt>
             <dd>{p.demo ? 'Não se aplica' : p.legislature}</dd>
             <dt>Partido informado na coleta</dt>
@@ -97,6 +119,30 @@ function Profile() {
           <p className="muted">Abrir um canal não confirma envio, leitura ou resposta.</p>
         </section>
       </div>
+      <section className="profile-proposals">
+        <div className="results-heading">
+          <h2>Propostas de autoria e coautoria</h2>
+          <Link to="/propostas" search={{ authorId: p.id, page: 1, pageSize: 6 }}>
+            Ver todas as propostas importadas
+          </Link>
+        </div>
+        <p className="muted">
+          Proponentes e signatários de apoio são apresentados com papéis distintos. A coleção
+          importada não representa toda a atuação parlamentar.
+        </p>
+        {proposals.items.length ? (
+          <div className="proposal-grid">
+            {proposals.items.map((proposal) => (
+              <ProposalCard key={proposal.id} proposal={proposal} personId={p.id} />
+            ))}
+          </div>
+        ) : (
+          <p className="coverage-note">
+            Nenhuma proposta importada para esta pessoa. Isso não significa ausência de propostas na
+            Câmara.
+          </p>
+        )}
+      </section>
       <section className="panel follow-panel">
         <div>
           <h2>Acompanhe esta pessoa</h2>
@@ -127,7 +173,8 @@ function Profile() {
           </a>
         )}
         <p>
-          Propostas, votações, gastos e candidaturas ainda não foram coletados para este perfil.
+          A seção de propostas mostra somente os vínculos coletados. Votações, gastos e candidaturas
+          ainda não estão integrados neste perfil.
         </p>
       </section>
     </>

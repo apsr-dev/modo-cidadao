@@ -70,3 +70,7 @@ As referências do Mobbin, a licença da fotografia e as decisões de layout est
 ## MOD-44 — apresentação institucional e navegação
 
 A separação de layouts foi complementada com fontes/cobertura por modo e entrada da conta restrita à persistência. Checks e evidências estão em [VALIDACAO-MOD-44.md](VALIDACAO-MOD-44.md).
+
+## Entrega posterior de propostas
+
+Este documento registra a fundação inicial. O catálogo foi posteriormente ampliado para 513 deputados e três propostas oficiais; detalhes e checks da nova entrega estão em [VALIDACAO-PROPOSTAS.md](VALIDACAO-PROPOSTAS.md).

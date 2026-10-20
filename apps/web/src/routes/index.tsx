@@ -136,15 +136,15 @@ function Home() {
           <h3>{demo ? 'Você está na demonstração' : 'Catálogo local da Câmara'}</h3>
           <p>
             {demo
-              ? 'Os representantes são personagens fictícios para conhecer a interface. A demonstração não salva acompanhamentos nem cria contas.'
-              : 'O catálogo reúne deputados importados dos Dados Abertos da Câmara. A importação é limitada; não há garantia de cobertura completa nem atualização automática.'}
+              ? 'Os representantes são personagens fictícios; propostas e tramitações também são fictícias para conhecer a interface. A demonstração não salva acompanhamentos nem cria contas.'
+              : 'O catálogo reúne deputados e propostas importados dos Dados Abertos da Câmara. A importação é limitada; não há garantia de cobertura completa nem atualização automática.'}
           </p>
           <p>
             {demo
               ? 'No modo integrado, cada perfil identifica a fonte, o link oficial e a data de coleta.'
               : 'Cada perfil identifica a fonte, o link oficial e a data de coleta. Coleta não é a data de atualização oficial.'}{' '}
-            Senadores, propostas, votações, despesas e dados eleitorais ainda não estão integrados
-            nesta versão.
+            Senadores, votações, despesas e dados eleitorais ainda não estão integrados nesta
+            versão.
           </p>
           <a
             className="text-link"

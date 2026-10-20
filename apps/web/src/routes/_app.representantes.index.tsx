@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_app/representantes/')({
   head: () =>
     metadata(
       'Representantes',
-      'Explore representantes da Câmara por nome e UF, com fontes e contatos oficiais quando disponíveis.',
+      'Explore deputados federais da Câmara por nome e UF de representação, com fontes e contatos oficiais quando disponíveis.',
       '/representantes',
     ),
   component: Directory,
@@ -28,11 +28,18 @@ function Directory() {
       <div className="page-heading">
         <span className="eyebrow">QUEM REPRESENTA VOCÊ</span>
         <h1>Representantes</h1>
-        <p>Encontre pessoas, consulte fontes e conheça os contatos disponíveis.</p>
+        <p>
+          Explore deputados federais da Câmara, da esfera federal, por nome e UF de representação. A
+          UF indica o estado ou o Distrito Federal representado.
+        </p>
+        <p>
+          Senadores também são da esfera federal. Deputados estaduais e distritais pertencem à
+          esfera estadual/distrital. Essas categorias ainda não estão integradas.
+        </p>
       </div>
       <div className="coverage-note">
-        Câmara dos Deputados · Amostra local limitada. Senado ainda não integrado. A lista não
-        representa a bancada completa.
+        Catálogo local da Câmara · Situação conforme a última coleta. Uma busca vazia não comprova
+        ausência na fonte. Senado ainda não integrado.
       </div>
       <section className="directory-workspace" aria-label="Busca e resultados">
         <form className="filter-form" method="get" action="/representantes">
@@ -49,7 +56,7 @@ function Directory() {
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="representative-uf">Unidade federativa</FieldLabel>
+              <FieldLabel htmlFor="representative-uf">UF de representação</FieldLabel>
               <UfSelect id="representative-uf" defaultValue={filters.uf} />
             </Field>
           </FieldGroup>
@@ -60,7 +67,7 @@ function Directory() {
         <div className="results-heading">
           <p>
             <strong>{data.total}</strong>{' '}
-            {data.total === 1 ? 'representante encontrado' : 'representantes encontrados'}
+            {data.total === 1 ? 'deputado federal encontrado' : 'deputados federais encontrados'}
           </p>
           <span>Ordem alfabética</span>
         </div>

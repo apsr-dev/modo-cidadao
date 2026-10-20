@@ -48,7 +48,7 @@ test('busca, paginação, perfil e navegação funcionam sem erros de hidrataç�
     await page.getByRole('link', { name: 'Próxima →' }).click()
     await expect(page.getByText('Página 2 de 2')).toBeVisible()
     await page.getByRole('textbox', { name: 'Nome do representante' }).fill('Aurora')
-    await page.getByRole('combobox', { name: 'Unidade federativa' }).click()
+    await page.getByRole('combobox', { name: 'UF de representação' }).click()
     await page.getByRole('option', { name: 'SP', exact: true }).click()
     await page.getByRole('button', { name: 'Buscar' }).click()
     await expect(page.getByRole('heading', { name: 'Aurora das Pontes' })).toBeVisible()
@@ -60,7 +60,7 @@ test('busca, paginação, perfil e navegação funcionam sem erros de hidrataç�
     await page.locator('.person-card').first().click()
     await expect(page.getByRole('heading', { name: 'Origem e cobertura' })).toBeVisible()
   }
-  await page.goto('/propostas')
+  await page.goto('/votacoes')
   await expect(page.getByRole('heading', { name: 'Integração ainda não disponível' })).toBeVisible()
   await page.goto('/participe')
   await expect(page.getByRole('link', { name: 'Ir ao canal oficial' })).toHaveCount(2)

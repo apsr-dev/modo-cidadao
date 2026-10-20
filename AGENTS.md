@@ -7,6 +7,8 @@ Leia integralmente, antes de mudanças relevantes:
 
 O planejamento descreve o produto completo; README e `docs/VALIDACAO.md` descrevem o que está implementado e verificado. Preserve os documentos completos; não reorganize por MVP, fases ou sprints. Registre decisões novas em `docs/decisions/` e atualize documentação quando comportamento, produto ou arquitetura mudar.
 
+Cada feature deve ser implementada em branch própria e entregue em pull request contra `main`. Não envie mudanças de features diretamente para `main` nem faça merge automático.
+
 ## Runtime e verificação
 
 - Bun **1.4.2** é o runtime da web/worker e único gerenciador. Use Bun workspaces, `workspace:*`, `bun.lock` e `bun install --frozen-lockfile`. Nunca gere lockfiles concorrentes.

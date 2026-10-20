@@ -20,14 +20,14 @@ test('Select permite navegar por teclado, cancelar e selecionar a última UF', a
   await expect(list).toHaveCount(0)
   await page.getByRole('button', { name: 'Encontrar representantes', exact: true }).click()
   await expect(page).toHaveURL(/uf=TO/)
-  await expect(page.getByRole('combobox', { name: 'Unidade federativa' })).toHaveText('TO')
+  await expect(page.getByRole('combobox', { name: 'UF de representação' })).toHaveText('TO')
 })
 
 test('Select limpa a UF sem enviar o sentinela e preserva o tamanho da página', async ({
   page,
 }, testInfo) => {
   await page.goto('/representantes?uf=SP&page=2&pageSize=1')
-  const trigger = page.getByRole('combobox', { name: 'Unidade federativa' })
+  const trigger = page.getByRole('combobox', { name: 'UF de representação' })
   await expect(trigger).toHaveAttribute('data-slot', 'select-trigger')
   await expect(trigger).toHaveText('SP')
   if (testInfo.project.name === 'mobile') await trigger.tap()
@@ -62,11 +62,11 @@ test('filtro por UF continua enviando o formulário sem JavaScript', async ({
     await page.getByLabel('Seu estado', { exact: true }).selectOption('SP')
     await page.getByRole('button', { name: 'Encontrar representantes', exact: true }).click()
     await expect(page).toHaveURL(/uf=SP/)
-    await expect(page.getByLabel('Unidade federativa')).toHaveValue('SP')
-    await page.getByLabel('Unidade federativa').selectOption('')
+    await expect(page.getByLabel('UF de representação')).toHaveValue('SP')
+    await page.getByLabel('UF de representação').selectOption('')
     await page.getByRole('button', { name: 'Buscar', exact: true }).click()
     expect(new URL(page.url()).searchParams.has('uf')).toBe(false)
-    await expect(page.getByLabel('Unidade federativa')).toHaveValue('')
+    await expect(page.getByLabel('UF de representação')).toHaveValue('')
   } finally {
     await context.close()
   }
