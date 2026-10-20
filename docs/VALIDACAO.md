@@ -44,3 +44,7 @@ A imagem do `Dockerfile`, o workflow no GitHub, adapters de hospedagem remota e 
 CPF retornado pela Câmara é removido antes de persistir RAW; hashes original/armazenado e campos removidos mantêm evidência dessa minimização. Datas de coleta e de observação não são datas legais de atualização ou filiação.
 
 Comandos reproduzíveis estão no [README](../README.md); versões instaladas em [VERSOES.md](VERSOES.md). A porta 3000 deve estar livre para suítes que iniciam seu próprio servidor; `E2E_BASE_URL` permite usar um servidor já ativo.
+
+## Entrega posterior de propostas
+
+Este documento registra a fundação inicial. O catálogo foi posteriormente ampliado para 513 deputados e três propostas oficiais; detalhes e checks da nova entrega estão em [VALIDACAO-PROPOSTAS.md](VALIDACAO-PROPOSTAS.md).

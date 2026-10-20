@@ -35,6 +35,26 @@ export const filtersSchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(50).default(6),
 })
 export const personIdSchema = z.uuid()
+const optionalInteger = (min: number, max: number) =>
+  z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.coerce.number().int().min(min).max(max).optional(),
+  )
+export const proposalTypeSchema = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .max(10)
+  .regex(/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+|\([A-Z0-9]+\))*$/)
+export const proposalFiltersSchema = z.object({
+  type: z.preprocess((value) => (value === '' ? undefined : value), proposalTypeSchema.optional()),
+  number: optionalInteger(1, 1000000),
+  year: optionalInteger(1900, 2100),
+  authorId: z.preprocess((value) => (value === '' ? undefined : value), z.uuid().optional()),
+  page: z.coerce.number().int().min(1).max(10000).default(1),
+  pageSize: z.coerce.number().int().min(1).max(50).default(6),
+})
+export const proposalIdSchema = z.uuid()
 export const credentialsSchema = z.object({
   email: z.email().max(254),
   password: z.string().min(10).max(128),
@@ -44,4 +64,12 @@ export const publicEnvSchema = z.object({
   VITE_APP_NAME: z.string().min(1).max(60).default('Plataforma Cívica'),
   VITE_APP_URL: z.url().default('http://localhost:3000'),
 })
-export type { DataValue, Page, Representative, RepresentativeFilters } from '@civica/domain'
+export type {
+  DataValue,
+  Page,
+  Proposal,
+  ProposalFilters,
+  ProposalSummary,
+  Representative,
+  RepresentativeFilters,
+} from '@civica/domain'

@@ -1,0 +1,52 @@
+{
+  "dados": [
+    {
+      "id": 2642134,
+      "uri": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2642134",
+      "siglaTipo": "PL",
+      "codTipo": 139,
+      "numero": 4916,
+      "ano": 2026,
+      "ementa": "Altera a Lei nº 8.906, de 4 de julho de 1994, o Estatuto da Advocacia, para permitir que os ocupantes de cargo efetivo ou em comissão do Poder Judiciário possam advogar, desde que não seja contra a Fazenda Pública que os remunere ou perante a esfera do Poder Judiciário em que atuem como ocupantes de tais cargos.",
+      "dataApresentacao": "2026-08-06T13:17"
+    },
+    {
+      "id": 2626629,
+      "uri": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2626629",
+      "siglaTipo": "PL",
+      "codTipo": 139,
+      "numero": 2546,
+      "ano": 2026,
+      "ementa": "Altera a Lei n 13.105, de 16 de março de 2015 – Código de Processo Civil, para assegurar gratuidade da justiça à pessoa física em ações que envolvam o direito à saúde ajuizadas em face da União, Estados, Municípios, Distrito Federal e operadoras de planos privados de assistência à saúde.",
+      "dataApresentacao": "2026-05-20T20:10"
+    },
+    {
+      "id": 2624624,
+      "uri": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2624624",
+      "siglaTipo": "PL",
+      "codTipo": 139,
+      "numero": 2385,
+      "ano": 2026,
+      "ementa": "Institui a Política Nacional de Proteção Humanitária ao Passageiro do Transporte Aéreo em Situação de Luto Familiar e dispõe sobre mecanismos obrigatórios de flexibilização contratual, assistência emergencial e tarifa humanitária no âmbito do transporte aéreo civil.",
+      "dataApresentacao": "2026-05-13T16:44"
+    }
+  ],
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaTipo=PL&ano=2026&idDeputadoAutor=204379&itens=3&ordem=DESC&ordenarPor=id"
+    },
+    {
+      "rel": "next",
+      "href": "https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaTipo=PL&ano=2026&idDeputadoAutor=204379&ordem=DESC&ordenarPor=id&pagina=2&itens=3"
+    },
+    {
+      "rel": "first",
+      "href": "https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaTipo=PL&ano=2026&idDeputadoAutor=204379&ordem=DESC&ordenarPor=id&pagina=1&itens=3"
+    },
+    {
+      "rel": "last",
+      "href": "https://dadosabertos.camara.leg.br/api/v2/proposicoes?siglaTipo=PL&ano=2026&idDeputadoAutor=204379&ordem=DESC&ordenarPor=id&pagina=1&itens=3"
+    }
+  ]
+}

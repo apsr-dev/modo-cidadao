@@ -107,8 +107,8 @@ function Home() {
               to: '/propostas',
               icon: BookOpen,
               title: 'O que está em discussão',
-              text: 'O espaço para entender propostas, versões do texto e tramitações.',
-              label: 'Conhecer este espaço',
+              text: 'Consulte ementas, autoria e tramitações com fontes oficiais.',
+              label: 'Explorar propostas',
               tone: 'yellow',
             },
             {
@@ -124,9 +124,7 @@ function Home() {
               <span className={`icon-tile ${tone}`}>
                 <Icon size={23} />
               </span>
-              {to !== '/representantes' && (
-                <Badge className="quiet-badge">Integração pendente</Badge>
-              )}
+              {to === '/votacoes' && <Badge className="quiet-badge">Integração pendente</Badge>}
               <h3>{title}</h3>
               <p>{text}</p>
               <span className="card-action">

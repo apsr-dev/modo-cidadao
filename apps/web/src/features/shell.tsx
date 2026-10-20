@@ -91,13 +91,14 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
           <div className="demo-strip">
             <span className="status-dot" /> Modo demonstração{' '}
             <span>
-              Os representantes são personagens fictícios. Nenhum dado eleitoral é simulado.
+              Representantes, propostas e tramitações são fictícios. Nenhum dado eleitoral é
+              simulado.
             </span>
           </div>
         ) : (
           <div className="live-strip">
             Catálogo local · Importação limitada da Câmara · Consulte a data de coleta em cada
-            perfil.
+            registro.
           </div>
         )}
         <main id="conteudo" className="content">
