@@ -7,9 +7,11 @@ Leia integralmente, antes de mudanças relevantes:
 
 O planejamento descreve o produto completo; README e `docs/VALIDACAO.md` descrevem o que está implementado e verificado. Preserve os documentos completos; não reorganize por MVP, fases ou sprints. Registre decisões novas em `docs/decisions/` e atualize documentação quando comportamento, produto ou arquitetura mudar.
 
+Cada feature deve ser implementada em branch própria e entregue em pull request contra `main`. Não envie mudanças de features diretamente para `main` nem faça merge automático.
+
 ## Runtime e verificação
 
-- Bun **1.4.2** é o runtime da web/worker e único gerenciador. Use Bun workspaces, `workspace:*`, `bun.lock` e `bun install --frozen-lockfile`. Nunca gere lockfiles concorrentes.
+- Bun **1.4.3** é o runtime da web/worker e único gerenciador. Use Bun workspaces, `workspace:*`, `bun.lock` e `bun install --frozen-lockfile`. Nunca gere lockfiles concorrentes.
 - Vite roda explicitamente com Bun: `bun --bun vite dev/build`. Produção local usa `apps/web/server.ts` com Bun. Não substitua o build por bundler Bun.
 - `bun run build`, `bun run typecheck`, `bun run lint`, `bun run test`, `bun run test:e2e`. O build gera as rotas antes do typecheck em checkout limpo. `bun run test` chama Vitest, não `bun test`.
 - Banco local: `bun run db:start`, `bun run db:env`, `bun run db:seed`, `bun run test:integration`. Leia README antes de `db:reset`, que apaga dados locais. Não use produção como fallback.
