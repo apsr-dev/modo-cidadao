@@ -42,22 +42,16 @@ test('landing separada do app mantém a descoberta por UF e os links públicos',
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 })
 
-test('landing sem JavaScript mantém apresentação, âncoras e entrada pública', async ({
-  browser,
-  baseURL,
-}) => {
-  const context = await browser.newContext({ javaScriptEnabled: false, baseURL })
-  try {
-    const page = await context.newPage()
+test.describe('apresentação sem JavaScript', () => {
+  test.use({ javaScriptEnabled: false })
+  test('landing mantém apresentação, âncoras e entrada pública', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { name: /A cidadania continua/ })).toBeVisible()
     await expect(page.locator('.landing-photo')).toHaveJSProperty('complete', true)
     await page.getByRole('link', { name: 'Explorar a plataforma', exact: true }).first().click()
     await expect(page.getByRole('heading', { name: 'Explorar', exact: true })).toBeVisible()
     await expect(page.getByLabel('Seu estado', { exact: true })).toBeVisible()
-  } finally {
-    await context.close()
-  }
+  })
 })
 
 const integrated = process.env.E2E_INTEGRATION === '1'

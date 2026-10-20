@@ -51,13 +51,9 @@ test('Select limpa a UF sem enviar o sentinela e preserva o tamanho da página',
   await expect(trigger).toHaveText('Todas as UFs')
 })
 
-test('filtro por UF continua enviando o formulário sem JavaScript', async ({
-  browser,
-  baseURL,
-}) => {
-  const context = await browser.newContext({ javaScriptEnabled: false, baseURL })
-  try {
-    const page = await context.newPage()
+test.describe('filtros sem JavaScript', () => {
+  test.use({ javaScriptEnabled: false })
+  test('filtro por UF continua enviando o formulário', async ({ page }) => {
     await page.goto('/app')
     await page.getByLabel('Seu estado', { exact: true }).selectOption('SP')
     await page.getByRole('button', { name: 'Encontrar representantes', exact: true }).click()
@@ -67,7 +63,5 @@ test('filtro por UF continua enviando o formulário sem JavaScript', async ({
     await page.getByRole('button', { name: 'Buscar', exact: true }).click()
     expect(new URL(page.url()).searchParams.has('uf')).toBe(false)
     await expect(page.getByLabel('UF de representação')).toHaveValue('')
-  } finally {
-    await context.close()
-  }
+  })
 })

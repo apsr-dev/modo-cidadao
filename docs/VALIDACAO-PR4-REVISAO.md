@@ -64,3 +64,7 @@ As capturas contêm somente dados públicos das fixtures e nenhum dado de conta.
 No primeiro envio, o job público passou e a integração do evento `pull_request` também passou. A execução de integração do evento `push` falhou antes dos testes porque a porta fixa 54322 já estava ocupada no runner. O fluxo agora executa `scripts/configure-ci-database.ts` antes de iniciar o banco: usa projeto exclusivo por run/attempt e escolhe portas disponíveis, preservando as opções de Auth, schemas e permissões. A reescrita é restrita a `GITHUB_ACTIONS=true`, em checkout efêmero; o arquivo de desenvolvimento versionado conserva suas portas. As reservas são mantidas até selecionar todas as portas para não repetir valores dentro da execução.
 
 O script foi conferido sobre uma cópia temporária do TOML, preservando as opções não relacionadas a portas/identidade, recusando execução fora do CI e confirmando portas válidas e distintas. Os checks remotos do commit mais recente validam o fluxo completo.
+
+## Contextos dos testes sem JavaScript
+
+Uma rodada pública no Linux concluiu as asserções do teste sem JavaScript, mas excedeu o timeout durante `context.close()` do contexto criado manualmente. Os dois cenários sem JavaScript usam agora `test.use({ javaScriptEnabled: false })` e a fixture `page` gerenciada pelo Playwright, que também herda viewport/dispositivo do projeto. Isso evita um contexto paralelo sem as opções mobile e mantém o encerramento no ciclo de vida da suíte. Nenhum teste foi ignorado nem recebeu retry para encobrir falhas.
