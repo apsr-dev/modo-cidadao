@@ -192,3 +192,7 @@ A home `/` apresenta propósito, fontes e cobertura com ação **Explorar a plat
 Os seletores de UF de `/app` e `/representantes` usam o Select do shadcn/Radix, com menu nas cores do tema, teclado, rolagem e opção “Todas as UFs”. O filtro continua no URL e o envio mantém `pageSize`. Sem JavaScript, o formulário usa um select nativo como fallback.
 
 O layout `_app` preserva as URLs públicas e não exige conta para consultar. `/meu-brasil` explica que login serve para salvar acompanhamentos e permite continuar sem conta; a demo mantém a conta indisponível. A implementação usa o PR #4 já aberto, sem duplicar a separação existente. Veja [ADR 004](docs/decisions/004-landing-e-app.md) e [validação](docs/VALIDACAO-MOD-44.md).
+
+## Revisão do PR 4
+
+O catálogo de propostas e seus detalhes compartilham o layout da plataforma, preservando as URLs públicas e a autoria por ID oficial. O diretório mantém partido em desktop/celular; a escolha manual de tema sobrevive à navegação entre landing e app quando o armazenamento está bloqueado. Decisões em [ADR 005](docs/decisions/005-integracao-e-revisao-pr-4.md), resultados em [validação do PR 4](docs/VALIDACAO-PR4-REVISAO.md).

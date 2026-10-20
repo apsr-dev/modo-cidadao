@@ -74,3 +74,7 @@ A separação de layouts foi complementada com fontes/cobertura por modo e entra
 ## Entrega posterior de propostas
 
 Este documento registra a fundação inicial. O catálogo foi posteriormente ampliado para 513 deputados e três propostas oficiais; detalhes e checks da nova entrega estão em [VALIDACAO-PROPOSTAS.md](VALIDACAO-PROPOSTAS.md).
+
+## Revisão e integração do PR 4 — 20/10/2026
+
+A integração com main e as correções de partido responsivo e preferência de tema foram verificadas novamente. Consulte os comandos, resultados e limites em [VALIDACAO-PR4-REVISAO.md](VALIDACAO-PR4-REVISAO.md). Os registros anteriores conservam as versões e a cobertura daquela execução.

@@ -34,9 +34,11 @@ export function PersonCard({ person }: { person: Representative }) {
             ? 'Contexto demonstrativo'
             : `Esfera ${representation.sphere.toLocaleLowerCase('pt-BR')}`}
         </p>
+        <p className="person-party-inline">{valueLabel(person.party)}</p>
       </div>
       <span className="person-party">{valueLabel(person.party)}</span>
-      <span className="person-uf" aria-label={`UF de representação: ${person.uf}`}>
+      <span className="person-uf">
+        <span className="sr-only">UF de representação: </span>
         {person.uf}
       </span>
       <Badge>{person.demo ? 'Personagem fictício' : representation.name}</Badge>

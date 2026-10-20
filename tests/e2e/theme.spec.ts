@@ -102,7 +102,7 @@ test('mantém contraste legível nos textos e botões das superfícies do tema',
   if (testInfo.project.name === 'mobile') await page.setViewportSize({ width: 320, height: 740 })
   for (const mode of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: mode })
-    for (const path of ['/', '/app']) {
+    for (const path of ['/', '/app', '/propostas']) {
       await page.goto(path)
       await expect(page.getByRole('button', { name: 'Tema escuro', exact: true })).toHaveAttribute(
         'aria-pressed',
@@ -154,15 +154,17 @@ test('mantém contraste legível nos textos e botões das superfícies do tema',
                 '.explore-context p',
                 '.coverage-list dd',
               ]
-            : [
-                '.button-primary',
-                '.button-outline',
-                '.text-link',
-                '.marketing-header nav',
-                '.landing-purpose p:not(.section-label)',
-                '.landing-path-list p',
-                '.principles-list p',
-              ]
+            : window.location.pathname === '/propostas'
+              ? ['.proposal-card', '.proposal-ementa', '.proposal-card-meta', '.coverage-note']
+              : [
+                  '.button-primary',
+                  '.button-outline',
+                  '.text-link',
+                  '.marketing-header nav',
+                  '.landing-purpose p:not(.section-label)',
+                  '.landing-path-list p',
+                  '.principles-list p',
+                ]
         return selectors.map((selector) => {
           const el = document.querySelector(selector)
           if (!el) throw new Error(`Missing theme sample: ${selector}`)
@@ -188,4 +190,36 @@ test('mantém contraste legível nos textos e botões das superfícies do tema',
       }
     }
   }
+})
+
+test('mantém a escolha manual entre landing e app com armazenamento bloqueado', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'localStorage', {
+      get() {
+        throw new DOMException('Storage blocked', 'SecurityError')
+      },
+    })
+  })
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await page.goto('/')
+  const toggle = page.getByRole('button', { name: 'Tema escuro', exact: true })
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true')
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false')
+  await page.getByRole('link', { name: 'Explorar a plataforma', exact: true }).first().click()
+  await expect(page.getByRole('heading', { name: 'Explorar', exact: true })).toBeVisible()
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.locator('html')).not.toHaveClass('dark')
+  await page
+    .locator('.sidebar')
+    .getByRole('link', { name: 'Plataforma Cívica', exact: true })
+    .click()
+  await expect(page.getByRole('heading', { name: /A cidadania continua/ })).toBeVisible()
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false')
+  await toggle.click()
+  await page.getByRole('link', { name: 'Encontrar representantes', exact: true }).click()
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.locator('html')).toHaveClass('dark')
 })

@@ -125,3 +125,24 @@ test('URLs públicas mantêm layout de consulta e conta fica restrita à persist
   await expect(page.getByRole('heading', { name: 'Representantes', exact: true })).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 })
+
+test('diretório preserva partido, cargo e UF nas larguras de desktop e celular', async ({
+  page,
+  request,
+}) => {
+  const data = await (await request.get('/api/v1/representatives?pageSize=1')).json()
+  const person = data.items[0]
+  expect(person.party.value).toBeTruthy()
+  for (const width of [320, 800, 1150, 1280]) {
+    await page.setViewportSize({ width, height: 844 })
+    await page.goto('/representantes?pageSize=1')
+    const row = page.locator('.person-card').first()
+    await expect(row.getByRole('heading', { name: person.name, exact: true })).toBeVisible()
+    await expect(
+      row.getByText(person.party.value, { exact: true }).filter({ visible: true }),
+    ).toHaveCount(1)
+    await expect(row.getByText(/Deputado federal/)).toBeVisible()
+    await expect(row.getByText(`UF de representação: ${person.uf}`, { exact: true })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  }
+})

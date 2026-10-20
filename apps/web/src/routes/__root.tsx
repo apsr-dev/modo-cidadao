@@ -8,6 +8,7 @@ import {
   Scripts,
 } from '@tanstack/react-router'
 import { EmptyState } from '../features/shell'
+import { ThemeProvider } from '../features/theme-toggle'
 import { getSettings } from '../lib/functions'
 import { themeInitScript } from '../lib/theme'
 import styleHref from '../styles.css?url'
@@ -56,7 +57,9 @@ function Root() {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <Outlet />
+        <ThemeProvider>
+          <Outlet />
+        </ThemeProvider>
         <Scripts />
       </body>
     </html>

@@ -1,8 +1,12 @@
 import { Moon, Sun } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from 'react'
 import { applyTheme, storedTheme, themeStorageKey } from '../lib/theme'
 
-export function ThemeToggle() {
+const ThemeContext = createContext<{ dark: boolean; toggle: () => void } | null>(null)
+
+// The root provider survives transitions between the marketing and application layouts.
+// Its state is request-local during SSR and stays in this browser tab after hydration.
+export function ThemeProvider({ children }: { children: ReactNode }) {
   const [dark, setDark] = useState(false)
   const manualTheme = useRef<string | null>(null)
 
@@ -42,6 +46,13 @@ export function ThemeToggle() {
     }
   }
 
+  return <ThemeContext.Provider value={{ dark, toggle }}>{children}</ThemeContext.Provider>
+}
+
+export function ThemeToggle() {
+  const theme = useContext(ThemeContext)
+  if (!theme) throw new Error('ThemeToggle requires ThemeProvider')
+  const { dark, toggle } = theme
   return (
     <button
       type="button"

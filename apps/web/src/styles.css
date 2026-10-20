@@ -824,6 +824,9 @@ pre {
   color: var(--subtle-foreground);
   margin: 0;
 }
+.person-party-inline {
+  display: none;
+}
 .person-party {
   font-size: 12px;
   color: var(--subtle-foreground);
@@ -861,6 +864,10 @@ pre {
 .explore-main .person-party,
 .explore-main .person-card > .badge {
   display: none;
+}
+.explore-main .person-party-inline {
+  display: block;
+  margin-top: 4px;
 }
 .explore-main .avatar {
   width: 40px;
@@ -1335,6 +1342,10 @@ pre {
   .person-party,
   .person-card > .badge {
     display: none;
+  }
+  .person-card .person-party-inline {
+    display: block;
+    margin-top: 4px;
   }
   .landing-purpose,
   .landing-paths {
@@ -1865,8 +1876,7 @@ pre {
   margin-bottom: 8px;
   font-size: 11px;
 }
-.proposal-text,
-.proposal-text ~ .panel {
+.proposal-panel {
   padding: 28px;
   margin-bottom: 24px;
   background: var(--card);
@@ -1877,8 +1887,7 @@ pre {
   margin: 0;
 }
 @media (max-width: 600px) {
-  .proposal-text,
-  .proposal-text ~ .panel {
+  .proposal-panel {
     padding: 22px 18px;
   }
 }

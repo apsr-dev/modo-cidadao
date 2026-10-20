@@ -54,3 +54,7 @@ Por solicitação do responsável, os controles de UF em `/app` e no diretório 
 `UfSelect` concentra a composição de opções e a integração com os formulários GET existentes. A opção interna `all` é convertida em string vazia no único campo `uf` enviado; o sentinela não chega ao contrato público. A mudança da UF no URL reinicializa o estado do controle. O tamanho da página continua no campo existente do diretório.
 
 O `ClientOnly` do Router preserva o HTML inicial e a consulta sem JavaScript usando NativeSelect como fallback; após hidratação, o menu interativo é o Select customizado. Não há segundo campo nomeado `uf` ativo nem alteração nos loaders, validação, banco ou fontes. A dependência e suas transitivas são fixadas em `bun.lock`. Verificação: [validação do Select](../VALIDACAO-SELECT.md).
+
+## Integração com main — 20/10/2026
+
+Os estados de propostas pendentes acima registram a cobertura existente durante a implementação original. A integração dos PRs 1 e 2 mantém agora o catálogo e as tramitações da Câmara dentro do layout `_app`, além dos rótulos de cargo/esfera/UF. A revisão de partido responsivo e tema sem armazenamento está no [ADR 005](005-integracao-e-revisao-pr-4.md).
