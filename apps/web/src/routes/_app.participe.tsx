@@ -2,7 +2,7 @@ import { Button } from '@civica/ui'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight, Landmark, MessageSquare } from 'lucide-react'
 import { metadata } from '../lib/env'
-export const Route = createFileRoute('/participe')({
+export const Route = createFileRoute('/_app/participe')({
   head: () =>
     metadata(
       'Participe',

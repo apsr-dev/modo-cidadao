@@ -9,6 +9,9 @@ test('busca aceita siglas oficiais com hífen e parênteses', async ({ page, req
     expect(result.items.every((p: { type: string }) => p.type === type)).toBe(true)
   }
   await page.goto('/propostas')
+  await expect(
+    page.getByRole('navigation', { name: 'Navegação principal', includeHidden: true }),
+  ).toHaveCount(1)
   await page.getByLabel('Tipo da proposta').fill('SBT-A')
   await page.getByRole('button', { name: 'Buscar', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Propostas', exact: true })).toBeVisible()
@@ -36,6 +39,7 @@ test('representante → proposta → tramitação → documento oficial; filtros
   expect(ssr.status()).toBe(200)
   const html = await ssr.text()
   expect(html).toContain(p.title)
+  expect(html).toContain('class="app-shell"')
   expect(html).toContain('name="description"')
   expect(html).toContain('rel="canonical"')
   expect((await request.get('/api/v1/proposals?year=1800')).status()).toBe(400)

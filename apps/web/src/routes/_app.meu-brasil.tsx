@@ -1,4 +1,4 @@
-import { Button } from '@civica/ui'
+import { Button, Field, FieldGroup, FieldLabel, Input } from '@civica/ui'
 import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { LockKeyhole, LogOut } from 'lucide-react'
@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { EmptyState } from '../features/shell'
 import { metadata } from '../lib/env'
 import { getPersonal, login, logout, signup } from '../lib/functions'
-export const Route = createFileRoute('/meu-brasil')({
+export const Route = createFileRoute('/_app/meu-brasil')({
   loader: () => getPersonal(),
   headers: () => ({ 'Cache-Control': 'private, no-store', Vary: 'Cookie, Authorization' }),
   head: () => ({
@@ -44,7 +44,7 @@ function Account() {
             Login e acompanhamento precisam do Supabase local e de dados integrados. A demonstração
             não cria sessões fictícias nem salva escolhas pessoais.
           </p>
-          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+          <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
             Explorar a demonstração
           </Link>
         </EmptyState>
@@ -74,7 +74,7 @@ function Account() {
                 }
               }}
             >
-              <LogOut size={16} /> Sair
+              <LogOut data-icon="inline-start" /> Sair
             </Button>
           </section>
           <section className="panel">
@@ -92,7 +92,7 @@ function Account() {
             ) : (
               <p>
                 Você ainda não segue ninguém.{' '}
-                <Link to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+                <Link to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
                   Encontre representantes
                 </Link>
                 .
@@ -107,7 +107,16 @@ function Account() {
       ) : (
         <section className="auth-panel panel">
           <h2>{register ? 'Criar conta local' : 'Entre na sua conta'}</h2>
-          <p>Acesso por e-mail e senha no Supabase configurado para este ambiente.</p>
+          <p>
+            A conta serve para salvar seus acompanhamentos. Consultar o catálogo não exige login.
+          </p>
+          <Link
+            to="/representantes"
+            search={{ name: '', page: 1, pageSize: 24 }}
+            className="text-link"
+          >
+            Continuar sem conta
+          </Link>
           <form
             method="post"
             onSubmit={async (event) => {
@@ -138,29 +147,33 @@ function Account() {
               }
             }}
           >
-            <label>
-              E-mail
-              <input
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                maxLength={254}
-                disabled={!hydrated}
-              />
-            </label>
-            <label>
-              Senha
-              <input
-                name="password"
-                type="password"
-                autoComplete={register ? 'new-password' : 'current-password'}
-                minLength={10}
-                maxLength={128}
-                required
-                disabled={!hydrated}
-              />
-            </label>
+            <FieldGroup>
+              <Field data-disabled={!hydrated}>
+                <FieldLabel htmlFor="account-email">E-mail</FieldLabel>
+                <Input
+                  id="account-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  maxLength={254}
+                  disabled={!hydrated}
+                />
+              </Field>
+              <Field data-disabled={!hydrated}>
+                <FieldLabel htmlFor="account-password">Senha</FieldLabel>
+                <Input
+                  id="account-password"
+                  name="password"
+                  type="password"
+                  autoComplete={register ? 'new-password' : 'current-password'}
+                  minLength={10}
+                  maxLength={128}
+                  required
+                  disabled={!hydrated}
+                />
+              </Field>
+            </FieldGroup>
             <small>No mínimo 10 caracteres. Recuperação de senha ainda não integrada.</small>
             <Button type="submit" disabled={busy || !hydrated}>
               {busy ? 'Aguarde…' : register ? 'Criar conta' : 'Entrar'}

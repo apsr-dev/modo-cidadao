@@ -7,7 +7,7 @@ import { sourceDateLabel } from '../features/proposals'
 import { valueLabel } from '../features/representatives'
 import { metadata } from '../lib/env'
 import { proposalQuery } from '../lib/queries'
-export const Route = createFileRoute('/propostas/$id')({
+export const Route = createFileRoute('/_app/propostas/$id')({
   loader: async ({ params, context }) => {
     if (!proposalIdSchema.safeParse(params.id).success) throw notFound()
     const p = await context.queryClient.ensureQueryData(proposalQuery(params.id))
@@ -41,7 +41,7 @@ function Detail() {
           reais.
         </div>
       )}
-      <section className="panel proposal-text">
+      <section className="panel proposal-text proposal-panel">
         <h2>Ementa {p.demo ? 'fictícia' : 'oficial'}</h2>
         <p>{p.title || 'Não informada pela fonte.'}</p>
         <dl>
@@ -81,7 +81,7 @@ function Detail() {
           significa transformação em lei.
         </p>
       </section>
-      <section className="panel">
+      <section className="panel proposal-panel">
         <h2>Autoria e coautoria</h2>
         <p className="muted">
           A Câmara considera autores tanto os proponentes quanto os apoiadores. O papel abaixo
@@ -113,7 +113,7 @@ function Detail() {
           <p>Não há autores informados no recurso coletado.</p>
         )}
       </section>
-      <section className="panel">
+      <section className="panel proposal-panel">
         <h2>Tramitação</h2>
         <p className="muted">
           Eventos em ordem cronológica. Horários são preservados como informados pela fonte; quando

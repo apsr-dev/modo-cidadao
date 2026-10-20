@@ -8,7 +8,7 @@ import { valueLabel } from '../features/representatives'
 import { representationLabels } from '../lib/catalog-labels'
 import { metadata } from '../lib/env'
 import { proposalsQuery, representativeQuery } from '../lib/queries'
-export const Route = createFileRoute('/representantes/$id')({
+export const Route = createFileRoute('/_app/representantes/$id')({
   loader: async ({ params, context }) => {
     if (!personIdSchema.safeParse(params.id).success) throw notFound()
     const person = await context.queryClient.ensureQueryData(representativeQuery(params.id))
@@ -30,7 +30,7 @@ function Profile() {
   const { person: p, proposals } = Route.useLoaderData()
   return (
     <>
-      <Link className="back-link" to="/representantes" search={{ name: '', page: 1, pageSize: 6 }}>
+      <Link className="back-link" to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
         <ArrowLeft size={16} />
         Todos os representantes
       </Link>

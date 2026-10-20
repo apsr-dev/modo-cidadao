@@ -7,7 +7,7 @@ import { ProposalCard } from '../features/proposals'
 import { EmptyState } from '../features/shell'
 import { metadata } from '../lib/env'
 import { proposalsQuery } from '../lib/queries'
-export const Route = createFileRoute('/propostas/')({
+export const Route = createFileRoute('/_app/propostas/')({
   validateSearch: proposalFiltersSchema,
   loaderDeps: ({ search }) => search,
   loader: ({ context, deps }) => context.queryClient.ensureQueryData(proposalsQuery(deps)),
