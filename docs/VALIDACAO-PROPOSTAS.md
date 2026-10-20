@@ -35,3 +35,9 @@ CI não consulta APIs legislativas: integração usa fixtures reais pequenas. O 
 - Servidor de produção Bun local validado. Imagem Docker e provedor remoto continuam sem execução nesta entrega; nenhuma infraestrutura externa foi provisionada.
 
 O workflow de CI acompanha o PR e seu resultado é consultado no GitHub. Os números acima são resultados locais efetivamente executados. Consulte [README](../README.md), [ADR 002](decisions/002-propostas-camara.md) e [ficha da fonte](FONTE-CAMARA.md) para reprodução.
+
+## Correção do review — 19/10/2026
+
+Busca pública e worker usam o mesmo schema para siglas, aceitando hífen e parênteses (`SBT-A`, `EMC-A`, `RLP(V)`) com limite de dez caracteres. O contrato OpenAPI foi ajustado. Testes sem rede verificam normalização, rejeição de entradas inválidas e envio da sigla pelo adapter com `URLSearchParams`; E2E cobre REST e envio do formulário.
+
+Validação local com Bun 1.4.3: build, TypeScript estrito e proteção de imports passaram; bundle público inspecionado em 21 arquivos. Vitest: **30 passaram**, com cinco testes de integração ignorados por padrão. Playwright em produção demo: **8 passaram** em desktop/mobile, com dois testes de Auth ignorados intencionalmente. Lint sem erros, mantendo os sete avisos CSS e uma sugestão anteriores. A CLI com `--type=SBT-A` passou pela validação e parou em `DATABASE_URL_REQUIRED` ao retirar explicitamente a configuração do banco; não houve chamada à API oficial nesse check. Integração PostgreSQL/Auth será conferida nos checks do novo commit no GitHub. As alterações locais de runtime preexistentes não fazem parte desta correção.

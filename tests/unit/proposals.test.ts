@@ -1,4 +1,4 @@
-import { proposalFiltersSchema } from '@civica/contracts'
+import { proposalFiltersSchema, proposalTypeSchema } from '@civica/contracts'
 import { authorRole, createDemoProposals, memoryProposals } from '@civica/domain'
 import {
   camaraClient,
@@ -33,6 +33,32 @@ const proposalFixture = () =>
     raw(events, 'proposicao-tramitacoes'),
   )
 describe('propostas: contratos e normalização', () => {
+  it.each(['PL', 'SBT-A', 'EMC-A', 'RLP(V)'])(
+    'aceita a sigla oficial %s na busca e na consulta usada pelo worker',
+    async (type) => {
+      const input = ` ${type.toLowerCase()} `
+      expect(proposalTypeSchema.parse(input)).toBe(type)
+      expect(proposalFiltersSchema.parse({ type: input }).type).toBe(type)
+      const fetcher = vi.fn(
+        async (_url: string, _init: RequestInit) => new Response('{"dados":[],"links":[]}'),
+      )
+      await camaraClient(fetcher).proposals(
+        1,
+        3,
+        { year: 2026, type: proposalTypeSchema.parse(input) },
+        new AbortController().signal,
+      )
+      const url = new URL(fetcher.mock.calls[0]?.[0] ?? '')
+      expect(url.searchParams.get('siglaTipo')).toBe(type)
+    },
+  )
+  it.each(['<script>', 'PL&ano=2025', 'PL/PEC', 'PL--A', 'RLP(V', 'RLP()', 'A'.repeat(11)])(
+    'rejeita a sigla inválida %s',
+    (type) => {
+      expect(proposalTypeSchema.safeParse(type).success).toBe(false)
+      expect(proposalFiltersSchema.safeParse({ type }).success).toBe(false)
+    },
+  )
   it('rejeita data inexistente e ordena offsets explícitos sem alterar a representação original', () => {
     const base = events.dados[0]
     if (!base) throw new Error('MISSING_EVENT')

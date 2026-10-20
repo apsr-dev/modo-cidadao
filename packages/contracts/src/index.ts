@@ -40,16 +40,14 @@ const optionalInteger = (min: number, max: number) =>
     (value) => (value === '' ? undefined : value),
     z.coerce.number().int().min(min).max(max).optional(),
   )
+export const proposalTypeSchema = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .max(10)
+  .regex(/^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+|\([A-Z0-9]+\))*$/)
 export const proposalFiltersSchema = z.object({
-  type: z.preprocess(
-    (value) => (value === '' ? undefined : value),
-    z
-      .string()
-      .trim()
-      .toUpperCase()
-      .regex(/^[A-Z][A-Z0-9]{0,9}$/)
-      .optional(),
-  ),
+  type: z.preprocess((value) => (value === '' ? undefined : value), proposalTypeSchema.optional()),
   number: optionalInteger(1, 1000000),
   year: optionalInteger(1900, 2100),
   authorId: z.preprocess((value) => (value === '' ? undefined : value), z.uuid().optional()),

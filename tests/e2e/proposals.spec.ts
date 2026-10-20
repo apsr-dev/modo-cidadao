@@ -1,6 +1,21 @@
 import { expect, test } from '@playwright/test'
 
 const integrated = process.env.E2E_INTEGRATION === '1'
+test('busca aceita siglas oficiais com hífen e parênteses', async ({ page, request }) => {
+  for (const type of ['SBT-A', 'EMC-A', 'RLP(V)']) {
+    const response = await request.get(`/api/v1/proposals?${new URLSearchParams({ type })}`)
+    expect(response.status()).toBe(200)
+    const result = await response.json()
+    expect(result.items.every((p: { type: string }) => p.type === type)).toBe(true)
+  }
+  await page.goto('/propostas')
+  await page.getByLabel('Tipo da proposta').fill('SBT-A')
+  await page.getByRole('button', { name: 'Buscar', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Propostas', exact: true })).toBeVisible()
+  expect(new URL(page.url()).searchParams.get('type')).toBe('SBT-A')
+  await expect(page.getByLabel('Tipo da proposta')).toHaveValue('SBT-A')
+})
+
 test('representante → proposta → tramitação → documento oficial; filtros e SSR', async ({
   page,
   request,

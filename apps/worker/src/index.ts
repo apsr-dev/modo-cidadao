@@ -1,3 +1,4 @@
+import { proposalTypeSchema } from '@civica/contracts'
 import { connectDatabase } from '@civica/db'
 import { z } from 'zod'
 import { requireLocal } from '../../../scripts/local-only'
@@ -20,10 +21,7 @@ const options = z
     resource: z.enum(['deputies', 'proposals']).default('deputies'),
     'start-page': z.coerce.number().int().min(1).max(10000).default(1),
     year: z.coerce.number().int().min(1900).max(2100).default(new Date().getUTCFullYear()),
-    type: z
-      .string()
-      .regex(/^[A-Z][A-Z0-9]{0,9}$/)
-      .optional(),
+    type: proposalTypeSchema.optional(),
     number: z.coerce.number().int().min(1).max(1000000).optional(),
     deputy: z.coerce.number().int().positive().optional(),
     'max-pages': z.coerce.number().int().min(1).max(5).default(1),
