@@ -58,3 +58,9 @@ Capturas conferidas visualmente:
 - [Ementa, autores e tramitação no tema escuro](screenshots/pr-4-review/tramitacao-escuro.png).
 
 As capturas contêm somente dados públicos das fixtures e nenhum dado de conta. Decisões em [ADR 005](decisions/005-integracao-e-revisao-pr-4.md). Os checks remotos devem corresponder ao commit atual do PR; seu resultado aparece no GitHub.
+
+## Isolamento do runner de CI
+
+No primeiro envio, o job público passou e a integração do evento `pull_request` também passou. A execução de integração do evento `push` falhou antes dos testes porque a porta fixa 54322 já estava ocupada no runner. O fluxo agora executa `scripts/configure-ci-database.ts` antes de iniciar o banco: usa projeto exclusivo por run/attempt e escolhe portas disponíveis, preservando as opções de Auth, schemas e permissões. A reescrita é restrita a `GITHUB_ACTIONS=true`, em checkout efêmero; o arquivo de desenvolvimento versionado conserva suas portas. As reservas são mantidas até selecionar todas as portas para não repetir valores dentro da execução.
+
+O script foi conferido sobre uma cópia temporária do TOML, preservando as opções não relacionadas a portas/identidade, recusando execução fora do CI e confirmando portas válidas e distintas. Os checks remotos do commit mais recente validam o fluxo completo.

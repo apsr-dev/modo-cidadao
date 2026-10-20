@@ -35,6 +35,8 @@ jobs:
         with:
           bun-version: '1.4.2'
       - run: bun install --frozen-lockfile
+      # Push and pull_request jobs can share runner resources; isolate local containers/ports.
+      - run: bun scripts/configure-ci-database.ts
       - run: bun run db:start
       - run: bun run db:env
       - run: bun run test:integration
