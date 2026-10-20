@@ -46,7 +46,7 @@ test('busca, paginação, perfil e navegação funcionam sem erros de hidrataç�
     await page.getByRole('link', { name: 'Próxima →' }).click()
     await expect(page.getByText('Página 2 de 2')).toBeVisible()
     await page.getByRole('textbox', { name: 'Nome do representante' }).fill('Aurora')
-    await page.getByLabel('Unidade federativa').selectOption('SP')
+    await page.getByLabel('UF de representação').selectOption('SP')
     await page.getByRole('button', { name: 'Buscar' }).click()
     await expect(page.getByRole('heading', { name: 'Aurora das Pontes' })).toBeVisible()
     await page.getByRole('link', { name: /Aurora das Pontes/ }).click()

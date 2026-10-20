@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUpRight, Mail, Phone } from 'lucide-react'
 import { FollowButton } from '../features/follow'
 import { ProposalCard } from '../features/proposals'
 import { valueLabel } from '../features/representatives'
+import { representationLabels } from '../lib/catalog-labels'
 import { metadata } from '../lib/env'
 import { proposalsQuery, representativeQuery } from '../lib/queries'
 export const Route = createFileRoute('/representantes/$id')({
@@ -42,10 +43,12 @@ function Profile() {
             .join('')}
         </span>
         <div>
-          <Badge>{p.demo ? 'Demonstração · Personagem fictício' : 'Câmara dos Deputados'}</Badge>
+          <Badge>
+            {p.demo ? 'Demonstração · Personagem fictício' : representationLabels(p).office}
+          </Badge>
           <h1>{p.name}</h1>
           <p>
-            {p.uf} · {valueLabel(p.party)}
+            UF de representação: {p.uf} · {valueLabel(p.party)}
           </p>
           <p className="muted">Situação informada: {valueLabel(p.status)}</p>
         </div>
@@ -56,8 +59,23 @@ function Profile() {
           <dl>
             <dt>Nome civil</dt>
             <dd>{valueLabel(p.civilName)}</dd>
+            <dt>Cargo</dt>
+            <dd>
+              {representationLabels(p).office}
+              {p.demo ? ' (contexto demonstrativo)' : ''}
+            </dd>
+            <dt>Esfera</dt>
+            <dd>
+              {representationLabels(p).sphere}
+              {p.demo ? ' (contexto demonstrativo)' : ''}
+            </dd>
+            <dt>UF de representação</dt>
+            <dd>{p.uf}</dd>
             <dt>Instituição</dt>
-            <dd>Câmara dos Deputados{p.demo ? ' (contexto demonstrativo)' : ''}</dd>
+            <dd>
+              {representationLabels(p).name}
+              {p.demo ? ' (contexto demonstrativo)' : ''}
+            </dd>
             <dt>Legislatura</dt>
             <dd>{p.demo ? 'Não se aplica' : p.legislature}</dd>
             <dt>Partido informado na coleta</dt>
