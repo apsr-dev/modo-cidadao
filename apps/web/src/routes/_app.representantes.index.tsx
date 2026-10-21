@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_app/representantes/')({
   head: () =>
     metadata(
       'Representantes',
-      'Explore deputados federais da Câmara por nome e UF de representação, com fontes e contatos oficiais quando disponíveis.',
+      'Explore deputados federais e senadores por nome e UF de representação, com fontes e contatos oficiais quando disponíveis.',
       '/representantes',
     ),
   component: Directory,
@@ -29,17 +29,18 @@ function Directory() {
         <span className="eyebrow">QUEM REPRESENTA VOCÊ</span>
         <h1>Representantes</h1>
         <p>
-          Explore deputados federais da Câmara, da esfera federal, por nome e UF de representação. A
-          UF indica o estado ou o Distrito Federal representado.
+          Explore deputados federais e senadores, da esfera federal, por nome e UF de representação.
+          A UF indica o estado ou o Distrito Federal representado.
         </p>
         <p>
-          Senadores também são da esfera federal. Deputados estaduais e distritais pertencem à
-          esfera estadual/distrital. Essas categorias ainda não estão integradas.
+          Deputados estaduais e distritais pertencem à esfera estadual/distrital e ainda não estão
+          integrados.
         </p>
       </div>
       <div className="coverage-note">
-        Catálogo local da Câmara · Situação conforme a última coleta. Uma busca vazia não comprova
-        ausência na fonte. Senado ainda não integrado.
+        Catálogo local da Câmara e do Senado · Importação manual e limitada, sem atualização
+        automática. Situação conforme a coleta de cada perfil; a lista do Senado contém pessoas em
+        exercício na ocasião da consulta. Uma busca vazia não comprova ausência na fonte.
       </div>
       <section className="directory-workspace" aria-label="Busca e resultados">
         <form className="filter-form" method="get" action="/representantes">
@@ -67,7 +68,7 @@ function Directory() {
         <div className="results-heading">
           <p>
             <strong>{data.total}</strong>{' '}
-            {data.total === 1 ? 'deputado federal encontrado' : 'deputados federais encontrados'}
+            {data.total === 1 ? 'representante encontrado' : 'representantes encontrados'}
           </p>
           <span>Ordem alfabética</span>
         </div>

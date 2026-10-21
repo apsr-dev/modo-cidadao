@@ -53,7 +53,8 @@ export function connectDatabase(url: string) {
     photo: p.photo,
     uf: m.jurisdiction,
     legislature: m.legislature,
-    institution: 'camara',
+    institution: m.institution,
+    ...(m.senateDetails ? { senateMandate: m.senateDetails } : {}),
     party: membership.party,
     status: m.status,
     email: c.email,
@@ -103,6 +104,7 @@ export function connectDatabase(url: string) {
     }
   }
   async function saveRaw(raw: {
+    source?: 'camara' | 'senado'
     resource: string
     externalId: string
     url: string
@@ -116,7 +118,7 @@ export function connectDatabase(url: string) {
       const [saved] = await tx
         .insert(rawSnapshots)
         .values({
-          source: 'camara',
+          source: raw.source ?? 'camara',
           resource: raw.resource,
           externalId: raw.externalId,
           resourceUrl: raw.url,
@@ -170,11 +172,12 @@ export function connectDatabase(url: string) {
         snapshotId,
       }
       await tx.insert(people).values(values).onConflictDoUpdate({ target: people.id, set: values })
-      const mandateId = `${p.id}:camara:${p.legislature}`
+      const mandateId = `${p.id}:${p.institution}:${p.senateMandate?.externalId ?? p.legislature}`
       const mandate = {
         id: mandateId,
         personId: p.id,
         institution: p.institution,
+        senateDetails: p.senateMandate ?? null,
         jurisdiction: p.uf,
         legislature: p.legislature,
         status: p.status,
@@ -224,10 +227,10 @@ export function connectDatabase(url: string) {
     repository,
     saveRaw,
     upsertRepresentative,
-    async startRun(resource = 'deputados') {
+    async startRun(resource = 'deputados', source: 'camara' | 'senado' = 'camara') {
       const [r] = await db
         .insert(syncRuns)
-        .values({ source: 'camara', resource, status: 'running' })
+        .values({ source, resource, status: 'running' })
         .returning({ id: syncRuns.id })
       if (!r) throw new Error('RUN_NOT_CREATED')
       return r.id

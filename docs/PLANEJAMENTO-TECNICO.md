@@ -443,3 +443,7 @@ Catálogo, autoria/coautoria e tramitação da Câmara implementados localmente,
 ## Atualização de runtime — 20/10/2026
 
 O projeto exige Bun **1.4.3**, conforme [ADR 006](decisions/006-bun-1-4-3.md). Bibliotecas e lockfile permanecem fixados; os registros históricos preservam a versão efetivamente usada.
+
+## Integração de senadores — MOD-47 (21/10/2026)
+
+A branch do MOD-47 adiciona adapter próprio para a lista v4 de senadores em exercício, sem paginação, com identidade por fonte e mandato distinto. Coleta manual limitada, RAW/observações privados e períodos informados pela fonte preservados. Consulte [ficha da fonte](FONTE-SENADO.md), [ADR 007](decisions/007-senadores-atuais.md) e [validação](VALIDACAO-MOD-47.md). O planejamento completo permanece integral; matérias/votações/despesas do Senado e TSE continuam pendentes.

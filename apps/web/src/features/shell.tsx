@@ -95,7 +95,7 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
           <Separator />
           <span className="sidebar-coverage">
             <span className="status-dot" />
-            Deputados federais
+            Representantes federais
           </span>
           <Link to="/">
             <ArrowLeft size={16} aria-hidden="true" />
@@ -125,7 +125,7 @@ export function Shell({ children, demo }: { children: ReactNode; demo: boolean }
           <span>
             {demo
               ? 'Representantes, propostas e tramitações fictícios. Nenhum dado eleitoral é simulado.'
-              : 'Catálogo local da Câmara. Consulte a coleta e a cobertura de cada registro.'}
+              : 'Catálogo local da Câmara e do Senado. Consulte a coleta e a cobertura de cada registro.'}
           </span>
         </div>
         <main id="conteudo" className="content">

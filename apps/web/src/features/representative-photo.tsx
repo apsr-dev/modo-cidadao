@@ -1,5 +1,6 @@
 import type { Representative } from '@civica/contracts'
 import { Avatar, AvatarFallback, AvatarImage, cn } from '@civica/ui'
+import { representationLabels } from '../lib/catalog-labels'
 
 export function RepresentativePhoto({
   person,
@@ -8,6 +9,7 @@ export function RepresentativePhoto({
   person: Representative
   large?: boolean
 }) {
+  const institution = representationLabels(person).name
   const src = !person.demo && person.photo.state === 'available' ? person.photo.value : undefined
   const initials = person.name
     .split(' ')
@@ -19,8 +21,8 @@ export function RepresentativePhoto({
       {src && (
         <AvatarImage
           src={src}
-          alt={`Foto oficial de ${person.name} — Câmara dos Deputados`}
-          title="Foto: Câmara dos Deputados"
+          alt={`Foto oficial de ${person.name} — ${institution}`}
+          title={`Foto: ${institution}`}
           referrerPolicy="no-referrer"
           decoding="async"
         />

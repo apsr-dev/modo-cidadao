@@ -3,12 +3,13 @@ import { connectDatabase } from '@civica/db'
 import { z } from 'zod'
 import { requireLocal } from '../../../scripts/local-only'
 import { syncProposals } from './proposals'
+import { syncSenado } from './senado'
 import { syncCamara } from './sync'
 
 const args = process.argv.slice(2)
 if (args.includes('--help') || !args.length) {
   console.log(
-    'Uso: bun run worker -- --source=camara --resource=deputies --start-page=1 --max-pages=1 --page-size=3 --limit=3\nPropostas: --resource=proposals --year=2026 --type=PL [--number=4916] [--deputy=204379]\nLotes manuais, locais, máximo 100 registros/chamada e 5 páginas. SIGINT/SIGTERM cancela e fecha o pool.',
+    'Uso: bun run worker -- --source=camara --resource=deputies --start-page=1 --max-pages=1 --page-size=3 --limit=3\nSenado: --source=senado --resource=senators --limit=100 (lista atual sem paginação)\nPropostas: --resource=proposals --year=2026 --type=PL [--number=4916] [--deputy=204379]\nLotes manuais, locais, máximo 100 registros/chamada e 5 páginas. SIGINT/SIGTERM cancela e fecha o pool.',
   )
   process.exit(0)
 }
@@ -17,8 +18,8 @@ const entries = Object.fromEntries(
 )
 const options = z
   .object({
-    source: z.literal('camara'),
-    resource: z.enum(['deputies', 'proposals']).default('deputies'),
+    source: z.enum(['camara', 'senado']),
+    resource: z.enum(['deputies', 'proposals', 'senators']).optional(),
     'start-page': z.coerce.number().int().min(1).max(10000).default(1),
     year: z.coerce.number().int().min(1900).max(2100).default(new Date().getUTCFullYear()),
     type: proposalTypeSchema.optional(),
@@ -30,7 +31,15 @@ const options = z
   })
   .strict()
   .safeParse(entries)
-if (!options.success) {
+if (
+  !options.success ||
+  (options.data.source === 'camara' && options.data.resource === 'senators') ||
+  (options.data.source === 'senado' &&
+    ((options.data.resource && options.data.resource !== 'senators') ||
+      ['start-page', 'max-pages', 'page-size', 'year', 'type', 'number', 'deputy'].some(
+        (key) => key in entries,
+      )))
+) {
   console.error('WORKER_INVALID_OPTIONS')
   process.exit(1)
 }
@@ -48,15 +57,17 @@ try {
     startPage: options.data['start-page'],
   }
   const result =
-    options.data.resource === 'proposals'
-      ? await syncProposals(connection, {
-          ...common,
-          year: options.data.year,
-          type: options.data.type,
-          number: options.data.number,
-          deputy: options.data.deputy,
-        })
-      : await syncCamara(connection, common)
+    options.data.source === 'senado'
+      ? await syncSenado(connection, { limit: options.data.limit, signal: abort.signal })
+      : options.data.resource === 'proposals'
+        ? await syncProposals(connection, {
+            ...common,
+            year: options.data.year,
+            type: options.data.type,
+            number: options.data.number,
+            deputy: options.data.deputy,
+          })
+        : await syncCamara(connection, common)
   console.log(JSON.stringify({ event: 'sync_completed', ...result }))
 } catch {
   console.error(JSON.stringify({ event: abort.signal.aborted ? 'sync_cancelled' : 'sync_failed' }))

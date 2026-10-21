@@ -2,7 +2,7 @@
 
 Projeto para conhecer representantes, acompanhar a atuação parlamentar e acessar canais oficiais de participação.
 
-Implementado: diretório e perfis da Câmara com fotos oficiais, propostas e tramitações parciais, importação manual, autenticação e acompanhamento privado de pessoas. Nome provisório; outras integrações permanecem planejadas.
+Implementado: diretório e perfis da Câmara e do Senado com fotos oficiais, propostas e tramitações parciais, importação manual, autenticação e acompanhamento privado de pessoas. Nome provisório; outras integrações permanecem planejadas.
 
 ## Rodar localmente
 

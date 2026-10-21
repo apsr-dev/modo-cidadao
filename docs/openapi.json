@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Plataforma cívica — contrato local",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Endpoints implementados na fundação. Demo e integração local têm cobertura explicitada. Não é compromisso de abertura pública em produção."
   },
   "servers": [
@@ -603,7 +603,7 @@
           },
           "photo": {
             "$ref": "#/components/schemas/DataValue",
-            "description": "URL oficial retornada por ultimoStatus.urlFoto; não coletado em registros anteriores, não informado quando ausente/inválido, não se aplica na demo."
+            "description": "URL oficial da Câmara ou Senado, preservada como retornada; ausência/invalidez e demo mantêm estados explícitos."
           },
           "uf": {
             "type": "string",
@@ -638,10 +638,11 @@
             ]
           },
           "legislature": {
-            "type": "string"
+            "type": "string",
+            "description": "Legislatura da Câmara ou legislaturas do mandato do Senado, separadas por /; não implica que todos os períodos estejam em exercício."
           },
           "institution": {
-            "const": "camara"
+            "enum": ["camara", "senado"]
           },
           "party": {
             "$ref": "#/components/schemas/DataValue"
@@ -670,7 +671,7 @@
             ],
             "properties": {
               "source": {
-                "enum": ["camara", "demo"]
+                "enum": ["camara", "senado", "demo"]
               },
               "externalId": {
                 "type": "string"
@@ -689,6 +690,65 @@
               },
               "normalizerVersion": {
                 "type": "string"
+              }
+            }
+          },
+          "senateMandate": {
+            "type": "object",
+            "description": "Presente apenas nos registros importados do Senado; dados do mandato e períodos limitados ao recurso atual.",
+            "required": ["externalId", "participation", "legislatures", "exercises"],
+            "properties": {
+              "externalId": {
+                "type": "string"
+              },
+              "participation": {
+                "$ref": "#/components/schemas/DataValue"
+              },
+              "legislatures": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["number", "start", "end"],
+                  "properties": {
+                    "number": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "end": {
+                      "type": "string",
+                      "format": "date"
+                    }
+                  }
+                }
+              },
+              "exercises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["externalId", "start", "end", "endReasonCode", "endReason"],
+                  "properties": {
+                    "externalId": {
+                      "type": "string"
+                    },
+                    "start": {
+                      "type": ["string", "null"],
+                      "format": "date"
+                    },
+                    "end": {
+                      "type": ["string", "null"],
+                      "format": "date"
+                    },
+                    "endReasonCode": {
+                      "type": ["string", "null"]
+                    },
+                    "endReason": {
+                      "type": ["string", "null"]
+                    }
+                  }
+                }
               }
             }
           }

@@ -11,6 +11,7 @@
     "@civica/contracts": "workspace:*",
     "@civica/db": "workspace:*",
     "@civica/source-camara": "workspace:*",
-    "zod": "4.6.5"
+    "zod": "4.6.5",
+    "@civica/source-senado": "workspace:*"
   }
 }

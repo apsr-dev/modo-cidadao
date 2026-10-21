@@ -39,7 +39,7 @@ export interface ProposalSummary {
   fullTextUrl: string | null
   authors: ProposalAuthor[]
   demo: boolean
-  provenance: Provenance
+  provenance: Provenance<'camara' | 'demo'>
 }
 export interface Proposal extends ProposalSummary {
   events: ProposalEvent[]

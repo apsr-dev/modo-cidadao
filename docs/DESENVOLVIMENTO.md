@@ -9,18 +9,18 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 - Web React/TanStack Start com SSR, metadados, rotas públicas, estados vazio/erro/404 e navegação responsiva.
 - Landing editorial em `/`, separada do app em `/app`, com catálogo em listas, regiões visuais distintas e contexto de cobertura. As URLs existentes continuam funcionando.
 - Tema Modo Cidadao do tweakcn, fontes locais e alternância claro/escuro no cabeçalho. Segue o sistema até uma escolha manual, preservada neste navegador.
-- Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação padrão de 24 itens e contatos retornados pela fonte. A coleta local foi ampliada para 513 deputados em exercício em 07/10/2026.
+- Diretório e perfil de representantes da Câmara e do Senado, busca por nome sem acentos, filtro por UF, paginação padrão de 24 itens e contatos retornados pela fonte. A coleta local foi ampliada para 513 deputados em exercício em 07/10/2026.
 - Propostas da Câmara: catálogo com tipo/número/ano/autor, paginação, detalhe com ementa e documentos oficiais, autoria/coautoria e linha do tempo de tramitação. O perfil mostra propostas importadas vinculadas por ID oficial.
 - Foto oficial no diretório e perfil, com iniciais acessíveis quando ausente ou indisponível. A demo mantém somente iniciais.
-- Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
+- Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama as APIs legislativas.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.
 - Supabase Auth local por e-mail/senha, cookies SSR HttpOnly e seguir/deixar de seguir. Follows privados por RLS; isolamento entre dois usuários testado no banco e no REST.
 - Modo demo explícito com 12 personagens e oito propostas fictícias, incluindo tramitações, e o mesmo seed determinístico. Auth/follows ficam indisponíveis nesse modo.
 - Participação abre os portais institucionais verificados da Câmara e do Senado.
 
-Votações, eleições e a integração de dados do Senado/TSE exibem indisponibilidade honesta. O catálogo de propostas é parcial e não representa toda a atuação de cada parlamentar. Feed, alertas, despesas, recuperação de senha, exportação/exclusão de conta, PWA e resumos de IA permanecem planejados. Esta inicialização não é uma operação pública completa.
+Votações, matérias do Senado e dados eleitorais do TSE exibem indisponibilidade honesta. O catálogo de propostas é parcial e não representa toda a atuação de cada parlamentar. Feed, alertas, despesas, recuperação de senha, exportação/exclusão de conta, PWA e resumos de IA permanecem planejados. Esta inicialização não é uma operação pública completa.
 
-Cargo, esfera e UF de representação são explícitos nos cartões, perfis e diretório. A UF identifica o estado ou o Distrito Federal representado pelo deputado federal; não indica que o cargo é estadual. Senadores e deputados estaduais/distritais ainda não estão integrados. Os rótulos preservam o aviso de personagens fictícios no modo demo. Consulte [ADR 003](decisions/003-cargo-esfera-representantes.md).
+Cargo, esfera e UF de representação são explícitos nos cartões, perfis e diretório. A UF identifica o estado ou o Distrito Federal representado pelo deputado federal; não indica que o cargo é estadual. Senadores em exercício podem ser importados manualmente; deputados estaduais/distritais ainda não estão integrados. Os rótulos preservam o aviso de personagens fictícios no modo demo. Consulte [ADR 003](decisions/003-cargo-esfera-representantes.md).
 
 ## Requisitos e início
 
@@ -109,6 +109,27 @@ O catálogo inicial de propostas contém três PLs de 2026 de um autor; é uma a
 
 Horários sem fuso são preservados, sem conversão para UTC. A situação não é traduzida para “virou lei”. PDFs permanecem como links; votos, resumos, relatorias, comparação pública de versões e follows de propostas ainda não estão implementados. Veja [ADR 002](decisions/002-propostas-camara.md), [ficha da fonte](FONTE-CAMARA.md) e [validação da feature](VALIDACAO-PROPOSTAS.md).
 
+## Senadores em exercício — MOD-47
+
+Após atualizar o código, aplique a migration antes de iniciar web/worker:
+
+```sh
+bun install --frozen-lockfile
+bun run db:migrate
+bun run worker -- --source=senado --resource=senators --limit=3
+bun run test:source:senado   # opt-in: valida o recurso oficial inteiro, sem persistir
+bun run test:worker:shutdown -- --source=senado # opt-in: testa cancelamento oficial
+# Para importar a lista observada, dentro do teto de 100 registros:
+bun run worker -- --source=senado --resource=senators --limit=100
+bun run dev:real
+```
+
+O Senado usa JSON com `Accept: application/json`, serviço v4, sem paginação. Não passe opções de páginas, ano ou filtros de propostas nesse comando: são rejeitadas. O limite padrão é três; cada chamada consulta o recurso completo e publica somente até o limite solicitado. `available` informa quantos registros a fonte retornou; `coverage=partial` indica truncamento local e `observed-list` indica que toda aquela resposta foi persistida. Nenhum desses estados garante atualização contínua ou cobertura histórica. `checkpoint=1` só é gravado quando toda a resposta foi persistida; não há retomada automática.
+
+A identidade usa `senado:senadores:<CodigoParlamentar>`, sem união por número/nome com a Câmara. Pessoa e mandato usam códigos distintos. Participação (titular/suplente), legislaturas e períodos de exercício do mandato são preservados no perfil/REST em `senateMandate`. A situação é uma observação de presença na lista de pessoas em exercício no momento da coleta; não é uma inferência a partir do fim ausente de um período. Datas legais informadas pelo Senado continuam separadas da coleta. Ausência posterior não remove nem desativa registros automaticamente.
+
+O catálogo permite busca por nome/UF e paginação nas duas Casas. Filtros por Casa/partido/período pertencem à MOD-48; o histórico completo e as filiações temporais, à MOD-50. Matérias, votações e despesas do Senado continuam sem integração. URLs oficiais HTTP/HTTPS são mantidas como retornadas, com host/caminho/identidade validados; falha do retrato mantém iniciais acessíveis. As fotos não são baixadas nem armazenadas. Ficha, termos e limites em [FONTE-SENADO.md](FONTE-SENADO.md), decisão em [ADR 007](decisions/007-senadores-atuais.md).
+
 ## Autenticação e acompanhamento
 
 Com `DEMO_MODE=false`, abra `/meu-brasil` e crie uma conta **local**. Senha mínima de 10 caracteres. Confirmação de e-mail está desativada apenas no Supabase local; não há envio externo. A partir de um perfil oficial, entre e use “Seguir representante” / “Deixar de seguir”. A lista pessoal mostra nomes e links dos perfis.
@@ -149,11 +170,12 @@ A apresentação pública usa `MarketingShell` em `/`; a plataforma usa `Shell` 
 
 ```text
 apps/web          React, SSR, TanStack Router, server functions e REST /api/v1
-apps/worker       ingestão manual/local da Câmara e encerramento controlado
+apps/worker       ingestão manual/local da Câmara e Senado, encerramento controlado
 packages/domain   entidades, portas e casos de uso, sem framework/banco
 packages/contracts validação Zod e tipos públicos
 packages/db       schema Drizzle, repositórios e tipo da Data API pessoal
 packages/source-camara cliente oficial, schemas externos e normalização
+packages/source-senado lista oficial v4 de senadores em exercício, schemas e normalização
 packages/ui       Button, Badge, Avatar, Field, Input, Select, NativeSelect (fallback), Empty e Separator; shadcn/ui
 packages/config   TypeScript estrito compartilhado
 supabase          configuração, migrations SQL e referência ao seed determinístico
@@ -162,7 +184,7 @@ tests             fixtures pequenas, Vitest e Playwright
 docs              planejamento completo, decisões e resultados
 ```
 
-Senado e TSE permanecem limites documentados em `docs/RECURSOS.md`, sem pacotes/implementações vazios. Não há `apps/api` separado.
+Recursos do Senado além dos senadores em exercício e os dados do TSE permanecem planejados em `docs/RECURSOS.md`. Não há `apps/api` separado.
 
 `civic` contém pessoas, mandatos, filiações observadas e contatos. `internal` contém snapshots, observações e sync runs. Somente `public.followed_people` fica exposta pela Data API, com grants explícitos/RLS. Os papéis SQL não têm bypassrls: web lê `civic`; ingestão escreve `civic/internal`; administração de migrations é separada. PostgreSQL direto usa postgres.js com `prepare:false`, pool máximo 3, conexão local testada. Poolers/hospedagem remotos permanecem sem validação.
 
@@ -194,7 +216,7 @@ Veja [AGENTS.md](../AGENTS.md), [ADR 001](decisions/001-bun-e-fundacao-local.md)
 
 ## Separação institucional e consulta — MOD-44
 
-A home `/` apresenta propósito, fontes e cobertura com ação **Explorar a plataforma** para `/app`. Sua seção de fontes distingue personagens fictícios da demo e catálogo local da Câmara com importação limitada, sem prometer atualização automática ou cobertura completa. Canais de participação são acessados nos portais oficiais. Propostas da Câmara têm catálogo e tramitações parciais; votações, Senado, despesas e eleições permanecem sem integração.
+A home `/` apresenta propósito, fontes e cobertura com ação **Explorar a plataforma** para `/app`. Sua seção de fontes distingue personagens fictícios da demo e catálogo local da Câmara com importação limitada, sem prometer atualização automática ou cobertura completa. Canais de participação são acessados nos portais oficiais. Propostas da Câmara têm catálogo e tramitações parciais; votações, matérias do Senado, despesas e eleições permanecem sem integração.
 
 Os seletores de UF de `/app` e `/representantes` usam o Select do shadcn/Radix, com menu nas cores do tema, teclado, rolagem e opção “Todas as UFs”. O filtro continua no URL e o envio mantém `pageSize`. Sem JavaScript, o formulário usa um select nativo como fallback.
 

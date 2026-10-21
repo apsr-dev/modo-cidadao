@@ -3,7 +3,7 @@ import { test as base } from '@playwright/test'
 export { expect } from '@playwright/test'
 
 export const officialPortrait =
-  /^https:\/\/www\.camara\.leg\.br\/internet\/deputado\/bandep\/\d+\.jpg$/
+  /^https?:\/\/(?:www\.camara\.leg\.br\/internet\/deputado\/bandep\/\d+|www\.senado\.leg\.br\/senadores\/img\/fotos-oficiais\/senador\d+)\.jpg$/
 export const portraitPng = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aGTsAAAAASUVORK5CYII=',
   'base64',

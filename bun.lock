@@ -9,6 +9,7 @@
         "@civica/db": "workspace:*",
         "@civica/domain": "workspace:*",
         "@civica/source-camara": "workspace:*",
+        "@civica/source-senado": "workspace:*",
         "@supabase/supabase-js": "2.117.3",
       },
       "devDependencies": {
@@ -60,6 +61,7 @@
         "@civica/db": "workspace:*",
         "@civica/domain": "workspace:*",
         "@civica/source-camara": "workspace:*",
+        "@civica/source-senado": "workspace:*",
         "zod": "4.6.5",
       },
     },
@@ -90,6 +92,14 @@
     },
     "packages/source-camara": {
       "name": "@civica/source-camara",
+      "version": "0.0.0",
+      "dependencies": {
+        "@civica/domain": "workspace:*",
+        "zod": "4.6.5",
+      },
+    },
+    "packages/source-senado": {
+      "name": "@civica/source-senado",
       "version": "0.0.0",
       "dependencies": {
         "@civica/domain": "workspace:*",
@@ -176,6 +186,8 @@
     "@civica/domain": ["@civica/domain@workspace:packages/domain"],
 
     "@civica/source-camara": ["@civica/source-camara@workspace:packages/source-camara"],
+
+    "@civica/source-senado": ["@civica/source-senado@workspace:packages/source-senado"],
 
     "@civica/ui": ["@civica/ui@workspace:packages/ui"],
 

@@ -4,13 +4,27 @@ export type DataValue =
 
 export * from './proposals'
 
-export interface Provenance {
-  source: 'camara' | 'demo'
+export interface Provenance<
+  Source extends 'camara' | 'senado' | 'demo' = 'camara' | 'senado' | 'demo',
+> {
+  source: Source
   externalId: string
   officialUrl: string | null
   resourceUrl: string | null
   fetchedAt: string
   normalizerVersion: string
+}
+export interface SenateMandate {
+  externalId: string
+  participation: DataValue
+  legislatures: Array<{ number: string; start: string; end: string }>
+  exercises: Array<{
+    externalId: string
+    start: string | null
+    end: string | null
+    endReasonCode: string | null
+    endReason: string | null
+  }>
 }
 export interface Representative {
   id: string
@@ -18,7 +32,8 @@ export interface Representative {
   civilName: DataValue
   uf: string
   legislature: string
-  institution: 'camara'
+  institution: 'camara' | 'senado'
+  senateMandate?: SenateMandate
   party: DataValue
   status: DataValue
   email: DataValue
