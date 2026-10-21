@@ -37,6 +37,7 @@ Cada feature deve ser implementada em branch própria e entregue em pull request
 
 ## Dados e produto
 
+- Todas as features seguem o núcleo de compreensão, ação cidadã e acompanhamento de `docs/PLANEJAMENTO-FEATURES.md` e da ADR 007: linguagem simples, contexto factual, responsabilidades comprovadas, fontes e próximo passo pertinente. Features técnicas sustentam essas jornadas. Registre a validação com pessoas de diferentes escolaridades quando executada; não confunda revisão interna com compreensão comprovada.
 - Cobertura federal Câmara/Senado; TSE eleitoral. Outras esferas são extensão do modelo, não promessa de importação municipal. Nome provisório configurável, sem ranking, nota política, classificação ideológica ou recomendação de voto.
 - Pessoa, mandato, filiação e candidatura são distintos. IDs têm namespace de fonte/recurso. Nunca una pessoas só por nome.
 - Preserve origem, ID externo, URL oficial, coleta, conteúdo da fonte e versão de normalização. Retenha apenas dados necessários: Câmara CPF é removido antes de persistir; registre campos removidos e hashes. Não altere outro campo oficial para completar lacunas.

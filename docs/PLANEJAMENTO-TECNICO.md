@@ -418,6 +418,7 @@ Referência: [glossário da ANPD](https://www.gov.br/anpd/pt-br/documentos-e-pub
 | Segurança | Usuário A não acessa dados de B; anônimo bloqueado em mutações; Data API/views não expõem interno; banco/segredos ausentes no bundle. |
 | E2E | Descobrir UF → perfil → proposta → votação → ação oficial; login → seguir → feed → deixar de seguir. |
 | Renderização | HTML público contém conteúdo/metadados; nenhuma hidratação inconsistente ou cache privado compartilhado. |
+| Compreensão e ação | Jornada com explicação simples, contexto factual, responsabilidades por papel, fontes e próximo passo; registrar validação com pessoas de diferentes escolaridades e familiaridade com política, ou sua pendência, conforme os critérios transversais de PLANEJAMENTO-FEATURES.md e ADR 007. |
 | Operação | Falha/retry de fonte, backfill sem alertas, falha de envio e recuperação do job. |
 
 Vitest para lógica/integrações locais e Playwright para fluxos relevantes. Checks de contrato online são opt-in ou agendados, nunca requisito de teste unitário. Fixtures não importam dados pessoais excessivos e não são confundidas com dados de produção.

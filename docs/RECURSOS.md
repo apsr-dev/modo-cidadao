@@ -250,3 +250,23 @@ Catálogo, autoria/coautoria e tramitação da Câmara implementados localmente,
 ## Atualização de runtime — 20/10/2026
 
 O projeto exige Bun **1.4.3**, conforme [ADR 006](decisions/006-bun-1-4-3.md). Bibliotecas e lockfile permanecem fixados; os registros históricos preservam a versão efetivamente usada.
+
+## 11. Fontes candidatas para o Executivo
+
+Consulta documental: 21/10/2026. Referências para a expansão F-35; não são integrações executadas nem garantia de cobertura completa. Validar contratos, acesso, identidade, períodos, retificações e vínculos antes de implementar cada recorte.
+
+| Fonte | Uso proposto | Limite a preservar |
+| --- | --- | --- |
+| [TSE: candidaturas por pleito](https://dadosabertos.tse.jus.br/group/candidatos) | Planos de governo e trajetória eleitoral do Executivo. | Resolver o dataset do cargo/ano; eleição não comprova posse ou exercício atual. |
+| [Siconfi: API do Tesouro](https://apidatalake.tesouro.gov.br/docs/siconfi/) | Relatórios e declarações fiscais de governos, com períodos e retificações. | Dados contábeis agregados não equivalem a todos os contratos e pagamentos individuais. |
+| [PNCP: escopo e responsabilidades](https://www.gov.br/pncp/pt-br/pncp/perguntas-e-respostas) | Contratações publicadas por órgãos federais, estaduais e municipais. | Cada órgão responde por seus registros; verificar cobertura por recurso e período. |
+| [Portal da Transparência: emendas](https://portaldatransparencia.gov.br/emendas) | Destinação e execução federal de recursos e seus beneficiários. | Não representa toda a execução orçamentária estadual ou municipal. |
+| [Transferegov: transferências especiais](https://www.gov.br/transferegov/pt-br/sobre/transferencias-especiais/perguntas-frequentes-faq/perguntas-frequente-faq-sobre-transferencia-especial/) | Planos e informações de execução de transferências cobertas. | Verificar modalidade, documentos e competência; repasse não comprova entrega. |
+| [Obrasgov: API atual](https://www.gov.br/obrasgov/pt-br/ferramentas-de-gestao-e-transparencia/api-de-dados-abertos-obrasgov.br) | Projetos de infraestrutura e informações disponíveis sobre andamento. | A API foi migrada; usar a documentação atual. Não presumir todas as obras locais ou conclusão verificada em campo. |
+| [SIOPS](https://portalfns.saude.gov.br/siops/) | Receitas e despesas públicas em saúde declaradas pelos entes. | Preservar período, situação da declaração e retificações; gasto não mede sozinho qualidade do atendimento. |
+| [SIOPE](https://www.gov.br/fnde/pt-br/assuntos/sistemas/siope/siope) | Informações e relatórios de aplicação de recursos em educação. | Validar recorte, acesso e atualização; gasto não comprova resultado educacional. |
+| [TCU: dados abertos](https://sites.tcu.gov.br/dados-abertos/) | Decisões e fiscalização dentro da competência e cobertura documentadas. | Não substitui os tribunais de contas locais nem comprova responsabilidade individual sem vínculo e análise do registro. |
+
+Portais próprios e diários oficiais de estados e municípios são complementos a validar por jurisdição. Não há uma integração local universal definida. Fala.BR só é apresentado quando o órgão e o canal forem verificados; não presumir adesão de todo governo.
+
+A ficha de cada fonte segue a seção 10. O cidadão vê explicações simples, responsabilidades por papel, fontes e lacunas; identificadores e contratos de integração ficam na documentação técnica. Requisitos em [F-35](PLANEJAMENTO-FEATURES.md#20-executivo--expansão-de-cobertura-planejada) e [ADR 008](decisions/008-expansao-executivo.md).
