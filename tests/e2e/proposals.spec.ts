@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 const integrated = process.env.E2E_INTEGRATION === '1'
 test('busca aceita siglas oficiais com hífen e parênteses', async ({ page, request }) => {

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 test('segue o sistema e preserva a escolha manual após recarga e navegação', async ({
   page,

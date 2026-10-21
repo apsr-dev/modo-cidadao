@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 test('landing separada do app mantém a descoberta por UF e os links públicos', async ({
   page,

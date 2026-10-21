@@ -839,6 +839,7 @@ pre {
   color: var(--subtle-foreground);
 }
 .avatar {
+  overflow: hidden;
   display: grid;
   place-items: center;
   width: 44px;
@@ -849,6 +850,18 @@ pre {
   font-size: 14px;
   font-weight: 500;
   flex-shrink: 0;
+}
+[data-slot="avatar-image"] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+[data-slot="avatar-fallback"] {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
 }
 .catalog-disclaimer {
   font-size: 10px;

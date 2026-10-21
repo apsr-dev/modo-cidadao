@@ -23,6 +23,7 @@ export interface Representative {
   status: DataValue
   email: DataValue
   phone: DataValue
+  photo: DataValue
   demo: boolean
   provenance: Provenance
 }
@@ -123,6 +124,7 @@ export const demoPeople: Representative[] = [
   status: reported('Personagem fictício'),
   email: { state: 'not_applicable', value: null },
   phone: { state: 'not_applicable', value: null },
+  photo: { state: 'not_applicable', value: null },
   demo: true,
   provenance: {
     source: 'demo',

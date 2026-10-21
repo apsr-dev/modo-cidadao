@@ -3,6 +3,7 @@ import { Badge } from '@civica/ui'
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { representationLabels } from '../lib/catalog-labels'
+import { RepresentativePhoto } from './representative-photo'
 
 export function valueLabel(value: DataValue) {
   return (
@@ -19,13 +20,7 @@ export function PersonCard({ person }: { person: Representative }) {
   const representation = representationLabels(person)
   return (
     <Link to="/representantes/$id" params={{ id: person.id }} className="person-card">
-      <span className="avatar" aria-hidden="true">
-        {person.name
-          .split(' ')
-          .slice(0, 2)
-          .map((n) => n[0])
-          .join('')}
-      </span>
+      <RepresentativePhoto person={person} />
       <div className="person-identity">
         <h2>{person.name}</h2>
         <p>

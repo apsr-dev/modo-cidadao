@@ -1,7 +1,7 @@
 import type { PersonalDatabase } from '@civica/db'
-import { expect, test } from '@playwright/test'
 import { createClient } from '@supabase/supabase-js'
 import { requireLocal } from '../../scripts/local-only'
+import { expect, test } from './fixtures'
 
 test.skip(process.env.E2E_INTEGRATION !== '1', 'Supabase local opt-in')
 test.use({ trace: 'off' })

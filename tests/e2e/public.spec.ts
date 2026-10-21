@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 const integrated = process.env.E2E_INTEGRATION === '1'
 test('SSR, metadados e REST validam o catálogo e seus filtros', async ({ request }) => {

@@ -38,7 +38,12 @@ describe('contratos e domínio', () => {
     expect(reported(null)).toEqual({ state: 'not_informed', value: null })
     expect(
       demoPeople.every(
-        (p) => p.demo && p.email.state === 'not_applicable' && p.provenance.officialUrl === null,
+        (p) =>
+          p.demo &&
+          p.email.state === 'not_applicable' &&
+          p.photo.state === 'not_applicable' &&
+          p.photo.value === null &&
+          p.provenance.officialUrl === null,
       ),
     ).toBe(true)
   })
@@ -57,11 +62,43 @@ describe('adapter Câmara', () => {
   it('normaliza fixture oficial sem inventar contato nem unir pelo nome', () => {
     const person = normalizeDeputy(fixture, date)
     expect(person.provenance.externalId).toBe('204379')
+    expect(person.photo).toEqual({
+      state: 'available',
+      value: fixture.dados.ultimoStatus.urlFoto,
+    })
+    expect(person.provenance.normalizerVersion).toBe('camara-deputados-2')
     expect(person.email).toEqual({ state: 'not_informed', value: null })
     expect(person.uf).toBe('AP')
     expect(person.id).toBe(stablePersonId('204379'))
     expect(person.id).not.toBe(stablePersonId('220714'))
     expect(() => normalizeDeputy({ dados: { id: 1 } }, date)).toThrow()
+  })
+  it.each([
+    undefined,
+    null,
+    '',
+    42,
+    { url: fixture.dados.ultimoStatus.urlFoto },
+    'invalid-url',
+    'http://www.camara.leg.br/internet/deputado/bandep/204379.jpg',
+    'https://example.test/internet/deputado/bandep/204379.jpg',
+    'https://www.camara.leg.br.evil.test/internet/deputado/bandep/204379.jpg',
+    'https://www.camara.leg.br/internet/deputado/bandep/220714.jpg',
+    'https://user:password@www.camara.leg.br/internet/deputado/bandep/204379.jpg',
+    'https://www.camara.leg.br:8443/internet/deputado/bandep/204379.jpg',
+    'https://www.camara.leg.br/internet/deputado/bandep/204379.jpg?tracking=1',
+    'https://www.camara.leg.br/internet/deputado/bandep/204379.jpg#fragment',
+  ])('mantém o representante sem foto quando a URL é ausente ou inválida: %j', (urlFoto) => {
+    const person = normalizeDeputy(
+      { dados: { ...fixture.dados, ultimoStatus: { ...fixture.dados.ultimoStatus, urlFoto } } },
+      date,
+    )
+    expect(person.id).toBe(stablePersonId('204379'))
+    expect(person.name).toBe(fixture.dados.ultimoStatus.nome)
+    expect(person.provenance.resourceUrl).toBe(
+      'https://dadosabertos.camara.leg.br/api/v2/deputados/204379',
+    )
+    expect(person.photo).toEqual({ state: 'not_informed', value: null })
   })
   it('remove CPF antes de persistir, conserva hash de origem e declara a minimização', () => {
     const raw = minimizeRaw(

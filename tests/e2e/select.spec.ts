@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 test('Select permite navegar por teclado, cancelar e selecionar a última UF', async ({ page }) => {
   await page.goto('/app')

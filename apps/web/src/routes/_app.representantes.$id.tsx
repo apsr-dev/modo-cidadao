@@ -4,6 +4,7 @@ import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { ArrowLeft, ArrowUpRight, Mail, Phone } from 'lucide-react'
 import { FollowButton } from '../features/follow'
 import { ProposalCard } from '../features/proposals'
+import { RepresentativePhoto } from '../features/representative-photo'
 import { valueLabel } from '../features/representatives'
 import { representationLabels } from '../lib/catalog-labels'
 import { metadata } from '../lib/env'
@@ -35,13 +36,7 @@ function Profile() {
         Todos os representantes
       </Link>
       <section className="profile-header">
-        <span className="avatar large">
-          {p.name
-            .split(' ')
-            .slice(0, 2)
-            .map((n) => n[0])
-            .join('')}
-        </span>
+        <RepresentativePhoto person={p} large />
         <div>
           <Badge>
             {p.demo ? 'Demonstração · Personagem fictício' : representationLabels(p).office}
@@ -167,6 +162,20 @@ function Profile() {
           }).format(new Date(p.provenance.fetchedAt))}{' '}
           (Brasília)
         </p>
+        {!p.demo && (
+          <p>
+            Foto: {p.photo.state === 'available' ? 'Câmara dos Deputados' : valueLabel(p.photo)}
+            {p.photo.value && (
+              <>
+                {' '}
+                ·{' '}
+                <a href={p.photo.value} target="_blank" rel="noreferrer">
+                  Imagem oficial da Câmara dos Deputados
+                </a>
+              </>
+            )}
+          </p>
+        )}
         {p.provenance.resourceUrl && (
           <a href={p.provenance.resourceUrl} target="_blank" rel="noreferrer">
             Consultar registro da fonte <ArrowUpRight size={14} />

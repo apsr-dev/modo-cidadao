@@ -9,6 +9,7 @@ Fundação local de uma plataforma brasileira de cidadania. O nome é provisóri
 - Tema Modo Cidadao do tweakcn, fontes locais e alternância claro/escuro no cabeçalho. Segue o sistema até uma escolha manual, preservada neste navegador.
 - Diretório e perfil de representantes da Câmara, busca por nome sem acentos, filtro por UF, paginação padrão de 24 itens e contatos retornados pela fonte. A coleta local foi ampliada para 513 deputados em exercício em 07/10/2026.
 - Propostas da Câmara: catálogo com tipo/número/ano/autor, paginação, detalhe com ementa e documentos oficiais, autoria/coautoria e linha do tempo de tramitação. O perfil mostra propostas importadas vinculadas por ID oficial.
+- Foto oficial no diretório e perfil, com iniciais acessíveis quando ausente ou indisponível. A demo mantém somente iniciais.
 - Server functions e REST `/api/v1` usam os mesmos casos de uso; o navegador não chama a API da Câmara.
 - Worker Bun manual/local: lista limitada → detalhe oficial → RAW minimizado e hashes → normalização → PostgreSQL → catálogo. Reexecução não duplica pessoas nem filiação inalterada. Coletas continuam criando observações.
 - Supabase Auth local por e-mail/senha, cookies SSR HttpOnly e seguir/deixar de seguir. Follows privados por RLS; isolamento entre dois usuários testado no banco e no REST.
@@ -62,6 +63,8 @@ bun run dev:real
 `dev:real` inicia o servidor com `DEMO_MODE=false`, independentemente do valor no `.env`, e usa os dados oficiais já importados no banco local. Não inicia o banco nem executa coleta automática.
 
 `db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Em um clone novo, execute esse fluxo e o worker para importar dados oficiais. O seed é fictício e não importa a Câmara. Os 513 deputados e três propostas dos registros anteriores pertencem ao ambiente daquela validação; não estão incluídos no clone.
+
+Para atualizar um banco existente com fotos, execute `bun run db:migrate` antes de iniciar a nova web/worker e repita a coleta limitada acima. A migration preserva pessoas e marca a foto anterior como “não coletado”; somente uma nova observação oficial preenche a URL. As imagens são carregadas diretamente da Câmara, sem crawler nem armazenamento de arquivos. Origem, atribuição e limites dos termos estão em [docs/FONTE-CAMARA.md](docs/FONTE-CAMARA.md).
 
 A origem web configurada é `http://localhost:3000`. Use esse endereço para login. Se trocar domínio/porta, ajuste `VITE_APP_URL`; as mutações por cookie verificam Origin. `VITE_APP_NAME` altera a marca após reiniciar/rebuild.
 
@@ -133,7 +136,7 @@ Em checkout limpo, execute `build` antes de `typecheck`, porque Start gera `rout
 
 O CI fixa Bun 1.4.3, usa `bun install --frozen-lockfile`, executa build/typecheck/lint/Vitest e Playwright. Um segundo job inicia Supabase local e testa Auth/RLS usando fixtures, sem acessar APIs legislativas. Os jobs públicos e de integração foram executados no GitHub; consulte os checks do commit atual no PR para o resultado vigente.
 
-Resultados desta revisão estão em [docs/VALIDACAO-PR5-REVISAO.md](docs/VALIDACAO-PR5-REVISAO.md). Resultados da fundação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md); checks da feature em [docs/VALIDACAO-PROPOSTAS.md](docs/VALIDACAO-PROPOSTAS.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
+Resultados da revisão de fotos estão em [docs/VALIDACAO-PR6-REVISAO.md](docs/VALIDACAO-PR6-REVISAO.md); da atualização de runtime, em [docs/VALIDACAO-PR5-REVISAO.md](docs/VALIDACAO-PR5-REVISAO.md). Resultados da fundação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md); checks da feature em [docs/VALIDACAO-PROPOSTAS.md](docs/VALIDACAO-PROPOSTAS.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
 
 ## Landing e plataforma
 
