@@ -10,6 +10,30 @@ Ajudar o cidadão a entender quem o representa, acompanhar decisões públicas e
 
 A experiência central é: **descobrir → entender → acompanhar → participar**. Cada informação relevante deve oferecer um próximo passo concreto: abrir o texto oficial, seguir a proposta, ver a votação, consultar o contato ou participar no canal competente.
 
+### Núcleo do produto: compreender, agir e acompanhar
+
+Decisão de produto confirmada em 21/10/2026: **transformar fatos públicos verificáveis em compreensão, ação cidadã e acompanhamento contínuo**. Esse princípio orienta todas as funcionalidades, inclusive decisões de apresentação, dados e operação.
+
+A experiência deve ser utilizável por pessoas com diferentes escolaridades e pouca familiaridade com política, orçamento ou termos jurídicos. Usar linguagem simples e respeitosa, sem infantilizar. Não exigir conhecimento prévio para encontrar uma situação, entender o que se sabe e escolher um próximo passo.
+
+A unidade de experiência é uma questão pública compreensível: uma decisão, proposta, gasto, entrega ou cobrança. Diretórios, tabelas e documentos permanecem disponíveis para busca e conferência; as jornadas conectam esses registros às perguntas do cidadão e à cobertura real.
+
+Cada jornada deve permitir responder, quando a evidência existir:
+
+1. **O que aconteceu?** Apresentar o fato, seu estado, período e uma explicação curta.
+2. **Por que isso importa?** Explicar a finalidade e a relação documentada com a questão acompanhada, distinguindo efeito previsto de resultado comprovado.
+3. **Quem responde por cada parte?** Identificar os papéis comprovados de decisão, destinação, execução e fiscalização, com canal competente quando verificado.
+4. **O que posso fazer?** Oferecer uma ação pertinente, como entender o texto, acompanhar mudanças, participar no canal oficial ou preparar um pedido de informação.
+5. **Como acompanho depois?** Explicar onde consultar mudanças, respostas e providências dentro das capacidades efetivamente implementadas.
+
+Primeiro mostrar explicação, situação e próximo passo; detalhes técnicos e documentos ficam acessíveis por aprofundamento. Termos oficiais devem ter explicação junto à informação, preservando o termo original para conferência. Recursos visuais precisam de rótulos, texto equivalente e contexto; não depender apenas de cor.
+
+Fonte, data do fato quando conhecida, data da coleta e limites de cobertura devem continuar acessíveis. Explicitar o que não foi informado, não foi coletado ou ainda não pôde ser verificado. Uma síntese não pode inventar vínculos, responsáveis, causalidade ou conclusões sobre corrupção. A simplificação é obrigatória na experiência; o uso de IA continua opcional e sujeito às regras de F-09.
+
+Para dados financeiros, acompanhar a movimentação do dinheiro e a entrega como estados distintos, cada qual sustentado por evidência própria. Pagamento registrado não comprova serviço entregue. Em participação, distinguir abertura de canal, envio, resposta e providência; sem evidência, não afirmar conclusão.
+
+Esta diretriz orienta a implementação e revisão das funcionalidades atuais e futuras. Não declara novas fontes, mecanismos de cobrança ou integrações financeiras já implementados. Decisão e consequências em [ADR 007](decisions/007-compreensao-acao-acompanhamento.md).
+
 | Assunto | Decisão consolidada |
 | --- | --- |
 | Público | Prioridade para jovens adultos de aproximadamente 18–35 anos, sem excluir outras idades. |
@@ -314,8 +338,39 @@ Complemento operacional necessário: visualizar sincronizações, cobertura, err
 - Interface adaptada à cobertura real de cada fonte e sem marketing de funcionalidade ainda inexistente.
 - Não prometer que o site é oficial, que representa uma instituição ou que uma ação garante resultado legislativo.
 
+### Aceitação comum: utilidade para o cidadão
+
+Toda entrega deve explicar qual pergunta do cidadão ajuda a responder e como contribui para compreender, agir ou acompanhar. Features técnicas e internas demonstram essa contribuição por meio das jornadas que sustentam; não precisam inventar ações cívicas em telas de infraestrutura ou conta.
+
+Na revisão de jornadas públicas, verificar:
+
+- Explicação inicial compreensível sem conhecimento prévio de política ou orçamento, com detalhes e termos oficiais disponíveis para aprofundamento.
+- Fatos e relações sustentados por fontes, com responsáveis por papel, datas, cobertura e lacunas identificáveis.
+- Próximo passo pertinente e disponível, incluindo sua finalidade e seus limites; o usuário sabe onde acompanhar mudanças quando o recurso existir.
+- Estados financeiros, entrega e participação diferenciados conforme a evidência, sem transformar ausência de informação em irregularidade.
+- Leitura e ação possíveis no celular, por teclado e sem depender apenas de cor.
+
+A validação de usabilidade deve incluir pessoas de diferentes escolaridades e familiaridade com política, com tarefas concretas: explicar o que aconteceu, identificar o que ainda não se sabe e encontrar o próximo passo sem ajuda. Registrar dificuldades, correções e limitações observadas. Testes automatizados e revisão interna não substituem essa validação; enquanto ela não ocorrer, registrar a pendência, sem alegar compreensão comprovada.
+
 ## 19. Decisões em aberto
 
 Nome/domínio e identidade visual; método inicial de login; provedor de IA; política de revisão dos resumos; frequência e limites de alertas; provedor/hospedagem do worker; orçamento de infraestrutura; eventual abertura pública da API; cobertura histórica e expansão territorial.
 
 Essas decisões não impedem a inicialização técnica. Use configuração e limites claros, registre escolhas e não complete lacunas com fatos inventados.
+
+## 20. Executivo — expansão de cobertura planejada
+
+**F-35 — Acompanhar o Executivo: presidente, governadores e prefeitos**
+
+Ampliação de escopo confirmada em 21/10/2026. Acompanhar governos, seus órgãos e períodos de exercício com o mesmo núcleo de compreensão, ação cidadã e acompanhamento. A cobertura operacional atual continua federal/legislativa; o recorte executivo depende de validação de fontes por localidade, recurso e período. Priorização e tarefas pertencem ao Linear.
+
+- Perfis e períodos de exercício do chefe do Executivo, com órgãos, papéis e substituições comprovados. Candidatura ou resultado eleitoral não comprova posse nem exercício atual.
+- Planos de governo, compromissos e atos oficiais com fonte, versão, prazo quando explícito e evidências de andamento; não inferir cumprimento apenas pela publicação de um ato.
+- Orçamento, receitas, despesas e contratos contextualizados por órgão, esfera, período e regime. Contas fiscais agregadas não equivalem a todos os pagamentos ou contratos.
+- Transferências e obras: relacionar origem do recurso, beneficiário, executor, contratação e entrega somente com vínculo verificado. Movimentação do dinheiro e andamento da entrega mantêm evidências próprias.
+- Recursos de saúde e educação com indicadores, unidades, metodologia, datas e limites. Gasto não equivale a qualidade do serviço nem comprova causalidade atribuível ao governante.
+- Canais de participação, informação e ouvidoria competentes, com próximo passo e acompanhamento por capacidades compartilhadas de conta, follows, feed e alertas. Qualquer registro pessoal de protocolo/resposta exige privacidade e distinção entre relato do usuário e confirmação oficial.
+
+**Aceitação:** explicar uma situação, os papéis responsáveis, o que se sabe, o que falta verificar e uma ação disponível sem exigir conhecimento prévio. Validar compreensão conforme os requisitos transversais. Ausência de dados, atraso ou valor alto não são prova de corrupção. Fontes nacionais ajudam a compor recortes; não se promete cobertura completa de estados e municípios. O Portal da Transparência federal não representa toda a execução local; PNCP e dados fiscais têm cobertura própria.
+
+Fontes candidatas e limites em [RECURSOS.md](RECURSOS.md#11-fontes-candidatas-para-o-executivo). Decisão em [ADR 008](decisions/008-expansao-executivo.md). Backlog em [F-35 no Linear](https://linear.app/modo-cidadao/issue/MOD-178).
