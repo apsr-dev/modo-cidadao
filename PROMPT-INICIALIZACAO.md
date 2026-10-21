@@ -25,15 +25,15 @@ Não inclua funcionalidades de canal, redes de conteúdo, blog editorial ou YouT
 ## Decisões técnicas
 
 - TypeScript em modo estrito, React e **TanStack Start** com TanStack Router; Vite como ferramenta de build.
-- Bun 1.4.2 workspaces e Turborepo para tarefas do monorepo.
+- Bun 1.4.3 workspaces e Turborepo para tarefas do monorepo.
 - Tailwind CSS, shadcn/ui e componentes acessíveis.
 - TanStack Query para estado remoto, cache e invalidação; filtros compartilháveis no URL com validação Zod.
 - PostgreSQL padrão no Supabase, Supabase Auth e Storage quando houver necessidade de arquivos.
 - Drizzle para consultas tipadas e representação do schema. SQL versionado em `supabase/migrations` é a única cadeia de migrations aplicada.
-- Workers Bun 1.4.2/TypeScript separados da web para ingestão, reprocessamento, resumos e notificações.
+- Workers Bun 1.4.3/TypeScript separados da web para ingestão, reprocessamento, resumos e notificações.
 - Vitest para lógica e integrações pertinentes; Playwright para os fluxos essenciais.
 
-Consulte as fontes oficiais atuais antes de escolher versões, comandos de scaffold ou APIs. Confirme Bun 1.4.2, use-o como runtime e único gerenciador de pacotes e gere bun.lock. Use bun --bun vite para dev/build e bun install --frozen-lockfile no CI. Não reutilize exemplos antigos do TanStack Start, não adote RSC experimental e não registre como fato versões ou status de lançamento de conversas anteriores. O guia oficial de início é https://tanstack.com/start/latest/docs/framework/react/getting-started.
+Consulte as fontes oficiais atuais antes de escolher versões, comandos de scaffold ou APIs. Confirme Bun 1.4.3, use-o como runtime e único gerenciador de pacotes e gere bun.lock. Use bun --bun vite para dev/build e bun install --frozen-lockfile no CI. Não reutilize exemplos antigos do TanStack Start, não adote RSC experimental e não registre como fato versões ou status de lançamento de conversas anteriores. O guia oficial de início é https://tanstack.com/start/latest/docs/framework/react/getting-started.
 
 ## Arquitetura que deve ser materializada
 

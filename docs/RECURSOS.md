@@ -211,7 +211,7 @@ Usar a versão de documentação correspondente ao PostgreSQL efetivamente provi
 | shadcn/ui | [TanStack Start](https://ui.shadcn.com/docs/installation/tanstack) | Instalação compatível com a web. |
 | Tailwind | [Vite](https://tailwindcss.com/docs/installation/using-vite) | Estilo e tokens. |
 | Zod | [Site oficial](https://zod.dev/) | Schemas e validação; consultar API atual ao instalar. |
-| Bun 1.4.2 | [Workspaces](https://bun.com/docs/pm/workspaces) e [TanStack Start](https://bun.com/guides/ecosystem/tanstack-start) | Runtime da web/workers e único gerenciador de pacotes. |
+| Bun 1.4.3 | [Workspaces](https://bun.com/docs/pm/workspaces) e [TanStack Start](https://bun.com/guides/ecosystem/tanstack-start) | Runtime da web/workers e único gerenciador de pacotes. |
 | Turborepo | [Política de suporte](https://turborepo.dev/docs/support-policy) | Orquestração de tarefas com Bun workspaces; suporte conferido em 07/10/2026. |
 | Vitest | [Guia](https://vitest.dev/guide/) | Testes de regras/adapters. |
 | Playwright | [Introdução](https://playwright.dev/docs/intro) | Navegação, SSR e fluxos E2E. |
@@ -242,3 +242,11 @@ Fonte indisponível deve gerar estado operacional verificável. Não completar l
 ## Atualização de decisão — 07/10/2026
 
 Bun **1.4.2** passa a ser o runtime da web e dos workers e o único gerenciador de pacotes. Workspaces ficam no `package.json`; `bun.lock` é o único lockfile. Vite continua sendo o pipeline de build (`bun --bun vite`), com checagem estática TypeScript separada. Vitest e Playwright permanecem. Consulte [ADR 001](decisions/001-bun-e-fundacao-local.md) e o README para comportamento implementado e validações. O restante do planejamento permanece integral.
+
+## Entrega de propostas — 07/10/2026
+
+Catálogo, autoria/coautoria e tramitação da Câmara implementados localmente, com versões preservadas e coleta manual limitada. O catálogo de deputados foi ampliado; o de propostas continua parcial. Consulte [ADR 002](decisions/002-propostas-camara.md), [ficha da fonte](FONTE-CAMARA.md) e [validação da feature](VALIDACAO-PROPOSTAS.md). Cada feature usa branch própria e PR para `main`, conforme `AGENTS.md`. O planejamento completo permanece integral.
+
+## Atualização de runtime — 20/10/2026
+
+O projeto exige Bun **1.4.3**, conforme [ADR 006](decisions/006-bun-1-4-3.md). Bibliotecas e lockfile permanecem fixados; os registros históricos preservam a versão efetivamente usada.

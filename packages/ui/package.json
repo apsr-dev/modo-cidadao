@@ -4,16 +4,22 @@
   "type": "module",
   "name": "@civica/ui",
   "exports": {
-    ".": "./src/index.tsx"
+    ".": "./src/index.tsx",
+    "./utils": "./src/utils.ts",
+    "./*": "./src/*.tsx"
   },
   "scripts": {
     "typecheck": "bun --bun tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "1.2.7",
+    "@radix-ui/react-label": "2.1.16",
+    "@radix-ui/react-select": "2.4.1",
+    "@radix-ui/react-separator": "1.1.16",
     "@radix-ui/react-slot": "1.4.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "lucide-react": "1.52.0",
     "react": "19.3.0",
     "tailwind-merge": "3.7.0"
   }

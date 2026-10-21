@@ -1,4 +1,4 @@
-import type { DataValue } from '@civica/domain'
+import type { DataValue, Proposal, ProposalAuthor } from '@civica/domain'
 import {
   boolean,
   integer,
@@ -37,12 +37,50 @@ export const rawObservations = internal.table('raw_observations', {
 export const syncRuns = internal.table('sync_runs', {
   id: uuid().primaryKey().defaultRandom(),
   source: text().notNull(),
+  resource: text().notNull().default('deputados'),
   status: text().notNull(),
   startedAt: instant('started_at').defaultNow().notNull(),
   finishedAt: instant('finished_at'),
   processed: integer().default(0).notNull(),
   checkpoint: integer().default(0).notNull(),
   errorCode: text('error_code'),
+})
+export const proposalRecords = civic.table('proposals', {
+  id: uuid().primaryKey(),
+  source: text().$type<'camara' | 'demo'>().notNull(),
+  externalId: text('external_id').notNull(),
+  type: text().notNull(),
+  number: integer().notNull(),
+  year: integer().notNull(),
+  demo: boolean().notNull(),
+  content: jsonb().$type<Proposal>().notNull(),
+  fetchedAt: instant('fetched_at').notNull(),
+  revisionHash: text('revision_hash').notNull(),
+  snapshotId: uuid('snapshot_id').references(() => rawSnapshots.id),
+})
+export const proposalAuthors = civic.table(
+  'proposal_authors',
+  {
+    proposalId: uuid('proposal_id')
+      .notNull()
+      .references(() => proposalRecords.id),
+    authorKey: text('author_key').notNull(),
+    deputyExternalId: text('deputy_external_id'),
+    content: jsonb().$type<ProposalAuthor>().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.proposalId, table.authorKey] })],
+)
+export const proposalRevisions = internal.table('proposal_revisions', {
+  id: uuid().primaryKey().defaultRandom(),
+  proposalId: uuid('proposal_id')
+    .notNull()
+    .references(() => proposalRecords.id),
+  revisionHash: text('revision_hash').notNull(),
+  content: jsonb().$type<Proposal>().notNull(),
+  observedAt: instant('observed_at').notNull(),
+  detailSnapshotId: uuid('detail_snapshot_id').references(() => rawSnapshots.id),
+  authorsSnapshotId: uuid('authors_snapshot_id').references(() => rawSnapshots.id),
+  eventsSnapshotId: uuid('events_snapshot_id').references(() => rawSnapshots.id),
 })
 export const people = civic.table('people', {
   id: uuid().primaryKey(),

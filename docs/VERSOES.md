@@ -1,5 +1,9 @@
 # Versões instaladas
 
+Atualização de 20/10/2026: runtime exigido e validado: **Bun 1.4.3**, conforme [ADR 006](decisions/006-bun-1-4-3.md). As bibliotecas e `bun.lock` permanecem fixados; `@types/bun` continua em 1.4.2, com versão independente do executável. Resultados em [VALIDACAO-PR5-REVISAO.md](VALIDACAO-PR5-REVISAO.md).
+
+## Registro original — 07/10/2026
+
 Verificadas nos manifests instalados em 07/10/2026. Versões diretas exatas; dependências transitivas estão em bun.lock.
 
 Runtime: **Bun 1.4.2**. PostgreSQL local: **17.11** (Supabase padrão). Docker CLI local: **29.8.1**.
@@ -8,6 +12,8 @@ Runtime: **Bun 1.4.2**. PostgreSQL local: **17.11** (Supabase padrão). Docker C
 | --- | --- |
 | @biomejs/biome | 2.5.15 |
 | @playwright/test | 1.63.0 |
+| @radix-ui/react-label | 2.1.16 |
+| @radix-ui/react-separator | 1.1.16 |
 | @radix-ui/react-slot | 1.4.0 |
 | @supabase/ssr | 0.12.7 |
 | @supabase/supabase-js | 2.117.3 |
@@ -36,4 +42,4 @@ Runtime: **Bun 1.4.2**. PostgreSQL local: **17.11** (Supabase padrão). Docker C
 | vitest | 5.0.3 |
 | zod | 4.6.5 |
 
-shadcn/ui é código adaptado do componente Button, com Radix Slot/CVA, não uma biblioteca runtime adicional. O alvo de produção é o servidor Bun local; nenhum adapter/provedor remoto foi instalado.
+shadcn/ui é código local adaptado de Button, Field, Input, NativeSelect, Empty e Separator. Radix fornece Slot, Label e Separator; CVA configura variantes. Os dois últimos pacotes Radix foram adicionados no redesign de 09/10/2026. O alvo de produção é o servidor Bun local; nenhum adapter/provedor remoto foi instalado.

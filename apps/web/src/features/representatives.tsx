@@ -1,8 +1,10 @@
 import type { DataValue, Representative } from '@civica/contracts'
 import { Badge } from '@civica/ui'
 import { Link } from '@tanstack/react-router'
-import { ArrowUpRight, MapPin } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
+import { representationLabels } from '../lib/catalog-labels'
 import { RepresentativePhoto } from './representative-photo'
+
 export function valueLabel(value: DataValue) {
   return (
     value.value ??
@@ -15,24 +17,27 @@ export function valueLabel(value: DataValue) {
   )
 }
 export function PersonCard({ person }: { person: Representative }) {
+  const representation = representationLabels(person)
   return (
     <Link to="/representantes/$id" params={{ id: person.id }} className="person-card">
-      <div className="person-card-top">
-        <RepresentativePhoto person={person} />
-        <ArrowUpRight size={20} />
+      <RepresentativePhoto person={person} />
+      <div className="person-identity">
+        <h2>{person.name}</h2>
+        <p>
+          {representation.office} ·{' '}
+          {person.demo
+            ? 'Contexto demonstrativo'
+            : `Esfera ${representation.sphere.toLocaleLowerCase('pt-BR')}`}
+        </p>
+        <p className="person-party-inline">{valueLabel(person.party)}</p>
       </div>
-      <Badge>{person.demo ? 'Personagem fictício' : 'Câmara dos Deputados'}</Badge>
-      <h2>{person.name}</h2>
-      <p>{valueLabel(person.party)}</p>
-      <div className="person-card-bottom">
-        <span>
-          <MapPin size={15} />
-          {person.uf}
-        </span>
-        <span>
-          Ver perfil <ArrowUpRight size={14} />
-        </span>
-      </div>
+      <span className="person-party">{valueLabel(person.party)}</span>
+      <span className="person-uf">
+        <span className="sr-only">UF de representação: </span>
+        {person.uf}
+      </span>
+      <Badge>{person.demo ? 'Personagem fictício' : representation.name}</Badge>
+      <ArrowUpRight size={18} className="person-arrow" aria-hidden="true" />
     </Link>
   )
 }

@@ -3,10 +3,14 @@
   "style": "new-york",
   "rsc": false,
   "tsx": true,
-  "tailwind": { "css": "src/styles.css", "baseColor": "neutral", "cssVariables": true },
+  "tailwind": {
+    "css": "src/styles.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
   "aliases": {
     "components": "@/features",
-    "utils": "@civica/ui",
+    "utils": "@civica/ui/utils",
     "ui": "@civica/ui",
     "lib": "@/lib",
     "hooks": "@/lib"

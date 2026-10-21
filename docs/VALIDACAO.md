@@ -37,7 +37,7 @@ Os testes unitários/integrados usam fixtures oficiais pequenas e minimizadas, s
 
 ## Ambiente e limites da verificação
 
-Bun 1.4.2 não estava disponível inicialmente e foi instalado em `.tools/` do projeto. Docker estava instalado, com daemon parado; Docker Desktop foi iniciado e o Supabase local ficou acessível. Esses impedimentos foram resolvidos e não bloquearam as verificações da fundação.
+Bun 1.4.2 não estava disponível inicialmente e foi usado a partir de uma instalação local ao projeto nas verificações da fundação. Essa instalação foi posteriormente substituída pelo Bun 1.4.2 em `~/.bun/bin`, disponível pelo PATH do zsh. Docker estava instalado, com daemon parado; Docker Desktop foi iniciado e o Supabase local ficou acessível. Esses impedimentos foram resolvidos e não bloquearam as verificações da fundação.
 
 A imagem do `Dockerfile`, o workflow no GitHub, adapters de hospedagem remota e conexão por pooler remoto **não foram executados/validados**. O alvo efetivamente testado é o servidor Bun local. Não há envio externo de e-mail, recuperação/exclusão de conta, fila, scheduler ou notificações. O advisor sem ocorrências não equivale a uma auditoria completa de segurança.
 
@@ -59,3 +59,37 @@ Validação no worktree da feature, com Bun 1.4.2, build de produção e Supabas
 - Navegador local: fotos reais renderizadas no diretório e perfil; crédito institucional e link da imagem presentes. URLs das fixtures 204379/220714 verificadas diretamente na API oficial.
 
 Para banco existente, aplicar `bun run db:migrate` antes de executar a nova versão e repetir a coleta para preencher fotos. A disponibilidade de cada arquivo depende do host da Câmara; indisponibilidade mantém as iniciais e acesso ao perfil. Autoria/licença específica de retrato não é fornecida por `urlFoto`; referências e limites estão em [FONTE-CAMARA.md](FONTE-CAMARA.md).
+
+## Tema visual Modo Cidadao — MOD-177
+
+O tema fornecido em 07/10/2026 foi aplicado na branch `feat/shadcn-theme`. Os 52 tokens claros e 50 escuros foram comparados ao CSS enviado e preservados. Fontes locais, superfícies, bordas, sombras, links, estados de foco e favicon usam o novo tema; cores auxiliares de texto e preenchimento são derivadas para legibilidade.
+
+Build Vite/Start, inspeção do bundle, typecheck e lint passaram. Permanecem os sete avisos CSS e a sugestão de template string já existentes. Vitest: **9 passaram, 2 opt-in ignorados**. Playwright contra o servidor Bun de produção isolado na porta 3002, em demo: **14 passaram, 2 de Auth ignorados**. O teste de contraste foi repetido após seu ajuste de tipagem, com os dois dispositivos aprovados.
+
+A suíte cobre preferência do sistema, escolha manual por teclado, recarga e navegação, sincronização entre abas, armazenamento bloqueado, aplicação antes do JavaScript da aplicação e contraste mínimo de 4,5 nas amostras de texto/botões verificadas nos dois temas. A navegação também foi verificada em 320 pixels, sem overflow horizontal, além dos fluxos públicos de catálogo/SSR/REST já existentes. A prévia foi inspecionada visualmente em desktop e celular, sem erros no navegador ou servidor. Esta entrega não alterou a ingestão, o banco ou a autenticação; os testes opt-in dessas integrações não foram repetidos.
+
+
+## Landing e app — redesign de 09/10/2026 no PR 4
+
+Validado com Bun 1.4.2 no worktree `feat/shadcn-theme`. A landing está em `/`, o início do app em `/app`, e os caminhos de catálogo, perfil, participação e área pessoal foram preservados pelo layout sem segmento `_app`.
+
+- `bun install --frozen-lockfile`, build Vite/Start, inspeção de 20 arquivos públicos e TypeScript estrito aprovados. Lint sem erros ou avisos; resta somente a sugestão preexistente de template string no script de configuração local.
+- Vitest: **9 passaram, 2 opt-in ignorados**. Sem mudanças de domínio, banco ou ingestão.
+- Playwright contra o build de produção na porta 3008, demo: **18 passaram, 2 de Auth ignorados**.
+- Playwright contra o mesmo build na porta 3009, com catálogo e Supabase existentes locais: **20 passaram**, incluindo login, follow, reload, isolamento REST, unfollow e logout. Contas temporárias removidas pela suíte. Nenhuma migration ou importação foi executada nesta validação.
+- A nova cobertura verifica landing sem navegação do app, entrada em `/app`, descoberta por UF, Escape/foco na navegação mobile e entrada pública sem JavaScript. A suíte anterior continua verificando SSR/REST, perfil/404, origem das mutações, tema, armazenamento bloqueado e contraste nas amostras de texto/botões verificadas.
+- Inspeção visual em desktop, 390 × 844 e 320 × 700: landing, início do app, catálogo, perfil e participação. Em 320 pixels, sem overflow horizontal. Console observado sem erros. Capturas em `docs/screenshots/pr-4` usam personagens fictícios e não contêm dados de contas.
+
+As referências do Mobbin, a licença da fotografia e as decisões de layout estão no [ADR 004](decisions/004-landing-e-app.md). O MCP conectado não expôs ferramentas nesta sessão; as referências foram consultadas no navegador. Os testes de fonte externa e o advisor de banco não foram repetidos porque esta entrega não modifica essas integrações. Não houve deploy remoto.
+
+## MOD-44 — apresentação institucional e navegação
+
+A separação de layouts foi complementada com fontes/cobertura por modo e entrada da conta restrita à persistência. Checks e evidências estão em [VALIDACAO-MOD-44.md](VALIDACAO-MOD-44.md).
+
+## Entrega posterior de propostas
+
+Este documento registra a fundação inicial. O catálogo foi posteriormente ampliado para 513 deputados e três propostas oficiais; detalhes e checks da nova entrega estão em [VALIDACAO-PROPOSTAS.md](VALIDACAO-PROPOSTAS.md).
+
+## Revisão e integração do PR 4 — 20/10/2026
+
+A integração com main e as correções de partido responsivo e preferência de tema foram verificadas novamente. Consulte os comandos, resultados e limites em [VALIDACAO-PR4-REVISAO.md](VALIDACAO-PR4-REVISAO.md). Os registros anteriores conservam as versões e a cobertura daquela execução.

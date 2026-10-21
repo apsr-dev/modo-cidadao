@@ -1,8 +1,7 @@
 import type { Representative } from '@civica/contracts'
-import { expect, test } from '@playwright/test'
+import { expect, officialPortrait, portraitPng, test } from './fixtures'
 
 const integrated = process.env.E2E_INTEGRATION === '1'
-const officialPortrait = /^https:\/\/www\.camara\.leg\.br\/internet\/deputado\/bandep\/\d+\.jpg$/
 
 test('demo usa iniciais acessíveis e permite abrir o perfil sem fotos', async ({ page }) => {
   test.skip(integrated, 'Catálogo fictício')
@@ -23,11 +22,8 @@ test('demo usa iniciais acessíveis e permite abrir o perfil sem fotos', async (
   expect(imageRequests).toBe(0)
 })
 
-for (const available of [true, false]) {
-  test(`foto oficial ${available ? 'carrega' : 'falha com fallback'} no diretório e perfil`, async ({
-    page,
-    request,
-  }) => {
+for (const outcome of ['loaded', 'not-found', 'invalid-image'] as const) {
+  test(`foto oficial ${outcome} no diretório e perfil`, async ({ page, request }) => {
     test.skip(!integrated, 'Catálogo oficial local opt-in')
     const response = await request.get('/api/v1/representatives?pageSize=6')
     expect(response.status()).toBe(200)
@@ -36,6 +32,7 @@ for (const available of [true, false]) {
     expect(person, 'A fixture oficial/coleta deve ter foto disponível').toBeDefined()
     if (!person) throw new Error('OFFICIAL_PHOTO_FIXTURE_MISSING')
     let imageRequests = 0
+    const available = outcome === 'loaded'
     await page.route(officialPortrait, async (route) => {
       imageRequests++
       expect(route.request().headers().referer).toBeUndefined()
@@ -45,12 +42,11 @@ for (const available of [true, false]) {
           ? {
               status: 200,
               contentType: 'image/png',
-              body: Buffer.from(
-                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aGTsAAAAASUVORK5CYII=',
-                'base64',
-              ),
+              body: portraitPng,
             }
-          : { status: 404, body: '' },
+          : outcome === 'invalid-image'
+            ? { status: 200, contentType: 'image/jpeg', body: 'invalid image bytes' }
+            : { status: 404, body: '' },
       )
     })
     await page.goto('/representantes')
@@ -81,3 +77,38 @@ for (const available of [true, false]) {
     ).toBe(true)
   })
 }
+
+test('mantém iniciais enquanto a foto carrega e as substitui após a resposta', async ({
+  page,
+  request,
+}) => {
+  test.skip(!integrated, 'Catálogo oficial local opt-in')
+  const response = await request.get('/api/v1/representatives?pageSize=6')
+  const { items } = (await response.json()) as { items: Representative[] }
+  const person = items.find((item) => item.photo.state === 'available')
+  if (!person) throw new Error('OFFICIAL_PHOTO_FIXTURE_MISSING')
+  let releaseImage = () => {}
+  const pendingImage = new Promise<void>((resolve) => {
+    releaseImage = resolve
+  })
+  await page.route(officialPortrait, async (route) => {
+    await pendingImage
+    await route.fulfill({ status: 200, contentType: 'image/png', body: portraitPng })
+  })
+  try {
+    await page.goto('/representantes', { waitUntil: 'domcontentloaded' })
+    const card = page.locator('.person-card').filter({
+      has: page.getByRole('heading', { name: person.name, exact: true }),
+    })
+    await expect(
+      card.getByRole('img', { name: `Representação por iniciais de ${person.name}` }),
+    ).toBeVisible()
+    releaseImage()
+    await expect(
+      card.getByRole('img', { name: `Foto oficial de ${person.name} — Câmara dos Deputados` }),
+    ).toBeVisible()
+    await expect(card.locator('[data-slot="avatar-fallback"]')).toHaveCount(0)
+  } finally {
+    releaseImage()
+  }
+})
