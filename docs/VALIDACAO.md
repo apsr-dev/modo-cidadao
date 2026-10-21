@@ -99,3 +99,7 @@ A integração com main e as correções de partido responsivo e preferência de
 O README curto e o guia completo de desenvolvimento foram atualizados por
 rebase sobre `main`. Comandos, links e preservação das skills conferidos em
 [VALIDACAO-PR7-REVISAO.md](VALIDACAO-PR7-REVISAO.md).
+
+## MOD-47 — senadores em exercício (21/10/2026)
+
+Integração local do serviço legislativo v4 do Senado, com IDs por fonte, mandato/participação/períodos preservados, RAW privado e coleta manual limitada. A validação desta entrega está em [VALIDACAO-MOD-47.md](VALIDACAO-MOD-47.md): 54 testes unitários, oito de banco, 38 E2E demo e 48 E2E integrados aprovados, além de API/worker oficiais (81 registros), replay, cancelamento e migration em banco vazio e cópia populada. Os registros históricos acima mantêm o estado e runtime de cada verificação anterior. Matérias, votações e despesas do Senado permanecem planejadas.

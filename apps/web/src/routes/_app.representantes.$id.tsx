@@ -29,6 +29,7 @@ export const Route = createFileRoute('/_app/representantes/$id')({
 })
 function Profile() {
   const { person: p, proposals } = Route.useLoaderData()
+  const institution = representationLabels(p).name
   return (
     <>
       <Link className="back-link" to="/representantes" search={{ name: '', page: 1, pageSize: 24 }}>
@@ -71,14 +72,42 @@ function Profile() {
               {representationLabels(p).name}
               {p.demo ? ' (contexto demonstrativo)' : ''}
             </dd>
-            <dt>Legislatura</dt>
+            <dt>{p.institution === 'senado' ? 'Legislaturas do mandato' : 'Legislatura'}</dt>
             <dd>{p.demo ? 'Não se aplica' : p.legislature}</dd>
             <dt>Partido informado na coleta</dt>
             <dd>{valueLabel(p.party)}</dd>
           </dl>
-          <p className="muted">
-            Histórico de exercício e filiação ainda não disponível nesta interface.
-          </p>
+          {p.senateMandate && (
+            <>
+              <h3>Mandato informado pelo Senado</h3>
+              <dl>
+                <dt>Identificador do mandato</dt>
+                <dd>{p.senateMandate.externalId}</dd>
+                <dt>Participação no mandato</dt>
+                <dd>{valueLabel(p.senateMandate.participation)}</dd>
+              </dl>
+              <h3>Períodos de exercício informados</h3>
+              {p.senateMandate.exercises.length ? (
+                <ul>
+                  {p.senateMandate.exercises.map((period) => (
+                    <li key={period.externalId}>
+                      {period.start ?? 'Início não informado'} — {period.end ?? 'Fim não informado'}
+                      {period.endReason ? ` · ${period.endReason}` : ''}
+                      {period.endReasonCode ? ` (${period.endReasonCode})` : ''}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Períodos não informados pela fonte.</p>
+              )}
+              <p className="muted">
+                A lista reúne senadores em exercício na coleta. Titular ou suplente indica a
+                participação no mandato; não determina exercício atual fora dessa observação. Os
+                períodos exibidos limitam-se ao recurso coletado.
+              </p>
+            </>
+          )}
+          <p className="muted">Histórico completo de exercício e filiação ainda não disponível.</p>
         </section>
         <section className="panel">
           <h2>Contatos {p.demo ? '' : 'oficiais'}</h2>
@@ -133,8 +162,9 @@ function Profile() {
           </div>
         ) : (
           <p className="coverage-note">
-            Nenhuma proposta importada para esta pessoa. Isso não significa ausência de propostas na
-            Câmara.
+            {p.institution === 'senado'
+              ? 'Matérias do Senado ainda não integradas. Isso não significa ausência de atuação parlamentar.'
+              : 'Nenhuma proposta importada para esta pessoa. Isso não significa ausência de propostas na Câmara.'}
           </p>
         )}
       </section>
@@ -150,7 +180,7 @@ function Profile() {
         <p>
           {p.demo
             ? 'Dados fictícios para demonstração. Não correspondem a políticos reais.'
-            : 'Fonte: Dados Abertos da Câmara dos Deputados.'}
+            : `Fonte: Dados Abertos ${p.institution === 'senado' ? 'do Senado Federal' : 'da Câmara dos Deputados'}.`}
         </p>
         <p>
           Identificador: {p.provenance.source}/{p.provenance.externalId} ·{' '}
@@ -164,13 +194,14 @@ function Profile() {
         </p>
         {!p.demo && (
           <p>
-            Foto: {p.photo.state === 'available' ? 'Câmara dos Deputados' : valueLabel(p.photo)}
+            Foto: {p.photo.state === 'available' ? institution : valueLabel(p.photo)}
             {p.photo.value && (
               <>
                 {' '}
                 ·{' '}
                 <a href={p.photo.value} target="_blank" rel="noreferrer">
-                  Imagem oficial da Câmara dos Deputados
+                  Imagem oficial{' '}
+                  {p.institution === 'senado' ? 'do Senado Federal' : 'da Câmara dos Deputados'}
                 </a>
               </>
             )}
@@ -182,8 +213,10 @@ function Profile() {
           </a>
         )}
         <p>
-          A seção de propostas mostra somente os vínculos coletados. Votações, gastos e candidaturas
-          ainda não estão integrados neste perfil.
+          Importação manual e limitada, sem atualização automática. A coleta não é data de
+          atualização oficial. Ausência em outra coleta não remove registros nem comprova
+          afastamento. A seção de propostas mostra somente os vínculos coletados. Votações, gastos e
+          candidaturas ainda não estão integrados neste perfil.
         </p>
       </section>
     </>

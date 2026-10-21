@@ -32,7 +32,8 @@
     "db:env": "bun scripts/local-env.ts",
     "worker": "bun apps/worker/src/index.ts",
     "check:boundaries": "bun scripts/check-boundaries.ts",
-    "test:worker:shutdown": "bun scripts/check-worker-shutdown.ts"
+    "test:worker:shutdown": "bun scripts/check-worker-shutdown.ts",
+    "test:source:senado": "bun scripts/check-senado.ts"
   },
   "devDependencies": {
     "typescript": "7.0.2",
@@ -50,7 +51,8 @@
     "@civica/domain": "workspace:*",
     "@civica/contracts": "workspace:*",
     "@civica/source-camara": "workspace:*",
-    "@supabase/supabase-js": "2.117.3"
+    "@supabase/supabase-js": "2.117.3",
+    "@civica/source-senado": "workspace:*"
   },
   "trustedDependencies": [
     "supabase"

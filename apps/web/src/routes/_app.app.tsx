@@ -62,7 +62,7 @@ function Explore() {
             </Button>
           </form>
           <div className="list-caption">
-            <span>Câmara dos Deputados</span>
+            <span>Representantes federais</span>
             <span>Ordem alfabética · {data.total} no catálogo</span>
           </div>
           <div className="people-grid">
@@ -81,7 +81,7 @@ function Explore() {
             {demo
               ? 'Personagens fictícios para explorar a interface.'
               : 'Esta seleção mostra os primeiros registros do catálogo local, em ordem alfabética.'}{' '}
-            Senado e outras esferas ainda não integrados.
+            Outras esferas ainda não integradas. A cobertura depende da importação de cada fonte.
           </p>
         </section>
         <aside className="explore-context" aria-label="Participação e cobertura">
@@ -98,7 +98,7 @@ function Explore() {
           <dl className="coverage-list">
             <div>
               <dt>Representantes</dt>
-              <dd>Catálogo da Câmara</dd>
+              <dd>Câmara e Senado · coleta manual limitada</dd>
             </div>
             <div>
               <dt>Participação</dt>
@@ -113,7 +113,7 @@ function Explore() {
               <dd>Integração pendente</dd>
             </div>
             <div>
-              <dt>Senado e eleições</dt>
+              <dt>Eleições</dt>
               <dd>Integração pendente</dd>
             </div>
           </dl>

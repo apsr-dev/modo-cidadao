@@ -33,11 +33,17 @@ export default defineConfig({
           specifiers: [
             '@civica/db',
             '@civica/source-camara',
+            '@civica/source-senado',
             'postgres',
             'drizzle-orm',
             '@supabase/ssr',
           ],
-          files: ['**/*.server.*', '**/packages/db/**', '**/packages/source-camara/**'],
+          files: [
+            '**/*.server.*',
+            '**/packages/db/**',
+            '**/packages/source-camara/**',
+            '**/packages/source-senado/**',
+          ],
         },
       },
     }),

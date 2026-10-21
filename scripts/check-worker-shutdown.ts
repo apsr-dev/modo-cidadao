@@ -2,14 +2,14 @@ import { connectDatabase } from '@civica/db'
 import { requireLocal } from './local-only'
 
 const connection = connectDatabase(requireLocal(process.env.DATABASE_URL, 'DATABASE_URL'))
+const source = process.argv.includes('--source=senado') ? 'senado' : 'camara'
 const started = new Date().toISOString()
 const child = Bun.spawn(
   [
     'bun',
     'apps/worker/src/index.ts',
-    '--source=camara',
-    '--max-pages=1',
-    '--page-size=3',
+    `--source=${source}`,
+    ...(source === 'camara' ? ['--max-pages=1', '--page-size=3'] : ['--resource=senators']),
     '--limit=3',
   ],
   { stdout: 'pipe', stderr: 'pipe' },
@@ -18,7 +18,7 @@ try {
   let run: string | undefined
   for (let i = 0; i < 100; i++) {
     const rows =
-      await connection.client`select id from internal.sync_runs where started_at >= ${started} order by started_at desc limit 1`
+      await connection.client`select id from internal.sync_runs where source=${source} and started_at >= ${started} order by started_at desc limit 1`
     if (rows[0]) {
       run = String(rows[0].id)
       break

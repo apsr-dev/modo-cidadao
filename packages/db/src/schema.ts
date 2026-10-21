@@ -1,4 +1,4 @@
-import type { DataValue, Proposal, ProposalAuthor } from '@civica/domain'
+import type { DataValue, Proposal, ProposalAuthor, SenateMandate } from '@civica/domain'
 import {
   boolean,
   integer,
@@ -87,7 +87,7 @@ export const people = civic.table('people', {
   name: text().notNull(),
   civilName: jsonb('civil_name').$type<DataValue>().notNull(),
   photo: jsonb().$type<DataValue>().notNull(),
-  source: text().$type<'demo' | 'camara'>().notNull(),
+  source: text().$type<'demo' | 'camara' | 'senado'>().notNull(),
   externalId: text('external_id').notNull(),
   searchName: text('search_name').notNull(),
   demo: boolean().notNull(),
@@ -102,7 +102,8 @@ export const mandates = civic.table('mandates', {
   personId: uuid('person_id')
     .notNull()
     .references(() => people.id),
-  institution: text().notNull(),
+  institution: text().$type<'camara' | 'senado'>().notNull(),
+  senateDetails: jsonb('senate_details').$type<SenateMandate>(),
   jurisdiction: text().notNull(),
   legislature: text().notNull(),
   status: jsonb().$type<DataValue>().notNull(),
