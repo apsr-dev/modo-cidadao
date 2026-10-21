@@ -11,7 +11,7 @@ Cada feature deve ser implementada em branch própria e entregue em pull request
 
 ## Runtime e verificação
 
-- Bun **1.4.2** é o runtime da web/worker e único gerenciador. Use Bun workspaces, `workspace:*`, `bun.lock` e `bun install --frozen-lockfile`. Nunca gere lockfiles concorrentes.
+- Bun **1.4.3** é o runtime da web/worker e único gerenciador. Use Bun workspaces, `workspace:*`, `bun.lock` e `bun install --frozen-lockfile`. Nunca gere lockfiles concorrentes.
 - Vite roda explicitamente com Bun: `bun --bun vite dev/build`. Produção local usa `apps/web/server.ts` com Bun. Não substitua o build por bundler Bun.
 - `bun run build`, `bun run typecheck`, `bun run lint`, `bun run test`, `bun run test:e2e`. O build gera as rotas antes do typecheck em checkout limpo. `bun run test` chama Vitest, não `bun test`.
 - Banco local: `bun run db:start`, `bun run db:env`, `bun run db:seed`, `bun run test:integration`. Leia README antes de `db:reset`, que apaga dados locais. Não use produção como fallback.

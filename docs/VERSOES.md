@@ -1,5 +1,9 @@
 # Versões instaladas
 
+Atualização de 20/10/2026: runtime exigido e validado: **Bun 1.4.3**, conforme [ADR 006](decisions/006-bun-1-4-3.md). As bibliotecas e `bun.lock` permanecem fixados; `@types/bun` continua em 1.4.2, com versão independente do executável. Resultados em [VALIDACAO-PR5-REVISAO.md](VALIDACAO-PR5-REVISAO.md).
+
+## Registro original — 07/10/2026
+
 Verificadas nos manifests instalados em 07/10/2026. Versões diretas exatas; dependências transitivas estão em bun.lock.
 
 Runtime: **Bun 1.4.2**. PostgreSQL local: **17.11** (Supabase padrão). Docker CLI local: **29.8.1**.

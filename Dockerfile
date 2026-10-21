@@ -1,10 +1,10 @@
 # Local production target; no deployment or external services are provisioned.
-FROM oven/bun:1.4.2 AS build
+FROM oven/bun:1.4.3 AS build
 WORKDIR /app
 COPY . .
 RUN bun install --frozen-lockfile
 RUN bun run build
-FROM oven/bun:1.4.2
+FROM oven/bun:1.4.3
 WORKDIR /app
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/packages ./packages

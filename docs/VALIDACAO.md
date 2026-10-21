@@ -37,7 +37,7 @@ Os testes unitários/integrados usam fixtures oficiais pequenas e minimizadas, s
 
 ## Ambiente e limites da verificação
 
-Bun 1.4.2 não estava disponível inicialmente e foi instalado em `.tools/` do projeto. Docker estava instalado, com daemon parado; Docker Desktop foi iniciado e o Supabase local ficou acessível. Esses impedimentos foram resolvidos e não bloquearam as verificações da fundação.
+Bun 1.4.2 não estava disponível inicialmente e foi usado a partir de uma instalação local ao projeto nas verificações da fundação. Essa instalação foi posteriormente substituída pelo Bun 1.4.2 em `~/.bun/bin`, disponível pelo PATH do zsh. Docker estava instalado, com daemon parado; Docker Desktop foi iniciado e o Supabase local ficou acessível. Esses impedimentos foram resolvidos e não bloquearam as verificações da fundação.
 
 A imagem do `Dockerfile`, o workflow no GitHub, adapters de hospedagem remota e conexão por pooler remoto **não foram executados/validados**. O alvo efetivamente testado é o servidor Bun local. Não há envio externo de e-mail, recuperação/exclusão de conta, fila, scheduler ou notificações. O advisor sem ocorrências não equivale a uma auditoria completa de segurança.
 

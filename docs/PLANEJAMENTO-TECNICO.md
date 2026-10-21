@@ -20,12 +20,12 @@ Escolher TanStack Start substitui a recomendação anterior de Next.js/React Rou
 | Consultas | Drizzle para catálogo público, ingestão e administração autorizada. |
 | Auth | Supabase Auth; sessão web por integração SSR suportada e JWT para clientes externos. |
 | Dados pessoais | Supabase client no contexto do usuário, com RLS e permissões apropriadas. |
-| Importação | Workers Bun 1.4.2/TypeScript; adapters por instituição. |
+| Importação | Workers Bun 1.4.3/TypeScript; adapters por instituição. |
 | Agendamento | Scheduler que enfileira tarefas; execução longa no worker. |
 | Busca | PostgreSQL FTS + `pg_trgm`; mecanismo externo só com necessidade medida. |
 | Notificações | Outbox + worker; Resend como candidato para e-mail, push web quando adotado. |
 | Observabilidade | Logs estruturados e Sentry como candidato para erros. |
-| Repositório | GitHub, Bun workspaces (Bun 1.4.2) e Turborepo. |
+| Repositório | GitHub, Bun workspaces (Bun 1.4.3) e Turborepo. |
 | Hospedagem | Web compatível com o adapter oficial escolhido; Vercel é candidato, não requisito de domínio. Worker requer ambiente adequado a jobs longos. |
 | Mobile | React Native/Expo previsto como consumidor HTTP; sem app nativo na inicialização. |
 
@@ -439,3 +439,7 @@ Bun **1.4.2** passa a ser o runtime da web e dos workers e o único gerenciador 
 ## Entrega de propostas — 07/10/2026
 
 Catálogo, autoria/coautoria e tramitação da Câmara implementados localmente, com versões preservadas e coleta manual limitada. O catálogo de deputados foi ampliado; o de propostas continua parcial. Consulte [ADR 002](decisions/002-propostas-camara.md), [ficha da fonte](FONTE-CAMARA.md) e [validação da feature](VALIDACAO-PROPOSTAS.md). Cada feature usa branch própria e PR para `main`, conforme `AGENTS.md`. O planejamento completo permanece integral.
+
+## Atualização de runtime — 20/10/2026
+
+O projeto exige Bun **1.4.3**, conforme [ADR 006](decisions/006-bun-1-4-3.md). Bibliotecas e lockfile permanecem fixados; os registros históricos preservam a versão efetivamente usada.

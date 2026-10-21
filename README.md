@@ -21,17 +21,16 @@ Cargo, esfera e UF de representação são explícitos nos cartões, perfis e di
 
 ## Requisitos e início
 
-Bun **1.4.2** é o único runtime JavaScript da aplicação/worker e gerenciador de pacotes. Nesta máquina ele foi instalado no projeto, sem alterar o perfil do shell:
+Bun **1.4.3** é o único runtime JavaScript da aplicação/worker e gerenciador de pacotes, conforme [ADR 006](docs/decisions/006-bun-1-4-3.md). Instale essa versão para seu usuário pelo [instalador oficial](https://bun.com/docs/installation). Abra um novo terminal após instalar e execute:
 
 ```sh
-cd /Users/Samuel.Reichert/Samuel/modo-cidadao
-export PATH="$PWD/.tools/bun-darwin-aarch64:$PATH"
+cd /caminho/para/modo-cidadao
 bun --version
 bun install --frozen-lockfile
 bun run dev
 ```
 
-Abra **http://localhost:3000**. Em outro terminal, repita o `export PATH` antes dos comandos. Em um clone novo, instale Bun 1.4.2 pelo [instalador oficial](https://bun.com/docs/installation); `.tools/` não é versionado. Node.js está instalado na máquina, mas os comandos da aplicação, Vitest e Playwright foram executados com Bun. Turborepo/Biome/CLI e serviços Docker usam seus próprios binários.
+Abra **http://localhost:3000**. O comando `bun --version` deve retornar `1.4.3`. Configure o PATH para a instalação do usuário, por exemplo `~/.bun/bin`, no perfil do shell; não é necessário instalar Bun dentro do repositório. A configuração do projeto não atualiza o executável instalado. Node.js está instalado na máquina, mas os comandos da aplicação, Vitest e Playwright foram executados com Bun. Turborepo/Biome/CLI e serviços Docker usam seus próprios binários.
 
 A web executa em demo quando não há `.env`. Se criar configuração manualmente, copie `.env.example` para `.env` e mantenha `DEMO_MODE=true` até configurar o banco. As variáveis privadas e públicas são validadas separadamente. Nunca prefixe credenciais com `VITE_`.
 
@@ -57,10 +56,12 @@ bun run db:env
 bun run db:seed
 bun run db:check
 bun run worker -- --source=camara --max-pages=1 --page-size=3 --limit=3
-DEMO_MODE=false bun run dev
+bun run dev:real
 ```
 
-`db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Neste ambiente o banco já foi iniciado, as migrations aplicadas, o seed carregado e 513 deputados e três propostas oficiais importados; `.env` foi deixado com `DEMO_MODE=false` para usar essa integração.
+`dev:real` inicia o servidor com `DEMO_MODE=false`, independentemente do valor no `.env`, e usa os dados oficiais já importados no banco local. Não inicia o banco nem executa coleta automática.
+
+`db:start` suprime a saída de credenciais da CLI. `db:env` lê o status local, gera senhas para os papéis `civica_reader` e `civica_ingest`, grava `.env` com permissão 0600 e preserva nome/URL/mode existentes. Execute após `db:start` ou `db:reset`; se já houver um processo web ativo, reinicie após trocar as senhas. Em um clone novo, execute esse fluxo e o worker para importar dados oficiais. O seed é fictício e não importa a Câmara. Os 513 deputados e três propostas dos registros anteriores pertencem ao ambiente daquela validação; não estão incluídos no clone.
 
 A origem web configurada é `http://localhost:3000`. Use esse endereço para login. Se trocar domínio/porta, ajuste `VITE_APP_URL`; as mutações por cookie verificam Origin. `VITE_APP_NAME` altera a marca após reiniciar/rebuild.
 
@@ -130,9 +131,9 @@ bun run build                    # recompõe build e rotas após o teste negativ
 
 Em checkout limpo, execute `build` antes de `typecheck`, porque Start gera `routeTree.gen.ts`. A suíte Playwright inicia e encerra seu próprio servidor; libere a porta 3000 antes. `E2E_BASE_URL=http://localhost:3000` permite testar um servidor já iniciado. Testes autenticados não gravam traces com tokens. Usuários temporários são removidos após a suíte.
 
-O CI fixa Bun 1.4.2, usa `bun install --frozen-lockfile`, executa build/typecheck/lint/Vitest e Playwright. Um segundo job inicia Supabase local e testa Auth/RLS usando fixtures, sem acessar APIs legislativas. Os jobs públicos e de integração foram executados no GitHub; consulte os checks do commit atual no PR para o resultado vigente.
+O CI fixa Bun 1.4.3, usa `bun install --frozen-lockfile`, executa build/typecheck/lint/Vitest e Playwright. Um segundo job inicia Supabase local e testa Auth/RLS usando fixtures, sem acessar APIs legislativas. Os jobs públicos e de integração foram executados no GitHub; consulte os checks do commit atual no PR para o resultado vigente.
 
-Resultados da fundação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md); checks da feature em [docs/VALIDACAO-PROPOSTAS.md](docs/VALIDACAO-PROPOSTAS.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
+Resultados desta revisão estão em [docs/VALIDACAO-PR5-REVISAO.md](docs/VALIDACAO-PR5-REVISAO.md). Resultados da fundação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md); checks da feature em [docs/VALIDACAO-PROPOSTAS.md](docs/VALIDACAO-PROPOSTAS.md). Versões efetivamente instaladas estão em [docs/VERSOES.md](docs/VERSOES.md).
 
 ## Landing e plataforma
 
@@ -181,7 +182,7 @@ Cada perfil identifica fonte, ID externo, link oficial e coleta. A data de colet
 
 A Câmara retorna CPF no detalhe. O adapter remove esse campo antes de persistir, mantendo os demais dados, hash original, hash armazenado e lista de campos removidos. Cada coleta mantém sua observação; quando minimizado, o corpo não é prometido como bytes idênticos do transporte. Filiação registra períodos **de observação**, sem inventar datas legais. Dados ausentes conservam “não informado”, “não coletado” ou “não se aplica”.
 
-O alvo de produção validado é o processo Bun local usando o build Start. `Dockerfile` fixa Bun 1.4.2, mas a imagem e um provedor remoto não foram validados. Nenhum deploy, serviço pago, conta externa ou agendamento remoto foi configurado. Para produção serão necessárias decisões sobre domínio, credenciais/papéis, e-mail, recuperação/exclusão de conta, retenção, orçamento e operação.
+O alvo de produção validado é o processo Bun local usando o build Start. `Dockerfile` fixa Bun 1.4.3, mas a imagem e um provedor remoto não foram validados. Nenhum deploy, serviço pago, conta externa ou agendamento remoto foi configurado. Para produção serão necessárias decisões sobre domínio, credenciais/papéis, e-mail, recuperação/exclusão de conta, retenção, orçamento e operação.
 
 Veja [AGENTS.md](AGENTS.md), [ADR 001](docs/decisions/001-bun-e-fundacao-local.md) e os três documentos de planejamento antes de mudanças relevantes.
 
